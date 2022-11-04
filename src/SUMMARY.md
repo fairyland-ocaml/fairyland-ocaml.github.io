@@ -7,6 +7,9 @@
 - [understanding module `Format`](./module-format.md)
 - [contravariant](./contravariant.md)
 
+# Special Topics
+
+- [Typeclassopedia](./typeclassopedia.md)
 # OCaml source reading(under construction)
 
 - [OCaml source reading](./ocaml-source-reading.md)
