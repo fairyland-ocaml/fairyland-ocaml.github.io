@@ -1,4 +1,12 @@
 # Summary
 
-- [Chapter 1](./chapter_1.md)
-- [Chapter 2](./chapter_2.md)
+# How to Print it (under porting)
+
+- [deriving print](./deriving-print.md)
+- [understanding type `format6`](./type-format6.md)
+- [understanding module `Format`](./module-format.md)
+- [contravariant](./contravariant.md)
+
+# OCaml source reading(under construction)
+
+- [OCaml source reading](./ocaml-source-reading.md)
