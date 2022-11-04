@@ -1,0 +1,10 @@
+[book]
+authors = ["Shiwei Weng 翁士伟"]
+language = "en"
+multilingual = true
+src = "src"
+title = "Fairyland OCaml"
+cname = "ocaml.prover.me"
+
+[output.html]
+mathjax-support = true

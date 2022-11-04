@@ -1,3 +1,3 @@
-# MDX blog
+# Fairyland OCaml
 
-mdxblog = [rwo/mdx](https://github.com/realworldocaml/mdx) + [rust-lang/mdBook](https://github.com/rust-lang/mdBook)
+a blog on OCaml
