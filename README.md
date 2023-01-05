@@ -8,9 +8,9 @@ https://github.com/marketplace/actions/mdbook-action
 
 # Todo
 
--[ ] Update syntax highlighting for OCaml
 -[ ] Porting and writing.
 
 # Done
 
+-[X] Update syntax highlighting for OCaml
 -[X] Bring in mdx.
