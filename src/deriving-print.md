@@ -1,4 +1,4 @@
-# deriving print
+# Deriving print
 
 ```ocaml
 1 + 2;;
