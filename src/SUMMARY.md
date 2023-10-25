@@ -1,21 +1,46 @@
 # Summary
 
-[Summary](./SUMMARY.md) (this page)
+[Summary](SUMMARY.md) This Page
 
-# Tutorials
+[Preface](preface.md) Why Fairyland OCaml
 
-- [Deriving print](./deriving-print.md)
+## Section: Library Gems
 
-# Language features
+Good libraries deserve more explanaion.
 
-- [Understanding type `format6`](./type-format6.md)
-- [Understanding module `Format`](./module-format.md)
+[Using `Hashcons`](libraries/hashcons.md)
 
-# Concepts
+## Section: Using `Core`
 
-- [Contravariant](./contravariant.md)
-- [Typeclassopedia](./typeclassopedia.md)
+More comprehensive discussion after RWO.
 
-# OCaml source reading(under construction)
+[Using Data Collections in `Core`](core/maps-and-hashtables.md)
 
-- [OCaml source reading](./ocaml-source-reading.md)
+## 🚧🚧 **Below is under construction** 🚧🚧
+
+[Fix]() (topics/fix.md)
+
+[Command-line]() (topics/command-line.md)
+
+[Profiling]() (topics/profiling.md)
+
+
+## Section: OCaml Internals
+
+[Deriving print]() (internals/deriving-print.md)
+
+[Understanding type `format6`]() (internals/type-format6.md)
+
+[Understanding module `Format`]() (internals/module-format.md)
+
+
+## Section: Concepts
+
+[Contravariant]() (concepts/contravariant.md)
+
+[Typeclassopedia]() (concepts/typeclassopedia.md)
+
+
+## Section: Code Reading
+
+[OCaml source reading]() (reading/ocaml-source-reading.md)
