@@ -152,7 +152,7 @@
 <p>Good libraries deserve more explanaion.</p>
 <p><a href="libraries/hashcons.html">Using <code>Hashcons</code></a></p>
 <h2 id="section-using-core"><a class="header" href="#section-using-core">Section: Using <code>Core</code></a></h2>
-<p>More comprehensive words after RWO..</p>
+<p>More comprehensive discussion after RWO.</p>
 <p><a href="core/maps-and-hashtables.html">Using Data Collections in <code>Core</code></a></p>
 <h2 id="-below-is-under-construction-"><a class="header" href="#-below-is-under-construction-">🚧🚧 <strong>Below is under construction</strong> 🚧🚧</a></h2>
 <p><a href="">Fix</a> (topics/fix.md)</p>
@@ -192,7 +192,7 @@
 <p><em>Hash collision</em>. Hash collision and hash resize is handled during the process to generate the unique id with the internal storage. The <code>equal</code> and data <code>hash</code> function will be used. Data <code>hash</code> collision outside of the internal storage is not concerned here. It should be handled by the external users.</p>
 <p><em>Structural equality</em>. A natural consequence of unique objects and ids is the structural equality check between two values can be replaced by physical equality. Refresh: structural equality checks whether two values per-component of their structures. Physical equality checks whether two values are at the same memory address. If all the objects is created inside the hash consing library, strutural equality can be replaced by phisical equality. <code>=</code> in OCaml approximates a structural equality check. <code>==</code> in OCaml is phisical equality check.</p>
 <h2 id="reading-library-code"><a class="header" href="#reading-library-code">Reading library code</a></h2>
-<p>Now we are ready to look closely into two OCaml libraries <code>backtracking/ocaml-hashcons</code> (<code>hashcons</code> on opam) and <code>fpottier/fix</code> with <code>Fix.HashCons</code> (<code>fix</code> on opam`).</p>
+<p>Now we are ready to look closely into two OCaml libraries <code>backtracking/ocaml-hashcons</code> (<code>hashcons</code> on opam) and <code>fpottier/fix</code> with <code>Fix.HashCons</code> (<code>fix</code> on opam).</p>
 <h3 id="backtrackingocaml-hashcons"><a class="header" href="#backtrackingocaml-hashcons"><code>backtracking/ocaml-hashcons</code></a></h3>
 <p>The repo is <a href="https://github.com/backtracking/ocaml-hashcons">url</a>.</p>
 <p><a href="https://github.com/backtracking/ocaml-hashcons/blob/master/hashcons.mli"><code>hashcons.mli</code></a> has types:</p>
