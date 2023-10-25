@@ -158,18 +158,18 @@
 <p><em>Hash functions</em>. With a unique id cons-ed, the datatype can provide a new <code>equal</code> function and a new <code>hash</code> function based on this id. In whole scenarios, three <code>hash</code> functions can be used.</p>
 <ol>
 <li>Global <code>hash</code>. Language provide e.g. <code>Hashtbl.hash</code>. It's used internally for convenience.</li>
-<li>Data <code>hash</code>. The hash function for your hash-consed data provided by users.</li>
+<li>Data's <code>hash</code>. The hash function for your hash-consed data provided by users.</li>
 <li>Hash-consing library <code>hash</code>. The hash function for your hash-consed data provided by the library.</li>
 </ol>
 <p>The existence and difference between <strong>2</strong> and <strong>3</strong> is not so clear depending on the library design. However, the ultimate target is to provide a better <strong>2</strong> with or without <strong>3</strong> than the old structural <code>hash</code>.</p>
 <p><em>Weak references</em>. Hash-consing library needs to provide an internal store to save the unique objects. This storage can be a <em>weak</em> array or a <em>weak</em> hash table. The internal storage should be <em>weak</em> because it should not prevent the garbage collection if any elements are not used outside.</p>
-<p><em>Hash collision</em>. Hash collision and hash resize is handled during the process to generate the unique id with the internal storage. The <code>equal</code> and data <code>hash</code> function will be used. Data <code>hash</code> collision outside of the internal storage is not concerned here. It should be handled by the external users.</p>
+<p><em>Hash collision</em>. Hash collision and hash resize is handled during the process to generate the unique id with the internal storage. The data's <code>equal</code> and data's <code>hash</code> function will be used. Data's <code>hash</code> collision outside of the internal storage is not concerned here.</p>
 <p><em>Structural equality</em>. A natural consequence of unique objects and ids is the structural equality check between two values can be replaced by physical equality. Refresh: structural equality checks whether two values per-component of their structures. Physical equality checks whether two values are at the same memory address. If all the objects is created inside the hash consing library, strutural equality can be replaced by phisical equality. <code>=</code> in OCaml approximates a structural equality check. <code>==</code> in OCaml is phisical equality check.</p>
 <h2 id="reading-library-code"><a class="header" href="#reading-library-code">Reading library code</a></h2>
 <p>Now we are ready to look closely into two OCaml libraries <code>backtracking/ocaml-hashcons</code> (<code>hashcons</code> on opam) and <code>fpottier/fix</code> with <code>Fix.HashCons</code> (<code>fix</code> on opam).</p>
 <h3 id="backtrackingocaml-hashcons"><a class="header" href="#backtrackingocaml-hashcons"><code>backtracking/ocaml-hashcons</code></a></h3>
-<p>The repo is <a href="https://github.com/backtracking/ocaml-hashcons">url</a>.</p>
-<p><a href="https://github.com/backtracking/ocaml-hashcons/blob/master/hashcons.mli"><code>hashcons.mli</code></a> has types:</p>
+<p>The repo is <a href="https://github.com/backtracking/ocaml-hashcons">backtracking/ocaml-hashcons</a>.</p>
+<p><a href="https://github.com/backtracking/ocaml-hashcons/blob/master/hashcons.mli"><code>hashcons.mli</code></a> defines the type:</p>
 <pre><code class="language-ocaml">type +'a hash_consed = private {
   hkey: int;
   tag : int;
@@ -218,10 +218,10 @@ let omega = app delta delta
 let () = assert (var &quot;x&quot; == x)
 let () = assert (app x x == app x x)
 </code></pre>
-<p><code>X.hash</code> is the data <code>hash</code>. Global <code>hash</code> is used both in <code>X.hash</code> inside of <a href="https://github.com/backtracking/ocaml-hashcons/blob/872594154dd263334a8f79822f99f1065832d383/hashcons.ml#L110"><code>H.hashcons</code></a>. <code>X.equal</code> uses physical equality for objects. <code>X.hash</code> also uses the unique ids for components. The last two <code>assert</code>s check the objects created at different application shares the same memory addresses.</p>
+<p><code>X.hash</code> is the data's <code>hash</code>. Global <code>hash</code> is used both in <code>X.hash</code> inside of <a href="https://github.com/backtracking/ocaml-hashcons/blob/872594154dd263334a8f79822f99f1065832d383/hashcons.ml#L110"><code>H.hashcons</code></a>. <code>X.equal</code> uses physical equality for objects. <code>X.hash</code> also uses the unique ids for components. The last two <code>assert</code>s check the objects created at different application shares the same memory addresses.</p>
 <p>Module <code>Hashcons</code> also provides <code>Hset</code> and <code>Hmap</code>. They're external containers which is aware of your hash-consed data. Don't confuse them with the internal storage, which is also a hash-based container.</p>
 <h3 id="fpottierfix"><a class="header" href="#fpottierfix"><code>fpottier/fix</code></a></h3>
-<p>The repo is <a href="https://gitlab.inria.fr/fpottier/fix">url</a>.</p>
+<p>The repo is <a href="https://gitlab.inria.fr/fpottier/fix">fpottier/fix</a>.</p>
 <p><code>Fix.HashCons</code>(<a href="https://gitlab.inria.fr/fpottier/fix/-/blob/master/src/HashCons.ml">ml</a>,<a href="https://gitlab.inria.fr/fpottier/fix/-/blob/master/src/HashCons.mli">mli</a>) looks very lightweighted because the internal storage is achieved by another module <code>Fix.MEMOIZER</code>. </p>
 <pre><code class="language-ocaml">type 'data cell =
   { id: int; data: 'data }
@@ -231,7 +231,7 @@ let () = assert (app x x == app x x)
 let make =
     M.memoize (fun data -&gt; { id = gensym(); data })
 </code></pre>
-<p><code>MEMOIZER</code> is a module relying on the user-provide <code>Map.S</code> which contains <code>find</code> and <code>add</code>. No data <code>hash</code> is required, but making <code>MEMOIZER</code> requires a <code>HashedType</code>. The result module of <code>HashCons.Make</code> provides a <code>hash</code> which relies on the unique id.</p>
+<p><code>MEMOIZER</code> is a module relying on the user-provide <code>Map.S</code> which contains <code>find</code> and <code>add</code>. No data's <code>hash</code> is required, but making <code>MEMOIZER</code> requires a <code>HashedType</code>. The result module of <code>HashCons.Make</code> provides a <code>hash</code> which relies on the unique id.</p>
 <p>The demo code <a href="https://gitlab.inria.fr/fpottier/fix/-/blob/master/demos/hco/HashConsDemo.ml">demos/hco
 HashConsDemo.ml</a> is challenging to read if one is not aware of these <code>hash</code> functions in use.</p>
 <pre><code class="language-ocaml">open Fix
