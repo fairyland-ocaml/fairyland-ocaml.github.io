@@ -172,7 +172,7 @@
 <p>The blog name is obviously from <a href="https://dev.realworldocaml.org/">Real World OCaml</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="using-hashcons"><a class="header" href="#using-hashcons">Using <code>Hashcons</code></a></h1>
 <h2 id="motivation"><a class="header" href="#motivation">Motivation</a></h2>
-<p><em>Aside</em>. data, value, object, component in this post means the same <em>thing</em> but from different perspectives.</p>
+<p><em>Aside</em>. Data, value, object, component in this post means the same thing but from different perspectives.</p>
 <p><em>Folklore</em>. Hash-consing, as the name may suggest, is a hash value cons-ed (appended) after the immutable data (hash key). The immediate benefit is to reuse the hash value for the unchanged data. When used in recursive datatypes, the hash value of a data can be computed from the new payload part and the recursive part whose hash value is already cons-ed.</p>
 <p><em>One-step further</em>. It's obvious hash-consing is straightforward for immutable data. However, with immutable data, more aggresive designs can be made. Hash-consing libraries in real-world usually coincide with <a href="https://en.wikipedia.org/wiki/Flyweight_pattern">Flyweight pattern</a>. They have the same targets:</p>
 <ol>
