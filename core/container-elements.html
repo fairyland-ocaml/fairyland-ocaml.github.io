@@ -146,45 +146,45 @@
                     <main>
                         <h1 id="what-are-deriving-compare-sexp_of-hash-for"><a class="header" href="#what-are-deriving-compare-sexp_of-hash-for">What are [@@deriving compare, sexp_of, hash] for?</a></h1>
 <!-- $MDX file=../../src-ocaml/elements.ml,part=pair_inline_compare -->
-<pre><code class="language-ocaml">type my_pair = P of int * int [@@deriving_inline compare]
+<pre><code class="language-ocaml">type foo1 = P1 of int * string [@@deriving_inline compare]
 
-let _ = fun (_ : my_pair) -&gt; ()
+let _ = fun (_ : foo1) -&gt; ()
 
-let compare_my_pair =
+let compare_foo1 =
   (fun a__001_ b__002_ -&gt;
      if Stdlib.( == ) a__001_ b__002_ then 0
      else
        match (a__001_, b__002_) with
-       | P (_a__003_, _a__005_), P (_b__004_, _b__006_) -&gt; (
+       | P1 (_a__003_, _a__005_), P1 (_b__004_, _b__006_) -&gt; (
            match compare_int _a__003_ _b__004_ with
-           | 0 -&gt; compare_int _a__005_ _b__006_
+           | 0 -&gt; compare_string _a__005_ _b__006_
            | n -&gt; n)
-    : my_pair -&gt; my_pair -&gt; int)
+    : foo1 -&gt; foo1 -&gt; int)
 
-let _ = compare_my_pair
+let _ = compare_foo1
 
 [@@@end]
 </code></pre>
 <!-- $MDX file=../../src-ocaml/elements.ml,part=pair_inline_sexp -->
-<pre><code class="language-ocaml">type my_pair = P of int * int [@@deriving_inline sexp]
+<pre><code class="language-ocaml">type foo2 = P2 of int * string [@@deriving_inline sexp]
 
-let _ = fun (_ : my_pair) -&gt; ()
+let _ = fun (_ : foo2) -&gt; ()
 
-let my_pair_of_sexp =
-  (let error_source__009_ = &quot;src-ocaml/elements.ml.my_pair&quot; in
+let foo2_of_sexp =
+  (let error_source__009_ = &quot;src-ocaml/elements.ml.foo2&quot; in
    function
    | Sexplib0.Sexp.List
-       (Sexplib0.Sexp.Atom ((&quot;p&quot; | &quot;P&quot;) as _tag__012_) :: sexp_args__013_) as
+       (Sexplib0.Sexp.Atom ((&quot;p2&quot; | &quot;P2&quot;) as _tag__012_) :: sexp_args__013_) as
      _sexp__011_ -&gt; (
        match sexp_args__013_ with
        | [ arg0__014_; arg1__015_ ] -&gt;
            let res0__016_ = int_of_sexp arg0__014_
-           and res1__017_ = int_of_sexp arg1__015_ in
-           P (res0__016_, res1__017_)
+           and res1__017_ = string_of_sexp arg1__015_ in
+           P2 (res0__016_, res1__017_)
        | _ -&gt;
            Sexplib0.Sexp_conv_error.stag_incorrect_n_args error_source__009_
              _tag__012_ _sexp__011_)
-   | Sexplib0.Sexp.Atom (&quot;p&quot; | &quot;P&quot;) as sexp__010_ -&gt;
+   | Sexplib0.Sexp.Atom (&quot;p2&quot; | &quot;P2&quot;) as sexp__010_ -&gt;
        Sexplib0.Sexp_conv_error.stag_takes_args error_source__009_ sexp__010_
    | Sexplib0.Sexp.List (Sexplib0.Sexp.List _ :: _) as sexp__008_ -&gt;
        Sexplib0.Sexp_conv_error.nested_list_invalid_sum error_source__009_
@@ -194,63 +194,59 @@ let my_pair_of_sexp =
          sexp__008_
    | sexp__008_ -&gt;
        Sexplib0.Sexp_conv_error.unexpected_stag error_source__009_ sexp__008_
-    : Sexplib0.Sexp.t -&gt; my_pair)
+    : Sexplib0.Sexp.t -&gt; foo2)
 
-let _ = my_pair_of_sexp
+let _ = foo2_of_sexp
 
-let sexp_of_my_pair =
-  (fun (P (arg0__018_, arg1__019_)) -&gt;
+let sexp_of_foo2 =
+  (fun (P2 (arg0__018_, arg1__019_)) -&gt;
      let res0__020_ = sexp_of_int arg0__018_
-     and res1__021_ = sexp_of_int arg1__019_ in
-     Sexplib0.Sexp.List [ Sexplib0.Sexp.Atom &quot;P&quot;; res0__020_; res1__021_ ]
-    : my_pair -&gt; Sexplib0.Sexp.t)
+     and res1__021_ = sexp_of_string arg1__019_ in
+     Sexplib0.Sexp.List [ Sexplib0.Sexp.Atom &quot;P2&quot;; res0__020_; res1__021_ ]
+    : foo2 -&gt; Sexplib0.Sexp.t)
 
-let _ = sexp_of_my_pair
+let _ = sexp_of_foo2
+
+[@@@end]
 </code></pre>
 <!-- $MDX file=../../src-ocaml/elements.ml,part=pair_inline_equal -->
-<pre><code class="language-ocaml">let _ = fun (_ : my_pair) -&gt; ()
-let equal_my_pair =
+<pre><code class="language-ocaml">type foo3 = P3 of int * string [@@deriving_inline equal]
+
+let _ = fun (_ : foo3) -&gt; ()
+let equal_foo3 =
   (fun a__022_ -&gt;
      fun b__023_ -&gt;
        if Stdlib.(==) a__022_ b__023_
        then true
        else
          (match (a__022_, b__023_) with
-          | (P (_a__024_, _a__026_), P (_b__025_, _b__027_)) -&gt;
+          | (P3 (_a__024_, _a__026_), P3 (_b__025_, _b__027_)) -&gt;
               Stdlib.(&amp;&amp;) (equal_int _a__024_ _b__025_)
-                (equal_int _a__026_ _b__027_)) : my_pair -&gt; my_pair -&gt; bool)
-let _ = equal_my_pair
+                (equal_string _a__026_ _b__027_)) : foo3 -&gt; foo3 -&gt; bool)
+let _ = equal_foo3
 [@@@end]
 </code></pre>
 <!-- $MDX file=../../src-ocaml/elements.ml,part=pair_inline_hash -->
-<pre><code class="language-ocaml">type my_pair = P of int * int [@@deriving_inline hash]
+<pre><code class="language-ocaml">type foo4 = P4 of int * string [@@deriving_inline hash]
 
-let _ = fun (_ : my_pair) -&gt; ()
-
-let (hash_fold_my_pair :
-      Ppx_hash_lib.Std.Hash.state -&gt; my_pair -&gt; Ppx_hash_lib.Std.Hash.state) =
-  (fun hsv arg -&gt;
-     match arg with
-     | P (_a0, _a1) -&gt;
-         let hsv = hsv in
-         let hsv =
+let _ = fun (_ : foo4) -&gt; ()
+let (hash_fold_foo4 :
+  Ppx_hash_lib.Std.Hash.state -&gt; foo4 -&gt; Ppx_hash_lib.Std.Hash.state) =
+  (fun hsv -&gt;
+     fun arg -&gt;
+       match arg with
+       | P4 (_a0, _a1) -&gt;
            let hsv = hsv in
-           hash_fold_int hsv _a0
-         in
-         hash_fold_int hsv _a1
-    : Ppx_hash_lib.Std.Hash.state -&gt; my_pair -&gt; Ppx_hash_lib.Std.Hash.state)
-
-let _ = hash_fold_my_pair
-
-let (hash_my_pair : my_pair -&gt; Ppx_hash_lib.Std.Hash.hash_value) =
+           let hsv = let hsv = hsv in hash_fold_int hsv _a0 in
+           hash_fold_string hsv _a1 : Ppx_hash_lib.Std.Hash.state -&gt;
+                                        foo4 -&gt; Ppx_hash_lib.Std.Hash.state)
+let _ = hash_fold_foo4
+let (hash_foo4 : foo4 -&gt; Ppx_hash_lib.Std.Hash.hash_value) =
   let func arg =
     Ppx_hash_lib.Std.Hash.get_hash_value
-      (let hsv = Ppx_hash_lib.Std.Hash.create () in
-       hash_fold_my_pair hsv arg)
-  in
+      (let hsv = Ppx_hash_lib.Std.Hash.create () in hash_fold_foo4 hsv arg) in
   fun x -&gt; func x
-
-let _ = hash_my_pair
+let _ = hash_foo4
 
 [@@@end]
 </code></pre>
