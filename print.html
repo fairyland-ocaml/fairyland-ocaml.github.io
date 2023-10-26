@@ -84,7 +84,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="libraries/hashcons.html">Using Hashcons</a></li><li class="chapter-item expanded affix "><a href="core/maps-and-hashtables.html">Using Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Fix</div></li><li class="chapter-item expanded affix "><div>Command-line</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="libraries/hashcons.html">Using Hashcons</a></li><li class="chapter-item expanded affix "><a href="core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="core/maps-and-hashtables.html">Using Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Fix</div></li><li class="chapter-item expanded affix "><div>Command-line</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -153,6 +153,7 @@
 <p><a href="libraries/hashcons.html">Using <code>Hashcons</code></a></p>
 <h2 id="section-using-core"><a class="header" href="#section-using-core">Section: Using <code>Core</code></a></h2>
 <p>More comprehensive discussion after RWO.</p>
+<p><a href="core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></p>
 <p><a href="core/maps-and-hashtables.html">Using Data Collections in <code>Core</code></a></p>
 <h2 id="-below-is-under-construction-"><a class="header" href="#-below-is-under-construction-">🚧🚧 <strong>Below is under construction</strong> 🚧🚧</a></h2>
 <p><a href="">Fix</a> (topics/fix.md)</p>
@@ -328,6 +329,58 @@ let () =
 <p>Furthermore, as string intern is widely used for many languages, why is hash-consing not the default implementation inside OCaml compilers?</p>
 <p>The functions on the raw types need to be reimplemented with the hash cons-ed type with just tedious fmap. Is it another case for the <em>Expression Problem</em> or <em>Open Recursion</em>?</p>
 <p>I am also interested in the implementation of <a href="https://github.com/camlp5/pa_ppx_hashcons">camlp5/pa_ppx_hashcons</a> and <a href="https://coq.inria.fr/doc/master/api/coq-core/Hashcons/index.html">coq-core/Hashcons</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="what-are-deriving-compare-sexp_of-hash-for"><a class="header" href="#what-are-deriving-compare-sexp_of-hash-for">What are [@@deriving compare, sexp_of, hash] for?</a></h1>
+<!-- $MDX file=../../src-ocaml/elements.ml,part=pair_inline -->
+<pre><code class="language-ocaml">type my_pair = P of int * int [@@deriving_inline compare, sexp_of, hash]
+
+let _ = fun (_ : my_pair) -&gt; ()
+
+let compare_my_pair =
+  (fun a__001_ -&gt;
+     fun b__002_ -&gt;
+       if Stdlib.(==) a__001_ b__002_
+       then 0
+       else
+         (match (a__001_, b__002_) with
+          | (P (_a__003_, _a__005_), P (_b__004_, _b__006_)) -&gt;
+              (match compare_int _a__003_ _b__004_ with
+               | 0 -&gt; compare_int _a__005_ _b__006_
+               | n -&gt; n)) : my_pair -&gt; my_pair -&gt; int)
+let _ = compare_my_pair
+
+let sexp_of_my_pair =
+  (fun (P (arg0__007_, arg1__008_)) -&gt;
+     let res0__009_ = sexp_of_int arg0__007_
+     and res1__010_ = sexp_of_int arg1__008_ in
+     Sexplib0.Sexp.List [Sexplib0.Sexp.Atom &quot;P&quot;; res0__009_; res1__010_] :
+  my_pair -&gt; Sexplib0.Sexp.t)
+let _ = sexp_of_my_pair
+
+let (hash_fold_my_pair :
+  Ppx_hash_lib.Std.Hash.state -&gt; my_pair -&gt; Ppx_hash_lib.Std.Hash.state) =
+  (fun hsv -&gt;
+     fun arg -&gt;
+       match arg with
+       | P (_a0, _a1) -&gt;
+           let hsv = hsv in
+           let hsv = let hsv = hsv in hash_fold_int hsv _a0 in
+           hash_fold_int hsv _a1 : Ppx_hash_lib.Std.Hash.state -&gt;
+                                     my_pair -&gt; Ppx_hash_lib.Std.Hash.state)
+
+let _ = hash_fold_my_pair
+
+let (hash_my_pair : my_pair -&gt; Ppx_hash_lib.Std.Hash.hash_value) =
+  let func arg =
+    Ppx_hash_lib.Std.Hash.get_hash_value
+      (let hsv = Ppx_hash_lib.Std.Hash.create () in
+       hash_fold_my_pair hsv arg)
+  in
+  fun x -&gt; func x
+
+let _ = hash_my_pair
+
+[@@@end]
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="map-set-and-hashtables"><a class="header" href="#map-set-and-hashtables">Map, Set and Hashtables</a></h1>
 
                     </main>
@@ -364,6 +417,8 @@ let () =
         <script src="book.js" charset="utf-8"></script>
 
         <!-- Custom JS scripts -->
+        <script src="asset/mermaid.min.js"></script>
+        <script src="asset/mermaid-init.js"></script>
 
         <script>
         window.addEventListener('load', function() {
