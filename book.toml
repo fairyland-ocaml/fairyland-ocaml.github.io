@@ -7,3 +7,10 @@ title = "Fairyland OCaml"
 
 [output.html]
 mathjax-support = true
+additional-js = ["asset/mermaid.min.js", "asset/mermaid-init.js"]
+
+[preprocessor.graphviz]
+command = "mdbook-graphviz"
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"

@@ -7,6 +7,8 @@ This repo is the source code for Fairyland OCaml [https://fairyland-ocaml.github
 - https://github.com/rust-lang/mdBook
 - https://github.com/marketplace/actions/mdbook-action
 - https://github.com/realworldocaml/mdx
+- https://github.com/dylanowen/mdbook-graphviz
+- https://github.com/badboy/mdbook-mermaid
 
 # Todo
 

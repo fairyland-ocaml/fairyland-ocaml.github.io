@@ -1,1 +1,1 @@
-(dirs :standard src \ book)
+(dirs :standard \ book mdBook theme)
