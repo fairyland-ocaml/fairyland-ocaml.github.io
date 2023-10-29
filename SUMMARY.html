@@ -147,14 +147,24 @@
                         <h1 id="summary"><a class="header" href="#summary">Summary</a></h1>
 <p><a href="SUMMARY.html">Summary</a> This Page</p>
 <p><a href="preface.html">Preface</a> Why Fairyland OCaml</p>
+<pre><code class="language-dot process">digraph {
+    &quot;processed&quot; -&gt; &quot;graph&quot;
+}
+</code></pre>
+<pre><code class="language-mermaid">graph TD;
+  A--&gt;B;
+  A--&gt;C;
+  B--&gt;D;
+  C--&gt;D;
+</code></pre>
 <h2 id="section-library-gems"><a class="header" href="#section-library-gems">Section: Library Gems</a></h2>
 <p>Good libraries deserve more explanaion.</p>
 <p><a href="libraries/hashcons.html">Using <code>Hashcons</code></a></p>
 <h2 id="section-using-core"><a class="header" href="#section-using-core">Section: Using <code>Core</code></a></h2>
 <p>More comprehensive discussion after RWO.</p>
 <p><a href="core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></p>
-<p><a href="core/maps-and-hashtables.html">Using Data Collections in <code>Core</code></a></p>
 <h2 id="-below-is-under-construction-"><a class="header" href="#-below-is-under-construction-">🚧🚧 <strong>Below is under construction</strong> 🚧🚧</a></h2>
+<p><a href="core/maps-and-hashtables.html">Using Data Collections in <code>Core</code></a></p>
 <p><a href="">Fix</a> (topics/fix.md)</p>
 <p><a href="">Command-line</a> (topics/command-line.md)</p>
 <p><a href="">Profiling</a> (topics/profiling.md)</p>

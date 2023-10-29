@@ -145,6 +145,92 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="map-set-and-hashtables"><a class="header" href="#map-set-and-hashtables">Map, Set and Hashtables</a></h1>
+<p>What are exact functions required for distinct data containers?</p>
+<p>Afterr all, what collections are in <code>Base</code> and <code>Core</code>?</p>
+<p>| Base                        | Core | Stdlib                   | kind      | requiring                | comment                                                                        |
+| --------------------------- | ---- | ------------------------ | --------- | ------------------------ | ------------------------------------------------------------------------------ |
+| <code>Applicative</code>               |      | /                        | functor   |                          |                                                                                |
+| <code>Array</code>                     |      | <code>Array</code>                  | std       |                          |                                                                                |
+| <code>Avltree</code>                   |      | /                        | low-level |                          |                                                                                |
+| <code>Backtrace</code>                 |      | <code>Printexc.raw_backtrace</code> | system    |                          |                                                                                |
+| <code>Binary_search</code>             |      | /                        | interface |                          |                                                                                |
+| <code>Binary_searchable</code>         |      | /                        | functor   |                          |                                                                                |
+| <code>Blit</code>                      |      | /                        | std       |                          | bit-block transfer                                                             |
+| <code>Bool</code>                      |      | <code>Bool</code>                   | std       |                          |                                                                                |
+| <code>Buffer</code>                    |      | <code>Buffer</code>                 | std       |                          |                                                                                |
+| <code>Bytes</code>                     |      | <code>Bytes</code>                  | std       |                          |                                                                                |
+| <code>Char</code>                      |      | <code>Char</code>                   | std       |                          |                                                                                |
+| <code>Comparable</code>                |      | /                        | functor   |                          |                                                                                |
+| <code>Comparator</code>                |      | /                        | functor   |                          |                                                                                |
+| <code>Comparisons</code>               |      | /                        | interface |                          |                                                                                |
+| <code>Container</code>                 |      | /                        | functor   |                          |                                                                                |
+| <code>Either</code>                    |      | <code>Either</code>                 | std       |                          |                                                                                |
+| <code>Equal</code>                     |      | /                        | interface |                          |                                                                                |
+| <code>Error</code>                     |      | /                        | std       |                          |                                                                                |
+| <code>Exn</code>                       |      | <code>exn</code>                    | std       |                          |                                                                                |
+| <code>Export</code>                    |      | /                        | wrap      |                          | undoc                                                                          |
+| <code>Field</code>                     |      | /                        | std       |                          |                                                                                |
+| <code>Float</code>                     |      | <code>Float</code>                  | std       |                          |                                                                                |
+| <code>Floatable</code>                 |      | /                        | interface |                          |                                                                                |
+| <code>Fn</code>                        |      | /                        | std       |                          |                                                                                |
+| <code>Formatter</code>                 |      | <code>Formatter</code>              | std       |                          |                                                                                |
+| <code>Hash</code>                      |      | /                        | std       |                          | hash primitives                                                                |
+| <code>Hash_set</code>                  |      | /                        | container | <code>compare, sexp_of, hash</code> |                                                                                |
+| <code>Hashable</code>                  |      | /                        | interface |                          | module trait                                                                   |
+| <code>Hasher</code>                    |      | /                        | interface |                          | just <code>t</code> and <code>hash_fold_t</code>                                                     |
+| <code>Hashtbl</code>                   |      | <code>Hashtbl</code>                | container | <code>compare, sexp_of, hash</code> |                                                                                |
+| <code>Identifiable</code>              |      | /                        | functor   |                          |                                                                                |
+| <code>Indexed_container</code>         |      | /                        | interface |                          |                                                                                |
+| <code>Info</code>                      |      | /                        | std       |                          |                                                                                |
+| <code>Int</code>                       |      | <code>Int</code>                    | std       |                          |                                                                                |
+| <code>Int32</code>                     |      | <code>Int32</code>                  | std       |                          |                                                                                |
+| <code>Int63</code>                     |      | /                        | std       |                          |                                                                                |
+| <code>Int64</code>                     |      | <code>Int64</code>                  | std       |                          |                                                                                |
+| <code>Int_conversions</code>           |      | /                        | std       |                          |                                                                                |
+| <code>Intable</code>                   |      | /                        | interface |                          |                                                                                |
+| <code>Int_math</code>                  |      | /                        | functor   |                          |                                                                                |
+| <code>Invariant</code>                 |      | /                        | interface |                          |                                                                                |
+| <code>Lazy</code>                      |      | <code>Lazy</code>                   | std       |                          |                                                                                |
+| <code>Linked_queue</code>              |      | <code>Queue </code>                 | container |                          |                                                                                |
+| <code>List</code>                      |      | <code>List</code>                   | container |                          |                                                                                |
+| <code>Map</code>                       |      | <code>Map</code>                    | std       | <code>compare, sexp_of</code>       | balanced binary tree over a totally-ordered domain                             |
+| <code>Maybe_bound</code>               |      | /                        | std       |                          |                                                                                |
+| <code>Monad</code>                     |      | /                        | functor   |                          |                                                                                |
+| <code>Nativeint</code>                 |      | /                        | std       |                          |                                                                                |
+| <code>Nothing</code>                   |      | /                        | std       |                          |                                                                                |
+| <code>Option</code>                    |      | <code>Option</code>                 | std       |                          |                                                                                |
+| <code>Option_array</code>              |      | /                        | std       |                          |                                                                                |
+| <code>Or_error</code>                  |      | /                        | std       |                          | a specialization of the <code>Result</code> type                                          |
+| <code>Ordered_collection_common</code> |      | /                        | trait     |                          |                                                                                |
+| <code>Ordering</code>                  |      | /                        | std       |                          |                                                                                |
+| <code>Poly</code>                      |      | <code>Stdlib</code>                 | std       |                          |                                                                                |
+| <code>Pretty_printer</code>            |      | /                        | std       |                          | for use in toplevels                                                           |
+| <code>Printf</code>                    |      | <code>Printf</code>                 | std       |                          |                                                                                |
+| <code>Queue</code>                     |      | <code>Queue</code>                  | std       |                          | A queue implemented with an array                                              |
+| <code>Random</code>                    |      | <code>Random</code>                 | std       |                          |                                                                                |
+| <code>Ref</code>                       |      | <code>'a ref</code>                 | std       |                          |                                                                                |
+| <code>Result</code>                    |      | <code>Result</code>                 | std       |                          |                                                                                |
+| <code>Sequence</code>                  |      | <code>Seq</code>                    | std       |                          |                                                                                |
+| <code>Set</code>                       |      | <code>Set</code>                    | std       |                          | Sets based on <code>Comparator.S</code>                                                   |
+| <code>Sexp</code>                      |      | /                        | std       |                          |                                                                                |
+| <code>Sexpable</code>                  |      | /                        | functor   |                          |                                                                                |
+| <code>Sign</code>                      |      | /                        | std       |                          |                                                                                |
+| <code>Sign_or_nan</code>               |      | /                        | std       |                          |                                                                                |
+| <code>Source_code_position</code>      |      | /                        | std       |                          |                                                                                |
+| <code>Stack</code>                     |      | <code>Stack</code>                  | std       |                          |                                                                                |
+| <code>Staged</code>                    |      | /                        | std       |                          |                                                                                |
+| <code>String</code>                    |      | <code>String</code>                 | std       |                          |                                                                                |
+| <code>Stringable</code>                |      | /                        | interface |                          |                                                                                |
+| <code>Sys</code>                       |      | <code>Sys</code>                    | std       |                          |                                                                                |
+| <code>T</code>                         |      | /                        | interface |                          |                                                                                |
+| <code>Type_equal</code>                |      | /                        | std       |                          | to represent type equalities that the type checker otherwise would not know    |
+| <code>Uniform_array</code>             |      | /                        | std       |                          | guaranteed that the representation array is not tagged with <code>Double_array_tag</code> |
+| <code>Unit</code>                      |      | <code>unit</code>                   | std       |                          |                                                                                |
+| <code>Uchar</code>                     |      | /                        | std       |                          |                                                                                |
+| <code>Variant</code>                   |      | /                        | std       |                          | used in <code>[@@deriving variants]</code>                                                |
+| <code>With_return</code>               |      | /                        | std       |                          |                                                                                |
+| <code>Word_size</code>                 |      | /                        | std       |                          |                                                                                |
+| ``                          |      | /                        | std       |                          |                                                                                |</p>
 
                     </main>
 
