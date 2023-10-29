@@ -16,9 +16,10 @@ More comprehensive discussion after RWO.
 
 [What are [@@deriving compare, sexp_of, hash] for?](core/container-elements.md)
 
-[Using Data Collections in `Core`](core/maps-and-hashtables.md)
 
 ## 🚧🚧 **Below is under construction** 🚧🚧
+
+[Using Data Collections in `Core`](core/maps-and-hashtables.md)
 
 [Fix]() (topics/fix.md)
 
