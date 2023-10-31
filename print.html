@@ -84,7 +84,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="libraries/hashcons.html">Using Hashcons</a></li><li class="chapter-item expanded affix "><a href="core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="core/maps-and-hashtables.html">Using Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Fix</div></li><li class="chapter-item expanded affix "><div>Command-line</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="libraries/hashcons.html">Using Hashcons</a></li><li class="chapter-item expanded affix "><a href="core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="core/maps-and-hashtables.html">Using Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>What is OCaml polymorphic compare</div></li><li class="chapter-item expanded affix "><div>Fix</div></li><li class="chapter-item expanded affix "><div>Command-line</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -154,8 +154,10 @@
 <h2 id="section-using-core"><a class="header" href="#section-using-core">Section: Using <code>Core</code></a></h2>
 <p>More comprehensive discussion after RWO.</p>
 <p><a href="core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></p>
-<h2 id="-below-is-under-construction-"><a class="header" href="#-below-is-under-construction-">🚧🚧 <strong>Below is under construction</strong> 🚧🚧</a></h2>
 <p><a href="core/maps-and-hashtables.html">Using Data Collections in <code>Core</code></a></p>
+<h2 id="-below-is-under-construction-"><a class="header" href="#-below-is-under-construction-">🚧🚧 <strong>Below is under construction</strong> 🚧🚧</a></h2>
+<p><a href="">What is OCaml polymorphic compare</a></p>
+<!-- - https://github.com/search?q=repo%3Aocaml%2Focaml%20equal&type=code -->
 <p><a href="">Fix</a> (topics/fix.md)</p>
 <p><a href="">Command-line</a> (topics/command-line.md)</p>
 <p><a href="">Profiling</a> (topics/profiling.md)</p>
@@ -168,7 +170,7 @@
 <p><a href="">Typeclassopedia</a> (concepts/typeclassopedia.md)</p>
 <h2 id="section-code-reading"><a class="header" href="#section-code-reading">Section: Code Reading</a></h2>
 <p><a href="">OCaml source reading</a> (reading/ocaml-source-reading.md)</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="preface"><a class="header" href="#preface">Preface</a></h1>
+<!-- - https://discuss.ocaml.org/t/readable-ml-ocaml-sml-etc-compilers/13318 --><div style="break-before: page; page-break-before: always;"></div><h1 id="preface"><a class="header" href="#preface">Preface</a></h1>
 <p>Fairyland OCaml is a blog by <a href="https://www.prover.me/">Shiwei Weng</a> to write my OCaml experience. I used to share OCaml snippet and understanding in our research group <a href="https://pl.cs.jhu.edu/">JHU PL Lab</a>. I decided to port them here. The intuition often comes from my learning and research experience as well as fantastic students from two <a href="https://pl.cs.jhu.edu/fpse/">functional</a> <a href="https://pl.cs.jhu.edu/pl/">programming</a> courses at JHU.</p>
 <p>The blog name is obviously from <a href="https://dev.realworldocaml.org/">Real World OCaml</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="using-hashcons"><a class="header" href="#using-hashcons">Using <code>Hashcons</code></a></h1>
@@ -522,96 +524,159 @@ let _ = Set.empty (module Int_set_as_element)
 let _ = Hash_set.create (module Int_set_as_element)
 </code></pre>
 <p>Both <code>Set.hash_m__t</code> and <code>Set.hash_fold_m__t</code> requires a first-class module implementing <code>Hasher.S</code> (which requires <code>hash_fold_t</code>). In this example, the module is <code>Int</code>. <code>Int</code> is a build-in module containing <code>hash</code> and <code>hash_fold</code>. If this is <code>Your_data</code> rather than <code>Int</code>, the generated code above for <code>Set.M(Your_data).t</code> will have <code>Set.hash_m__t (module Your_data)</code> and <code>Set.hash_fold_m__t (module Your_data)</code>. Therefore, <code>Your_data</code> have to provide <code>hash</code> and <code>hash_fold</code> functions.</p>
-<p>This can explain why <code>Base.Hash_set.Key</code> contains <code>hash</code> and no <code>hash_fold</code>, but we still need <code>hash_fold</code> even it may not be immediately used.</p>
+<p>This can explain why <code>Base.Hash_set.Key</code> contains <code>hash</code> and no <code>hash_fold</code>, but <code>ppx_hash</code> still derives both <code>hash</code> and <code>hash_fold</code>.</p>
 <p>p.s. I don't claim this design is good.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="map-set-and-hashtables"><a class="header" href="#map-set-and-hashtables">Map, Set and Hashtables</a></h1>
 <p>What are exact functions required for distinct data containers?</p>
 <p>Afterr all, what collections are in <code>Base</code> and <code>Core</code>?</p>
-<p>| Base                        | Core | Stdlib                   | kind      | requiring                | comment                                                                        |
-| --------------------------- | ---- | ------------------------ | --------- | ------------------------ | ------------------------------------------------------------------------------ |
-| <code>Applicative</code>               |      | /                        | functor   |                          |                                                                                |
-| <code>Array</code>                     |      | <code>Array</code>                  | std       |                          |                                                                                |
-| <code>Avltree</code>                   |      | /                        | low-level |                          |                                                                                |
-| <code>Backtrace</code>                 |      | <code>Printexc.raw_backtrace</code> | system    |                          |                                                                                |
-| <code>Binary_search</code>             |      | /                        | interface |                          |                                                                                |
-| <code>Binary_searchable</code>         |      | /                        | functor   |                          |                                                                                |
-| <code>Blit</code>                      |      | /                        | std       |                          | bit-block transfer                                                             |
-| <code>Bool</code>                      |      | <code>Bool</code>                   | std       |                          |                                                                                |
-| <code>Buffer</code>                    |      | <code>Buffer</code>                 | std       |                          |                                                                                |
-| <code>Bytes</code>                     |      | <code>Bytes</code>                  | std       |                          |                                                                                |
-| <code>Char</code>                      |      | <code>Char</code>                   | std       |                          |                                                                                |
-| <code>Comparable</code>                |      | /                        | functor   |                          |                                                                                |
-| <code>Comparator</code>                |      | /                        | functor   |                          |                                                                                |
-| <code>Comparisons</code>               |      | /                        | interface |                          |                                                                                |
-| <code>Container</code>                 |      | /                        | functor   |                          |                                                                                |
-| <code>Either</code>                    |      | <code>Either</code>                 | std       |                          |                                                                                |
-| <code>Equal</code>                     |      | /                        | interface |                          |                                                                                |
-| <code>Error</code>                     |      | /                        | std       |                          |                                                                                |
-| <code>Exn</code>                       |      | <code>exn</code>                    | std       |                          |                                                                                |
-| <code>Export</code>                    |      | /                        | wrap      |                          | undoc                                                                          |
-| <code>Field</code>                     |      | /                        | std       |                          |                                                                                |
-| <code>Float</code>                     |      | <code>Float</code>                  | std       |                          |                                                                                |
-| <code>Floatable</code>                 |      | /                        | interface |                          |                                                                                |
-| <code>Fn</code>                        |      | /                        | std       |                          |                                                                                |
-| <code>Formatter</code>                 |      | <code>Formatter</code>              | std       |                          |                                                                                |
-| <code>Hash</code>                      |      | /                        | std       |                          | hash primitives                                                                |
-| <code>Hash_set</code>                  |      | /                        | container | <code>compare, sexp_of, hash</code> |                                                                                |
-| <code>Hashable</code>                  |      | /                        | interface |                          | module trait                                                                   |
-| <code>Hasher</code>                    |      | /                        | interface |                          | just <code>t</code> and <code>hash_fold_t</code>                                                     |
-| <code>Hashtbl</code>                   |      | <code>Hashtbl</code>                | container | <code>compare, sexp_of, hash</code> |                                                                                |
-| <code>Identifiable</code>              |      | /                        | functor   |                          |                                                                                |
-| <code>Indexed_container</code>         |      | /                        | interface |                          |                                                                                |
-| <code>Info</code>                      |      | /                        | std       |                          |                                                                                |
-| <code>Int</code>                       |      | <code>Int</code>                    | std       |                          |                                                                                |
-| <code>Int32</code>                     |      | <code>Int32</code>                  | std       |                          |                                                                                |
-| <code>Int63</code>                     |      | /                        | std       |                          |                                                                                |
-| <code>Int64</code>                     |      | <code>Int64</code>                  | std       |                          |                                                                                |
-| <code>Int_conversions</code>           |      | /                        | std       |                          |                                                                                |
-| <code>Intable</code>                   |      | /                        | interface |                          |                                                                                |
-| <code>Int_math</code>                  |      | /                        | functor   |                          |                                                                                |
-| <code>Invariant</code>                 |      | /                        | interface |                          |                                                                                |
-| <code>Lazy</code>                      |      | <code>Lazy</code>                   | std       |                          |                                                                                |
-| <code>Linked_queue</code>              |      | <code>Queue </code>                 | container |                          |                                                                                |
-| <code>List</code>                      |      | <code>List</code>                   | container |                          |                                                                                |
-| <code>Map</code>                       |      | <code>Map</code>                    | std       | <code>compare, sexp_of</code>       | balanced binary tree over a totally-ordered domain                             |
-| <code>Maybe_bound</code>               |      | /                        | std       |                          |                                                                                |
-| <code>Monad</code>                     |      | /                        | functor   |                          |                                                                                |
-| <code>Nativeint</code>                 |      | /                        | std       |                          |                                                                                |
-| <code>Nothing</code>                   |      | /                        | std       |                          |                                                                                |
-| <code>Option</code>                    |      | <code>Option</code>                 | std       |                          |                                                                                |
-| <code>Option_array</code>              |      | /                        | std       |                          |                                                                                |
-| <code>Or_error</code>                  |      | /                        | std       |                          | a specialization of the <code>Result</code> type                                          |
-| <code>Ordered_collection_common</code> |      | /                        | trait     |                          |                                                                                |
-| <code>Ordering</code>                  |      | /                        | std       |                          |                                                                                |
-| <code>Poly</code>                      |      | <code>Stdlib</code>                 | std       |                          |                                                                                |
-| <code>Pretty_printer</code>            |      | /                        | std       |                          | for use in toplevels                                                           |
-| <code>Printf</code>                    |      | <code>Printf</code>                 | std       |                          |                                                                                |
-| <code>Queue</code>                     |      | <code>Queue</code>                  | std       |                          | A queue implemented with an array                                              |
-| <code>Random</code>                    |      | <code>Random</code>                 | std       |                          |                                                                                |
-| <code>Ref</code>                       |      | <code>'a ref</code>                 | std       |                          |                                                                                |
-| <code>Result</code>                    |      | <code>Result</code>                 | std       |                          |                                                                                |
-| <code>Sequence</code>                  |      | <code>Seq</code>                    | std       |                          |                                                                                |
-| <code>Set</code>                       |      | <code>Set</code>                    | std       |                          | Sets based on <code>Comparator.S</code>                                                   |
-| <code>Sexp</code>                      |      | /                        | std       |                          |                                                                                |
-| <code>Sexpable</code>                  |      | /                        | functor   |                          |                                                                                |
-| <code>Sign</code>                      |      | /                        | std       |                          |                                                                                |
-| <code>Sign_or_nan</code>               |      | /                        | std       |                          |                                                                                |
-| <code>Source_code_position</code>      |      | /                        | std       |                          |                                                                                |
-| <code>Stack</code>                     |      | <code>Stack</code>                  | std       |                          |                                                                                |
-| <code>Staged</code>                    |      | /                        | std       |                          |                                                                                |
-| <code>String</code>                    |      | <code>String</code>                 | std       |                          |                                                                                |
-| <code>Stringable</code>                |      | /                        | interface |                          |                                                                                |
-| <code>Sys</code>                       |      | <code>Sys</code>                    | std       |                          |                                                                                |
-| <code>T</code>                         |      | /                        | interface |                          |                                                                                |
-| <code>Type_equal</code>                |      | /                        | std       |                          | to represent type equalities that the type checker otherwise would not know    |
-| <code>Uniform_array</code>             |      | /                        | std       |                          | guaranteed that the representation array is not tagged with <code>Double_array_tag</code> |
-| <code>Unit</code>                      |      | <code>unit</code>                   | std       |                          |                                                                                |
-| <code>Uchar</code>                     |      | /                        | std       |                          |                                                                                |
-| <code>Variant</code>                   |      | /                        | std       |                          | used in <code>[@@deriving variants]</code>                                                |
-| <code>With_return</code>               |      | /                        | std       |                          |                                                                                |
-| <code>Word_size</code>                 |      | /                        | std       |                          |                                                                                |
-| ``                          |      | /                        | std       |                          |                                                                                |</p>
-
+<div class="table-wrapper"><table><thead><tr><th>Base</th><th>Core</th><th>Stdlib</th><th>Kind</th><th>Requiring</th><th>Comment</th></tr></thead><tbody>
+<tr><td><code>Applicative</code></td><td></td><td>/</td><td>functor</td><td></td><td><code>base</code> lib</td></tr>
+<tr><td><code>Array</code></td><td><code>Array</code></td><td><code>Array</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Avltree</code></td><td></td><td>/</td><td>low-level</td><td></td><td></td></tr>
+<tr><td><code>Backtrace</code></td><td></td><td><code>Printexc.raw_backtrace</code></td><td>system</td><td></td><td></td></tr>
+<tr><td><code>Binary_search</code></td><td></td><td>/</td><td>interface</td><td></td><td></td></tr>
+<tr><td><code>Binary_searchable</code></td><td></td><td>/</td><td>functor</td><td></td><td></td></tr>
+<tr><td><code>Blit</code></td><td><code>Blit</code></td><td>/</td><td>std</td><td></td><td>bit-block transfer</td></tr>
+<tr><td><code>Bool</code></td><td><code>Bool</code></td><td><code>Bool</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Buffer</code></td><td></td><td><code>Buffer</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Bytes</code></td><td><code>Bytes</code></td><td><code>Bytes</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Char</code></td><td><code>Char</code></td><td><code>Char</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Comparable</code></td><td></td><td>/</td><td>functor</td><td></td><td></td></tr>
+<tr><td><code>Comparator</code></td><td></td><td>/</td><td>functor</td><td></td><td></td></tr>
+<tr><td><code>Comparisons</code></td><td></td><td>/</td><td>interface</td><td></td><td></td></tr>
+<tr><td><code>Container</code></td><td><code>Container_intf</code></td><td>/</td><td>functor</td><td></td><td></td></tr>
+<tr><td><code>Either</code></td><td><code>Either</code></td><td><code>Either</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Equal</code></td><td></td><td>/</td><td>interface</td><td></td><td></td></tr>
+<tr><td><code>Error</code></td><td><code>Error</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Exn</code></td><td></td><td><code>exn</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Export</code></td><td></td><td>/</td><td>wrap</td><td></td><td>undoc</td></tr>
+<tr><td><code>Field</code></td><td></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Float</code></td><td><code>Float</code></td><td><code>Float</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Floatable</code></td><td></td><td>/</td><td>interface</td><td></td><td></td></tr>
+<tr><td><code>Fn</code></td><td></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Formatter</code></td><td></td><td><code>Formatter</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Hash</code></td><td></td><td>/</td><td>std</td><td></td><td>hash primitives</td></tr>
+<tr><td><code>Hash_set</code></td><td><code>Hash_set</code></td><td>/</td><td>container</td><td><code>compare, sexp_of, hash</code></td><td></td></tr>
+<tr><td><code>Hashable</code></td><td><code>Hashable</code></td><td>/</td><td>interface</td><td></td><td>module trait</td></tr>
+<tr><td><code>Hasher</code></td><td></td><td>/</td><td>interface</td><td></td><td>just <code>t</code> and <code>hash_fold_t</code></td></tr>
+<tr><td><code>Hashtbl</code></td><td></td><td><code>Hashtbl</code></td><td>container</td><td><code>compare, sexp_of, hash</code></td><td></td></tr>
+<tr><td><code>Identifiable</code></td><td><code>Identifiable</code></td><td>/</td><td>functor</td><td></td><td></td></tr>
+<tr><td><code>Indexed_container</code></td><td><code>Indexed_container</code></td><td>/</td><td>interface</td><td></td><td></td></tr>
+<tr><td><code>Info</code></td><td><code>Info</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Int</code></td><td><code>Int</code></td><td><code>Int</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Int32</code></td><td><code>Int32</code></td><td><code>Int32</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Int63</code></td><td><code>Int63</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Int64</code></td><td><code>Int64</code></td><td><code>Int64</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Int_conversions</code></td><td></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Intable</code></td><td></td><td>/</td><td>interface</td><td></td><td></td></tr>
+<tr><td><code>Int_math</code></td><td></td><td>/</td><td>functor</td><td></td><td></td></tr>
+<tr><td><code>Invariant</code></td><td></td><td>/</td><td>interface</td><td></td><td></td></tr>
+<tr><td><code>Lazy</code></td><td><code>Lazy</code></td><td><code>Lazy</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Linked_queue</code></td><td><code>Linked_queue</code></td><td><code>Queue </code></td><td>container</td><td></td><td></td></tr>
+<tr><td><code>List</code></td><td></td><td><code>List</code></td><td>container</td><td></td><td></td></tr>
+<tr><td><code>Map</code></td><td><code>Map</code></td><td><code>Map</code></td><td>container</td><td><code>compare, sexp_of</code></td><td>balanced binary tree over a totally-ordered domain</td></tr>
+<tr><td><code>Maybe_bound</code></td><td><code>Maybe_bound</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Monad</code></td><td></td><td>/</td><td>functor</td><td></td><td></td></tr>
+<tr><td><code>Nativeint</code></td><td><code>Nativeint</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Nothing</code></td><td><code>Nothing</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Option</code></td><td><code>Option</code></td><td><code>Option</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Option_array</code></td><td><code>Option_array</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Or_error</code></td><td><code>Or_error</code></td><td>/</td><td>std</td><td></td><td>a specialization of the <code>Result</code> type</td></tr>
+<tr><td><code>Ordered_collection_common</code></td><td><code>Ordered_collection_common</code></td><td>/</td><td>trait</td><td></td><td></td></tr>
+<tr><td><code>Ordering</code></td><td><code>Ordering</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Poly</code></td><td></td><td><code>Stdlib</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Pretty_printer</code></td><td></td><td>/</td><td>std</td><td></td><td>for use in toplevels</td></tr>
+<tr><td><code>Printf</code></td><td><code>Printf</code></td><td><code>Printf</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Queue</code></td><td><code>Queue</code></td><td><code>Queue</code></td><td>std</td><td></td><td>A queue implemented with an array</td></tr>
+<tr><td><code>Random</code></td><td></td><td><code>Random</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Ref</code></td><td><code>Ref</code></td><td><code>'a ref</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Result</code></td><td><code>Result</code></td><td><code>Result</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Sequence</code></td><td><code>Sequence</code></td><td><code>Seq</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Set</code></td><td><code>Set</code></td><td><code>Set</code></td><td>std</td><td></td><td>Sets based on <code>Comparator.S</code></td></tr>
+<tr><td><code>Sexp</code></td><td><code>Sexp</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Sexpable</code></td><td><code>Sexpable</code></td><td>/</td><td>functor</td><td></td><td></td></tr>
+<tr><td><code>Sign</code></td><td><code>Sign</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Sign_or_nan</code></td><td><code>Sign_or_nan</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Source_code_position</code></td><td><code>Source_code_position</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Stack</code></td><td><code>Stack</code></td><td><code>Stack</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Staged</code></td><td></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>String</code></td><td><code>String</code></td><td><code>String</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Stringable</code></td><td><code>Stringable</code></td><td>/</td><td>interface</td><td></td><td></td></tr>
+<tr><td><code>Sys</code></td><td><code>Sys</code></td><td><code>Sys</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>T</code></td><td></td><td>/</td><td>interface</td><td></td><td></td></tr>
+<tr><td><code>Type_equal</code></td><td><code>Type_equal</code></td><td>/</td><td>std</td><td></td><td>to represent type equalities that the type checker otherwise would not know</td></tr>
+<tr><td><code>Uniform_array</code></td><td><code>Uniform_array</code></td><td>/</td><td>std</td><td></td><td>guaranteed that the representation array is not tagged with <code>Double_array_tag</code></td></tr>
+<tr><td><code>Unit</code></td><td><code>Unit</code></td><td><code>unit</code></td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Uchar</code></td><td></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Variant</code></td><td></td><td>/</td><td>std</td><td></td><td>used in <code>[@@deriving variants]</code></td></tr>
+<tr><td><code>With_return</code></td><td></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td><code>Word_size</code></td><td></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><code>Base_internalhash_types</code></td><td></td><td>/</td><td>std</td><td></td><td><code>base.base_internalhash_types</code> lib</td></tr>
+<tr><td><code>Md5_lib</code></td><td></td><td>/</td><td>std</td><td></td><td><code>base.md5</code> lib</td></tr>
+<tr><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td></td><td><code>Arg</code></td><td><code>Stdlib.Arg</code></td><td>std</td><td></td><td><code>core</code> lib; <code>Command</code> module is generally recommended over this</td></tr>
+<tr><td></td><td><code>Bag</code></td><td>/</td><td>container</td><td></td><td></td></tr>
+<tr><td></td><td><code>Bigbuffer</code></td><td>/</td><td>std</td><td></td><td>Extensible string buffers based on <code>Bigstrings</code></td></tr>
+<tr><td></td><td><code>Bigstring</code></td><td>/</td><td>std</td><td></td><td><code>String</code> type based on <code>Bigarray</code></td></tr>
+<tr><td></td><td><code>Bigsubstring</code></td><td>/</td><td>std</td><td></td><td><code>Substring</code> type based on <code>Bigarray</code></td></tr>
+<tr><td></td><td><code>Bin_prot</code></td><td>/</td><td>interface</td><td></td><td></td></tr>
+<tr><td></td><td><code>Binable</code></td><td>/</td><td>functor</td><td></td><td></td></tr>
+<tr><td></td><td><code>Blang</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Bounded_index </code></td><td>/</td><td>std</td><td></td><td>unique index types with explicit bounds and human-readable labels</td></tr>
+<tr><td></td><td><code>Byte_units</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Command</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Container</code></td><td>/</td><td>interface</td><td></td><td></td></tr>
+<tr><td></td><td><code>Core_stable</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Date</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Day_of_week</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Debug</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Deque</code></td><td>/</td><td>container</td><td></td><td></td></tr>
+<tr><td></td><td><code>Doubly_linked</code></td><td>/</td><td>container</td><td></td><td></td></tr>
+<tr><td></td><td><code>Fdeque</code></td><td>/</td><td>container</td><td></td><td></td></tr>
+<tr><td></td><td><code>Filename</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Float_with_finite_only_serialization</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Fqueue</code></td><td>/</td><td>container</td><td></td><td></td></tr>
+<tr><td></td><td><code>Gc</code></td><td><code>Gc</code></td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Hash_queue</code></td><td>/</td><td>container</td><td></td><td></td></tr>
+<tr><td></td><td><code>Heap_block</code></td><td>/</td><td>std</td><td></td><td><code>Core.heap_block</code> lib</td></tr>
+<tr><td></td><td><code>Hexdump</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Host_and_port</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Immediate_option</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>In_channel</code></td><td>/</td><td>std</td><td></td><td><code>Stdio.In_channel</code></td></tr>
+<tr><td></td><td><code>Interfaces</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Md5</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Month</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Mutex</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Only_in_test</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Optional_syntax</code></td><td>/</td><td>std</td><td></td><td>provided by <code>ppx_optional</code></td></tr>
+<tr><td></td><td><code>Out_channel</code></td><td>/</td><td>std</td><td></td><td><code>Stdio.Out_channel</code></td></tr>
+<tr><td></td><td><code>Percent</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Perms</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Pid</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Printexc</code></td><td><code>Printexc</code></td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Quickcheck</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Quickcheckable</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Robustly_comparable</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Set_once</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Sexp_maybe</code></td><td>/</td><td>std</td><td></td><td><code>Sexp.Sexp_maybe</code></td></tr>
+<tr><td></td><td><code>Signal</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Splittable_random</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Stable_comparable</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Stable_unit_test</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Substring</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Thread</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Time_float</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Time_ns</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Tuple</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>union_find</code></td><td>/</td><td>container</td><td></td><td></td></tr>
+<tr><td></td><td><code>Unit_of_time</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Univ_map</code></td><td>/</td><td>container</td><td></td><td></td></tr>
+<tr><td></td><td><code>Validate</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td><code>Weak</code></td><td>/</td><td>std</td><td></td><td></td></tr>
+<tr><td></td><td>``</td><td>/</td><td>std</td><td></td><td></td></tr>
+</tbody></table>
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
