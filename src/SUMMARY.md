@@ -16,10 +16,14 @@ More comprehensive discussion after RWO.
 
 [What are [@@deriving compare, sexp_of, hash] for?](core/container-elements.md)
 
+[Using Data Collections in `Core`](core/maps-and-hashtables.md)
+
 
 ## 🚧🚧 **Below is under construction** 🚧🚧
 
-[Using Data Collections in `Core`](core/maps-and-hashtables.md)
+[What is OCaml polymorphic compare]()
+<!-- - https://github.com/search?q=repo%3Aocaml%2Focaml%20equal&type=code -->
+
 
 [Fix]() (topics/fix.md)
 
@@ -47,3 +51,4 @@ More comprehensive discussion after RWO.
 ## Section: Code Reading
 
 [OCaml source reading]() (reading/ocaml-source-reading.md)
+<!-- - https://discuss.ocaml.org/t/readable-ml-ocaml-sml-etc-compilers/13318 -->

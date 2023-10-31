@@ -221,6 +221,6 @@ let _ = Hash_set.create (module Int_set_as_element)
 
 Both `Set.hash_m__t` and `Set.hash_fold_m__t` requires a first-class module implementing `Hasher.S` (which requires `hash_fold_t`). In this example, the module is `Int`. `Int` is a build-in module containing `hash` and `hash_fold`. If this is `Your_data` rather than `Int`, the generated code above for `Set.M(Your_data).t` will have `Set.hash_m__t (module Your_data)` and `Set.hash_fold_m__t (module Your_data)`. Therefore, `Your_data` have to provide `hash` and `hash_fold` functions.
 
-This can explain why `Base.Hash_set.Key` contains `hash` and no `hash_fold`, but we still need `hash_fold` even it may not be immediately used.
+This can explain why `Base.Hash_set.Key` contains `hash` and no `hash_fold`, but `ppx_hash` still derives both `hash` and `hash_fold`.
 
 p.s. I don't claim this design is good.
