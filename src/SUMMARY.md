@@ -19,8 +19,14 @@ More comprehensive discussion after RWO.
 
 [Understanding Data Collections in `Core`](core/maps-and-hashtables.md)
 
+## Section: OCaml Internals
+
+[What is polymorphic compare](internals/polymorphic-compare.md)
+
 
 ## 🚧🚧 **Below is under construction** 🚧🚧
+
+Section: Library Gems
 
 [Using `Hashcons`]() (libraries/hashcons-examples.md)
 
@@ -30,17 +36,12 @@ More comprehensive discussion after RWO.
 
 <!-- - https://github.com/search?q=repo%3Aocaml%2Focaml%20equal&type=code -->
 
-
-[Fix]() (topics/fix.md)
-
 [Command-line]() (topics/command-line.md)
 
 [Profiling]() (topics/profiling.md)
 
 
-## Section: OCaml Internals
-
-[What is polymorphic compare](internals/polymorphic-compare.md)
+Section: OCaml Internals
 
 [Deriving print]() (internals/deriving-print.md)
 
@@ -49,14 +50,15 @@ More comprehensive discussion after RWO.
 [Understanding module `Format`]() (internals/module-format.md)
 
 
-## Section: Concepts
+Section: Concepts
+
+[Fixed point]() (topics/fixed-point.md)
 
 [Contravariant]() (concepts/contravariant.md)
 
 [Typeclassopedia]() (concepts/typeclassopedia.md)
 
-
-## Section: Code Reading
+Section: Code Reading
 
 [OCaml source reading]() (reading/ocaml-source-reading.md)
 <!-- - https://discuss.ocaml.org/t/readable-ml-ocaml-sml-etc-compilers/13318 -->
