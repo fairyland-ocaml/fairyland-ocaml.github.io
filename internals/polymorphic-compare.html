@@ -1,0 +1,394 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>What is polymorphic compare - Fairyland OCaml</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="../preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="../libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="../core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="../core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Fix</div></li><li class="chapter-item expanded affix "><div>Command-line</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><a href="../internals/polymorphic-compare.html" class="active">What is polymorphic compare</a></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">Fairyland OCaml</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="what-is-polymorphic-compare"><a class="header" href="#what-is-polymorphic-compare">What is polymorphic compare</a></h1>
+<p><img src="/img/camel-compare.png" alt="Camel Compare" /></p>
+<h2 id="the-compare-function"><a class="header" href="#the-compare-function">The <code>compare</code> function</a></h2>
+<p>OCaml's polymorphic compare is easy-to-use but hard-to-reason.</p>
+<p>In the <a href="https://v2.ocaml.org/api/Stdlib.html#1_Comparisons">manual</a>, polymorphic <code>compare</code> is <code>val (=) : 'a -&gt; 'a -&gt; bool</code> where</p>
+<blockquote>
+<p><code>e1 = e2</code> tests for structural equality of <code>e1</code> and <code>e2</code>. Mutable structures (e.g. references and arrays) are equal if and only if their current contents are structurally equal, even if the two mutable objects are not the same physical object. Equality between functional values raises <code>Invalid_argument</code>. Equality between cyclic data structures may not terminate.</p>
+</blockquote>
+<p>In the source, <code>Stdlib.comare</code> is provided as an FFI and the actual implementation is in C code of the runtime:</p>
+<pre><code class="language-ocaml">(* https://github.com/ocaml/ocaml/blob/trunk/stdlib/stdlib.ml#L72 *)
+external compare : 'a -&gt; 'a -&gt; int = &quot;%compare&quot;
+
+(* https://github.com/ocaml/ocaml/blob/trunk/runtime/compare.c#L339 *)
+CAMLprim value caml_compare(value v1, value v2)
+{
+  intnat res = compare_val(v1, v2, 1);
+  if (res &lt; 0)
+    return Val_int(LESS);
+  else if (res &gt; 0)
+    return Val_int(GREATER);
+  else
+    return Val_int(EQUAL);
+}
+</code></pre>
+<p>The other sibing functions are also wrapping <code>compare_val</code> e.g. <code>&lt;&gt;</code>(<code>notequal</code>), <code>&lt;</code>(<code>lessthan</code>), <code>&lt;=</code>(<code>lessequal</code>) and the implementation is easy to infer. The third argument <code>total</code> is only set to <code>1</code> for <code>caml_compare</code> (a.k.a <code>Stdlib.compare</code>) and <code>0</code> otherwise.</p>
+<pre><code class="language-c">// https://github.com/ocaml/ocaml/blob/trunk/runtime/compare.c#L88C42-L88C42
+static intnat compare_val(value v1, value v2, int total)
+{
+  struct compare_stack stk;
+  intnat res;
+  stk.stack = stk.init_stack;
+  stk.limit = stk.stack + COMPARE_STACK_INIT_SIZE;
+  res = do_compare_val(&amp;stk, v1, v2, total);
+  compare_free_stack(&amp;stk);
+  return res;
+}
+</code></pre>
+<p><code>campare_val</code> prepares a stack and invokes a payload <code>do_compare_val</code> to perform the comparison. Conceptual, <code>do_compare_val</code> also performs the strucutral comparison on the low-level representations. By keeping only the tag casing part, a simplied <code>do_compare_val</code> now looks like this:</p>
+<pre><code class="language-c">static intnat do_compare_val(struct compare_stack* stk,
+                             value v1, value v2, int total)
+{
+  struct compare_item * sp;
+  tag_t t1, t2;
+
+  sp = stk-&gt;stack;
+  while (...) {
+    while (...) {
+      if (v1 == v2 &amp;&amp; total) goto next_item;
+      if (Is_long(v1)) {
+        if (v1 == v2) goto next_item;
+        if (Is_long(v2))
+          return Long_val(v1) - Long_val(v2);
+        switch (Tag_val(v2)) {
+          case Forward_tag:
+            v2 = Forward_val(v2);
+            continue;
+          case Custom_tag: {
+            int res = compare(v1, v2);
+            if (Caml_state-&gt;compare_unordered &amp;&amp; !total) return UNORDERED;
+            if (res != 0) return res;
+            goto next_item;
+          }
+          default: /*fallthrough*/;
+          }
+        return LESS;                /* v1 long &lt; v2 block */
+      }
+      if (Is_long(v2)) {
+          // ... symmetry of the above code
+        }
+        return GREATER;            /* v1 block &gt; v2 long */
+      }
+      t1 = Tag_val(v1);
+      t2 = Tag_val(v2);
+      if (t1 != t2) {
+          if (t1 == Forward_tag) { v1 = Forward_val (v1); continue; }
+          if (t2 == Forward_tag) { v2 = Forward_val (v2); continue; }
+          if (t1 == Infix_tag) t1 = Closure_tag;
+          if (t2 == Infix_tag) t2 = Closure_tag;
+          if (t1 != t2)
+              return (intnat)t1 - (intnat)t2;
+      }
+      switch(t1) {
+      case Forward_tag: {
+          v1 = Forward_val (v1);
+          v2 = Forward_val (v2);
+          continue;
+      }
+      case String_tag: // ... string case
+
+      case Double_tag: // ... double case
+
+      case Double_array_tag: // ... double array case
+      
+      case Abstract_tag:
+      case Closure_tag:
+      case Infix_tag:
+      case Cont_tag: // ... invalid cases
+
+      case Object_tag: {
+        intnat oid1 = Oid_val(v1);
+        intnat oid2 = Oid_val(v2);
+        if (oid1 != oid2) return oid1 - oid2;
+        break;
+      }
+      case Custom_tag: {
+        int res;
+        int (*compare)(value v1, value v2) = Custom_ops_val(v1)-&gt;compare;
+        /* Hardening against comparisons between different types */
+        if (compare != Custom_ops_val(v2)-&gt;compare) {
+          return strcmp(Custom_ops_val(v1)-&gt;identifier,
+                        Custom_ops_val(v2)-&gt;identifier) &lt; 0
+                 ? LESS : GREATER;
+        }
+        if (compare == NULL) {
+          compare_free_stack(stk);
+          caml_invalid_argument(&quot;compare: abstract value&quot;);
+        }
+        Caml_state-&gt;compare_unordered = 0;
+        res = compare(v1, v2);
+        if (Caml_state-&gt;compare_unordered &amp;&amp; !total) return UNORDERED;
+        if (res != 0) return res;
+        break;
+      }
+      default: {
+        mlsize_t sz1 = Wosize_val(v1);
+        mlsize_t sz2 = Wosize_val(v2);
+        /* Compare sizes first for speed */
+        if (sz1 != sz2) return sz1 - sz2;
+        if (sz1 == 0) break;
+        /* Remember that we still have to compare fields 1 ... sz - 1. */
+        if (sz1 &gt; 1) {
+          if (sp &gt;= stk-&gt;limit) sp = compare_resize_stack(stk, sp);
+          struct compare_item* next = sp++;
+          next-&gt;v1 = v1;
+          next-&gt;v2 = v2;
+          next-&gt;size = Val_long(sz1);
+          next-&gt;offset = Val_long(1);
+        }
+        /* Continue comparison with first field */
+        v1 = Field(v1, 0);
+        v2 = Field(v2, 0);
+        continue;
+      }
+      }
+    next_item:
+      /* Pop one more item to compare, if any */
+      if (sp == stk-&gt;stack) return EQUAL; /* we're done */
+
+      struct compare_item* last = sp-1;
+      v1 = Field(last-&gt;v1, Long_val(last-&gt;offset));
+      v2 = Field(last-&gt;v2, Long_val(last-&gt;offset));
+      last-&gt;offset += 2;/* Long_val(last-&gt;offset) += 1 */
+      if (last-&gt;offset == last-&gt;size) sp--;
+    }
+  }
+}
+</code></pre>
+<p>The code here is the skeleton to compare two element tag-wise. The code omitted is details of specific tag cases. The stack is to store elements to compare, getting from compound values.</p>
+<p>Displamer (TODO): At this moment, I am not clear when elements are pushed into the stack. <code>Begin_roots2(root_v1, root_v2); run_pending_actions(stk, sp);</code> is doubty.</p>
+<h2 id="value-and-tag"><a class="header" href="#value-and-tag"><code>value</code> and <code>tag</code></a></h2>
+<p>OCaml value is stored as a <em>value</em> in memory at runtime. <code>value</code> and tag functions e.g. <code>Is_long</code>, <code>Tag_val</code> is defined in <a href="https://github.com/ocaml/ocaml/blob/trunk/runtime/caml/mlvalues.h"><code>runtime/caml/mlvalues.h</code></a>. OCaml manual explains tags in Chapter 22 <a href="https://v2.ocaml.org/manual/intfc.html#ss:c-blocks">Interfacing C with OCaml</a>. RWO has a clear explanation in chapter 23 <a href="https://dev.realworldocaml.org/runtime-memory-layout.html">Memory Representation of Values</a>. Here is my recap:</p>
+<p>Memory <em>value</em> can be immediate integer or a pointer to some other memory. An OCaml value of primitive types e.g. <code>bool</code>, <code>int</code>, <code>unit</code> and some others encodes to an immediate integer. The rest uses a pointer to store the extra <em>blocks</em>. The last bit of a memory word is used to identify them: <code>1</code> marks immediate integers and <code>0</code> marks a pointer. OCaml enforces word-aligned memory addresses.</p>
+<p>A block, which a pointer value points to, contains a header. The header has a tag which identifies whether to interpret the payload as opage bytes or OCaml values.</p>
+<div class="table-wrapper"><table><thead><tr><th>OCaml type</th><th>Value/Tag</th><th>Compare case</th><th>Comment</th></tr></thead><tbody>
+<tr><td>int</td><td>immediate</td><td><code>Is_long</code></td><td></td></tr>
+<tr><td>enforced lazy value</td><td><code>Forward_tag</code></td><td>via <code>Forward_val</code></td><td><code>runtime/obj.c</code></td></tr>
+<tr><td>abstract datatype with user functions</td><td><code>Custom_tag</code></td><td>via <code>-&gt;compare_ext</code></td><td></td></tr>
+<tr><td>function (closure)</td><td><code>Infix_tag</code></td><td>via <code>Closure_tag</code></td><td>a special <code>Closure</code> tag (used in <code>asmcomp/cmmgen.ml</code>)</td></tr>
+<tr><td>string</td><td><code>String_tag</code></td><td><code>case String_tag</code></td><td></td></tr>
+<tr><td>float</td><td><code>Double_tag</code></td><td><code>case Double_tag</code></td><td></td></tr>
+<tr><td>float array</td><td><code>Double_array_tag</code></td><td><code>case Double_array_tag</code></td><td></td></tr>
+<tr><td>abstract datatype</td><td><code>Abstract_tag</code></td><td>invalid <code>abstract value</code></td><td></td></tr>
+<tr><td>function (closure)</td><td><code>Closure_tag</code></td><td>invalid <code>functional value</code></td><td></td></tr>
+<tr><td>(handling effects inside callbacks)</td><td><code>Cont_tag</code></td><td>invalid <code>continuation value</code></td><td></td></tr>
+<tr><td>object</td><td><code>Object_tag</code></td><td>via <code>Oid_val</code></td><td></td></tr>
+</tbody></table>
+</div>
+<h2 id="to-do"><a class="header" href="#to-do">To-do</a></h2>
+<p>Some omitted code in <code>compare</code> above is for GC interrupts. It's heavivy discussed in <a href="https://github.com/ocaml/ocaml/pull/12128">ocaml/#12128</a>.</p>
+<p>Demostrating a nice example to explain why polymorphic compare is worriable will improve this post a lot.</p>
+<p>The example is like</p>
+<pre><code class="language-ocaml">module IntSet = Set.Make(Int);;
+let a = IntSet.(add 1 (singleton 0));;
+let b = IntSet.(add 0 (singleton 1));;
+
+a = b;; (* (bool = false) *)
+IntSet.equal a b;; (* bool = true *)
+
+(* ocamldumpobj or https://github.com/favonia/ocaml-objdump *)
+utop # Format.printf &quot;@[%a@]@.&quot; pp (a, ());;
+variant0(
+  variant0(int(0),int(0),variant0(int(0),int(1),int(0),int(1)),int(2)),
+  int(0))
+- : unit = ()
+
+utop # Format.printf &quot;@[%a@]@.&quot; pp (b, ());;
+variant0(
+  variant0(variant0(int(0),int(0),int(0),int(1)),int(1),int(0),int(2)),
+  int(0))
+- : unit = ()
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../core/maps-and-hashtables.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../core/maps-and-hashtables.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js" charset="utf-8"></script>
+        <script src="../mark.min.js" charset="utf-8"></script>
+        <script src="../searcher.js" charset="utf-8"></script>
+
+        <script src="../clipboard.min.js" charset="utf-8"></script>
+        <script src="../highlight.js" charset="utf-8"></script>
+        <script src="../book.js" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="../asset/mermaid.min.js"></script>
+        <script src="../asset/mermaid-init.js"></script>
+
+
+    </body>
+</html>
