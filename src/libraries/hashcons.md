@@ -1,4 +1,4 @@
-# Using `Hashcons`
+# Understanding `Hashcons`
 
 ## Motivation
 

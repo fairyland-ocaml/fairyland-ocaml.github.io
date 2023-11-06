@@ -13,6 +13,7 @@ This repo is the source code for Fairyland OCaml [https://fairyland-ocaml.github
 # Todo
 
 -[ ] Porting and writing
+-[ ] Customize favicon
 
 # Done
 

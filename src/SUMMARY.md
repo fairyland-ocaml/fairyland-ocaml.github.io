@@ -8,7 +8,8 @@
 
 Good libraries deserve more explanaion.
 
-[Using `Hashcons`](libraries/hashcons.md)
+[Understanding `Hashcons`](libraries/hashcons.md)
+
 
 ## Section: Using `Core`
 
@@ -16,12 +17,17 @@ More comprehensive discussion after RWO.
 
 [What are [@@deriving compare, sexp_of, hash] for?](core/container-elements.md)
 
-[Using Data Collections in `Core`](core/maps-and-hashtables.md)
+[Understanding Data Collections in `Core`](core/maps-and-hashtables.md)
 
 
 ## 🚧🚧 **Below is under construction** 🚧🚧
 
-[What is OCaml polymorphic compare]()
+[Using `Hashcons`]() (libraries/hashcons-examples.md)
+
+[Understanding `Fix`]() (libraries/fix.md)
+
+[Using `Fix`]() (libraries/fix-examples.md)
+
 <!-- - https://github.com/search?q=repo%3Aocaml%2Focaml%20equal&type=code -->
 
 
@@ -33,6 +39,8 @@ More comprehensive discussion after RWO.
 
 
 ## Section: OCaml Internals
+
+[What is polymorphic compare](internals/polymorphic-compare.md)
 
 [Deriving print]() (internals/deriving-print.md)
 
