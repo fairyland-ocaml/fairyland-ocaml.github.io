@@ -84,7 +84,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><a href="internals/polymorphic-compare.html">What is polymorphic compare</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Command-line</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="internals/polymorphic-compare.html">What is polymorphic compare?</a></li><li class="chapter-item expanded affix "><a href="core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Understanding Ocamlgraph</div></li><li class="chapter-item expanded affix "><div>Command-line</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -154,15 +154,16 @@
 <h2 id="section-using-core"><a class="header" href="#section-using-core">Section: Using <code>Core</code></a></h2>
 <p>More comprehensive discussion after RWO.</p>
 <p><a href="core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></p>
-<p><a href="core/maps-and-hashtables.html">Understanding Data Collections in <code>Core</code></a></p>
 <h2 id="section-ocaml-internals"><a class="header" href="#section-ocaml-internals">Section: OCaml Internals</a></h2>
-<p><a href="internals/polymorphic-compare.html">What is polymorphic compare</a></p>
-<h2 id="-below-is-under-construction-"><a class="header" href="#-below-is-under-construction-">🚧🚧 <strong>Below is under construction</strong> 🚧🚧</a></h2>
+<p><a href="internals/polymorphic-compare.html">What is polymorphic compare?</a></p>
+<h2 id="-under-construction-"><a class="header" href="#-under-construction-">🚧 <strong>Under Construction</strong> 🚧</a></h2>
+<p><a href="core/maps-and-hashtables.html">Understanding Data Collections in <code>Core</code></a></p>
+<h2 id="-in-my-plan-"><a class="header" href="#-in-my-plan-">📝 <strong>In My Plan</strong> 📝</a></h2>
 <p>Section: Library Gems</p>
 <p><a href="">Using <code>Hashcons</code></a> (libraries/hashcons-examples.md)</p>
 <p><a href="">Understanding <code>Fix</code></a> (libraries/fix.md)</p>
 <p><a href="">Using <code>Fix</code></a> (libraries/fix-examples.md)</p>
-<!-- - https://github.com/search?q=repo%3Aocaml%2Focaml%20equal&type=code -->
+<p><a href="">Understanding <code>Ocamlgraph</code></a> (libraries/ocamlgraph.md)</p>
 <p><a href="">Command-line</a> (topics/command-line.md)</p>
 <p><a href="">Profiling</a> (topics/profiling.md)</p>
 <p>Section: OCaml Internals</p>
@@ -383,17 +384,20 @@ let () =
 <pre><code class="language-ocaml">type foo1 = P1 of int * string [@@deriving_inline equal]
 
 let _ = fun (_ : foo1) -&gt; ()
+
 let equal_foo1 =
-  (fun a__008_ -&gt;
-     fun b__009_ -&gt;
-       if Stdlib.(==) a__008_ b__009_
-       then true
-       else
-         (match (a__008_, b__009_) with
-          | (P1 (_a__010_, _a__012_), P1 (_b__011_, _b__013_)) -&gt;
-              Stdlib.(&amp;&amp;) (equal_int _a__010_ _b__011_)
-                (equal_string _a__012_ _b__013_)) : foo1 -&gt; foo1 -&gt; bool)
+  (fun a__008_ b__009_ -&gt;
+     if Stdlib.( == ) a__008_ b__009_ then true
+     else
+       match (a__008_, b__009_) with
+       | P1 (_a__010_, _a__012_), P1 (_b__011_, _b__013_) -&gt;
+           Stdlib.( &amp;&amp; )
+             (equal_int _a__010_ _b__011_)
+             (equal_string _a__012_ _b__013_)
+    : foo1 -&gt; foo1 -&gt; bool)
+
 let _ = equal_foo1
+
 [@@@end]
 </code></pre>
 <p><code>equal</code> is straightforward. Two values are equal if they are physically equal i.e. at the same memory address. Otherwises, they need to be equal piecewise-ly. <code>Core</code> doesn't shadow OCaml vanilla standard library <code>Stdlib</code>.</p>
@@ -401,18 +405,20 @@ let _ = equal_foo1
 <pre><code class="language-ocaml">type foo2 = P2 of int * string [@@deriving_inline compare]
 
 let _ = fun (_ : foo2) -&gt; ()
+
 let compare_foo2 =
-  (fun a__014_ -&gt;
-     fun b__015_ -&gt;
-       if Stdlib.(==) a__014_ b__015_
-       then 0
-       else
-         (match (a__014_, b__015_) with
-          | (P2 (_a__016_, _a__018_), P2 (_b__017_, _b__019_)) -&gt;
-              (match compare_int _a__016_ _b__017_ with
-               | 0 -&gt; compare_string _a__018_ _b__019_
-               | n -&gt; n)) : foo2 -&gt; foo2 -&gt; int)
+  (fun a__014_ b__015_ -&gt;
+     if Stdlib.( == ) a__014_ b__015_ then 0
+     else
+       match (a__014_, b__015_) with
+       | P2 (_a__016_, _a__018_), P2 (_b__017_, _b__019_) -&gt; (
+           match compare_int _a__016_ _b__017_ with
+           | 0 -&gt; compare_string _a__018_ _b__019_
+           | n -&gt; n)
+    : foo2 -&gt; foo2 -&gt; int)
+
 let _ = compare_foo2
+
 [@@@end]
 </code></pre>
 <p><code>compare</code> is similar to <code>equal</code>. <code>Stdlib.compare : 'a -&gt; 'a -&gt; int</code> the polymorphic compare is not used in <code>Core</code>, however, the convertion should be observed: <code>compare x y</code> returns 0 if x is equal to y, a negative integer if x is less than y, and a positive integer if x is greater than y.</p>
@@ -420,37 +426,42 @@ let _ = compare_foo2
 <pre><code class="language-ocaml">type foo3 = P3 of int * string [@@deriving_inline sexp]
 
 let _ = fun (_ : foo3) -&gt; ()
+
 let foo3_of_sexp =
   (let error_source__022_ = &quot;src-ocaml/elements.ml.foo3&quot; in
    function
-   | Sexplib0.Sexp.List ((Sexplib0.Sexp.Atom
-       (&quot;p3&quot; | &quot;P3&quot; as _tag__025_))::sexp_args__026_) as _sexp__024_ -&gt;
-       (match sexp_args__026_ with
-        | arg0__027_::arg1__028_::[] -&gt;
-            let res0__029_ = int_of_sexp arg0__027_
-            and res1__030_ = string_of_sexp arg1__028_ in
-            P3 (res0__029_, res1__030_)
-        | _ -&gt;
-            Sexplib0.Sexp_conv_error.stag_incorrect_n_args error_source__022_
-              _tag__025_ _sexp__024_)
+   | Sexplib0.Sexp.List
+       (Sexplib0.Sexp.Atom ((&quot;p3&quot; | &quot;P3&quot;) as _tag__025_) :: sexp_args__026_) as
+     _sexp__024_ -&gt; (
+       match sexp_args__026_ with
+       | [ arg0__027_; arg1__028_ ] -&gt;
+           let res0__029_ = int_of_sexp arg0__027_
+           and res1__030_ = string_of_sexp arg1__028_ in
+           P3 (res0__029_, res1__030_)
+       | _ -&gt;
+           Sexplib0.Sexp_conv_error.stag_incorrect_n_args error_source__022_
+             _tag__025_ _sexp__024_)
    | Sexplib0.Sexp.Atom (&quot;p3&quot; | &quot;P3&quot;) as sexp__023_ -&gt;
        Sexplib0.Sexp_conv_error.stag_takes_args error_source__022_ sexp__023_
-   | Sexplib0.Sexp.List ((Sexplib0.Sexp.List _)::_) as sexp__021_ -&gt;
+   | Sexplib0.Sexp.List (Sexplib0.Sexp.List _ :: _) as sexp__021_ -&gt;
        Sexplib0.Sexp_conv_error.nested_list_invalid_sum error_source__022_
          sexp__021_
    | Sexplib0.Sexp.List [] as sexp__021_ -&gt;
        Sexplib0.Sexp_conv_error.empty_list_invalid_sum error_source__022_
          sexp__021_
    | sexp__021_ -&gt;
-       Sexplib0.Sexp_conv_error.unexpected_stag error_source__022_ sexp__021_ :
-  Sexplib0.Sexp.t -&gt; foo3)
+       Sexplib0.Sexp_conv_error.unexpected_stag error_source__022_ sexp__021_
+    : Sexplib0.Sexp.t -&gt; foo3)
+
 let _ = foo3_of_sexp
+
 let sexp_of_foo3 =
   (fun (P3 (arg0__031_, arg1__032_)) -&gt;
      let res0__033_ = sexp_of_int arg0__031_
      and res1__034_ = sexp_of_string arg1__032_ in
-     Sexplib0.Sexp.List [Sexplib0.Sexp.Atom &quot;P3&quot;; res0__033_; res1__034_] :
-  foo3 -&gt; Sexplib0.Sexp.t)
+     Sexplib0.Sexp.List [ Sexplib0.Sexp.Atom &quot;P3&quot;; res0__033_; res1__034_ ]
+    : foo3 -&gt; Sexplib0.Sexp.t)
+
 let _ = sexp_of_foo3
 
 [@@@end]
@@ -535,6 +546,216 @@ let _ = Hash_set.create (module Int_set_as_element)
 <p>Both <code>Set.hash_m__t</code> and <code>Set.hash_fold_m__t</code> requires a first-class module implementing <code>Hasher.S</code> (which requires <code>hash_fold_t</code>). In this example, the module is <code>Int</code>. <code>Int</code> is a build-in module containing <code>hash</code> and <code>hash_fold</code>. If this is <code>Your_data</code> rather than <code>Int</code>, the generated code above for <code>Set.M(Your_data).t</code> will have <code>Set.hash_m__t (module Your_data)</code> and <code>Set.hash_fold_m__t (module Your_data)</code>. Therefore, <code>Your_data</code> have to provide <code>hash</code> and <code>hash_fold</code> functions.</p>
 <p>This can explain why <code>Base.Hash_set.Key</code> contains <code>hash</code> and no <code>hash_fold</code>, but <code>ppx_hash</code> still derives both <code>hash</code> and <code>hash_fold</code>.</p>
 <p>p.s. I don't claim this design is good.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="what-is-polymorphic-compare"><a class="header" href="#what-is-polymorphic-compare">What is polymorphic compare?</a></h1>
+<h2 id="the-compare-function"><a class="header" href="#the-compare-function">The <code>compare</code> function</a></h2>
+<p>OCaml's polymorphic compare (or <code>Stdlib.compare</code>) is tempting to use but hard to reason.</p>
+<p>Polymorphic <code>compare</code> in the <a href="https://v2.ocaml.org/api/Stdlib.html#1_Comparisons">manual</a> says:</p>
+<blockquote>
+<p><code>val (=) : 'a -&gt; 'a -&gt; bool</code> </p>
+<p><code>e1 = e2</code> tests for structural equality of <code>e1</code> and <code>e2</code>. Mutable structures (e.g. references and arrays) are equal if and only if their current contents are structurally equal, even if the two mutable objects are not the same physical object. Equality between functional values raises <code>Invalid_argument</code>. Equality between cyclic data structures may not terminate.</p>
+</blockquote>
+<p>Intuitionally, it compares two values structurally for their representations in memory.</p>
+<p>This function is error-prone. A quick example to show here is to compare two values of <code>IntSet</code>. They are <em>equal</em> respecting their elements but <em>unequal</em> respecting their memory objects. <code>Objdump</code> is from <a href="https://github.com/favonia/ocaml-objdump">favonia/ocaml-objdump</a>. <code>Stdlib.Set</code> uses a balance-tree in the implementation. A tree containing two elements has multiple morphs to be balanced.</p>
+<!-- $MDX skip -->
+<pre><code class="language-ocaml"># module IntSet = Set.Make(Int);;
+
+# let a = IntSet.(add 1 (singleton 0));;
+val a : IntSet.t = &lt;abstr&gt;
+# let b = IntSet.(add 0 (singleton 1));;
+val b : IntSet.t = &lt;abstr&gt;
+
+# a = b;;
+- : bool = false
+# IntSet.equal a b;;
+- : bool = true
+
+# #require &quot;objdump&quot;;;
+# Format.printf &quot;@[%a@]@.&quot; Objdump.pp a;;
+variant0(int(0),int(0),variant0(int(0),int(1),int(0),int(1)),int(2))
+
+- : unit = ()
+# Format.printf &quot;@[%a@]@.&quot; Objdump.pp b;;
+variant0(variant0(int(0),int(0),int(0),int(1)),int(1),int(0),int(2))
+
+- : unit = ()
+</code></pre>
+<p><img src="internals//img/camel-compare.png" alt="Camel Compare" /></p>
+<h2 id="compare-in-the-source"><a class="header" href="#compare-in-the-source"><code>compare</code> in the source</a></h2>
+<p>In the source, <code>Stdlib.compare</code> is provided as an FFI, and the actual implementation is in the C code of the runtime:</p>
+<!-- $MDX skip -->
+<pre><code class="language-ocaml">(* https://github.com/ocaml/ocaml/blob/trunk/stdlib/stdlib.ml#L72 *)
+external compare : 'a -&gt; 'a -&gt; int = &quot;%compare&quot;
+
+(* https://github.com/ocaml/ocaml/blob/trunk/runtime/compare.c#L339 *)
+CAMLprim value caml_compare(value v1, value v2)
+{
+  intnat res = compare_val(v1, v2, 1);
+  if (res &lt; 0)
+    return Val_int(LESS);
+  else if (res &gt; 0)
+    return Val_int(GREATER);
+  else
+    return Val_int(EQUAL);
+}
+</code></pre>
+<p>The other sibing functions are also wrapping <code>compare_val</code> e.g. <code>&lt;&gt;</code>(<code>notequal</code>), <code>&lt;</code>(<code>lessthan</code>), <code>&lt;=</code>(<code>lessequal</code>) and the implementation is easy to infer. The third argument <code>total</code> is only set to <code>1</code> for <code>caml_compare</code> (a.k.a <code>Stdlib.compare</code>) and <code>0</code> otherwise.</p>
+<pre><code class="language-c">// https://github.com/ocaml/ocaml/blob/trunk/runtime/compare.c#L88C42-L88C42
+static intnat compare_val(value v1, value v2, int total)
+{
+  struct compare_stack stk;
+  intnat res;
+  stk.stack = stk.init_stack;
+  stk.limit = stk.stack + COMPARE_STACK_INIT_SIZE;
+  res = do_compare_val(&amp;stk, v1, v2, total);
+  compare_free_stack(&amp;stk);
+  return res;
+}
+</code></pre>
+<p><code>campare_val</code> prepares a stack and invokes a worker function <code>do_compare_val</code> to perform the comparison. <code>do_compare_val</code> performs the structural comparison on the low-level representations. By keeping only the tag cases, a simplified <code>do_compare_val</code> is:</p>
+<pre><code class="language-c">static intnat do_compare_val(struct compare_stack* stk,
+                             value v1, value v2, int total)
+{
+  struct compare_item * sp;
+  tag_t t1, t2;
+
+  sp = stk-&gt;stack;
+  while (...) {
+    while (...) {
+      if (v1 == v2 &amp;&amp; total) goto next_item;
+      if (Is_long(v1)) {
+        if (v1 == v2) goto next_item;
+        if (Is_long(v2))
+          return Long_val(v1) - Long_val(v2);
+        switch (Tag_val(v2)) {
+          case Forward_tag:
+            v2 = Forward_val(v2);
+            continue;
+          case Custom_tag: {
+            int res = compare(v1, v2);
+            if (Caml_state-&gt;compare_unordered &amp;&amp; !total) return UNORDERED;
+            if (res != 0) return res;
+            goto next_item;
+          }
+          default: /*fallthrough*/;
+          }
+        return LESS;                /* v1 long &lt; v2 block */
+      }
+      if (Is_long(v2)) {
+          // ... symmetry of the above code
+        }
+        return GREATER;            /* v1 block &gt; v2 long */
+      }
+      t1 = Tag_val(v1);
+      t2 = Tag_val(v2);
+      if (t1 != t2) {
+          if (t1 == Forward_tag) { v1 = Forward_val (v1); continue; }
+          if (t2 == Forward_tag) { v2 = Forward_val (v2); continue; }
+          if (t1 == Infix_tag) t1 = Closure_tag;
+          if (t2 == Infix_tag) t2 = Closure_tag;
+          if (t1 != t2)
+              return (intnat)t1 - (intnat)t2;
+      }
+      switch(t1) {
+      case Forward_tag: {
+          v1 = Forward_val (v1);
+          v2 = Forward_val (v2);
+          continue;
+      }
+      case String_tag: // ... string case
+
+      case Double_tag: // ... double case
+
+      case Double_array_tag: // ... double array case
+      
+      case Abstract_tag:
+      case Closure_tag:
+      case Infix_tag:
+      case Cont_tag: // ... invalid cases
+
+      case Object_tag: {
+        intnat oid1 = Oid_val(v1);
+        intnat oid2 = Oid_val(v2);
+        if (oid1 != oid2) return oid1 - oid2;
+        break;
+      }
+      case Custom_tag: {
+        int res;
+        int (*compare)(value v1, value v2) = Custom_ops_val(v1)-&gt;compare;
+        /* Hardening against comparisons between different types */
+        if (compare != Custom_ops_val(v2)-&gt;compare) {
+          return strcmp(Custom_ops_val(v1)-&gt;identifier,
+                        Custom_ops_val(v2)-&gt;identifier) &lt; 0
+                 ? LESS : GREATER;
+        }
+        if (compare == NULL) {
+          compare_free_stack(stk);
+          caml_invalid_argument(&quot;compare: abstract value&quot;);
+        }
+        Caml_state-&gt;compare_unordered = 0;
+        res = compare(v1, v2);
+        if (Caml_state-&gt;compare_unordered &amp;&amp; !total) return UNORDERED;
+        if (res != 0) return res;
+        break;
+      }
+      default: {
+        mlsize_t sz1 = Wosize_val(v1);
+        mlsize_t sz2 = Wosize_val(v2);
+        /* Compare sizes first for speed */
+        if (sz1 != sz2) return sz1 - sz2;
+        if (sz1 == 0) break;
+        /* Remember that we still have to compare fields 1 ... sz - 1. */
+        if (sz1 &gt; 1) {
+          if (sp &gt;= stk-&gt;limit) sp = compare_resize_stack(stk, sp);
+          struct compare_item* next = sp++;
+          next-&gt;v1 = v1;
+          next-&gt;v2 = v2;
+          next-&gt;size = Val_long(sz1);
+          next-&gt;offset = Val_long(1);
+        }
+        /* Continue comparison with first field */
+        v1 = Field(v1, 0);
+        v2 = Field(v2, 0);
+        continue;
+      }
+      }
+    next_item:
+      /* Pop one more item to compare, if any */
+      if (sp == stk-&gt;stack) return EQUAL; /* we're done */
+
+      struct compare_item* last = sp-1;
+      v1 = Field(last-&gt;v1, Long_val(last-&gt;offset));
+      v2 = Field(last-&gt;v2, Long_val(last-&gt;offset));
+      last-&gt;offset += 2;/* Long_val(last-&gt;offset) += 1 */
+      if (last-&gt;offset == last-&gt;size) sp--;
+    }
+  }
+}
+</code></pre>
+<p>The code here is the skeleton to compare two elements tag-wise. The code omitted is details of specific tag cases. The stack is to store elements to compare, getting from compound values.</p>
+<p>At this moment, I am not clear when elements are pushed into the stack. <code>Begin_roots2(root_v1, root_v2); run_pending_actions(stk, sp);</code> is doubty.</p>
+<h2 id="value-and-tag"><a class="header" href="#value-and-tag"><code>value</code> and <code>tag</code></a></h2>
+<p>OCaml value is stored as a <em>value</em> in memory at runtime. <code>value</code> and tag functions, e.g. <code>Is_long</code> and <code>Tag_val</code> are defined in <a href="https://github.com/ocaml/ocaml/blob/trunk/runtime/caml/mlvalues.h"><code>runtime/caml/mlvalues.h</code></a>. OCaml manual explains tags in Chapter 22 <a href="https://v2.ocaml.org/manual/intfc.html#ss:c-blocks">Interfacing C with OCaml</a>. RWO has a clear explanation in chapter 23 <a href="https://dev.realworldocaml.org/runtime-memory-layout.html">Memory Representation of Values</a>. Here is my recap:</p>
+<p>Memory <em>value</em> can be an immediate integer or a pointer to other memory. An OCaml value of primitive types e.g. <code>bool</code>, <code>int</code>, <code>unit</code> encodes to an immediate integer. The rest uses a pointer to store the extra <em>blocks</em>. The last bit of a memory word is used to identify them: <code>1</code> marks immediate integers and <code>0</code> marks a pointer. OCaml enforces word-aligned memory addresses.</p>
+<p>A block, which a pointer value points to, contains a header and variable-length data. The header has the size of the block and a tag identifying whether to interpret the payload data as opaque bytes or OCaml values.</p>
+<p>Here is a rusty table pairing the summary from RWO and the handling case from <code>compare.c</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>OCaml type</th><th>Value/Tag</th><th>Compare case</th></tr></thead><tbody>
+<tr><td>int</td><td>immediate</td><td><code>Is_long</code></td></tr>
+<tr><td>enforced lazy value</td><td><code>Forward_tag</code></td><td>via <code>Forward_val</code></td></tr>
+<tr><td>abstract datatype with user functions</td><td><code>Custom_tag</code></td><td>via <code>-&gt;compare_ext</code></td></tr>
+<tr><td>function (closure)</td><td><code>Infix_tag</code></td><td>via <code>Closure_tag</code></td></tr>
+<tr><td>string</td><td><code>String_tag</code></td><td><code>case String_tag</code></td></tr>
+<tr><td>float</td><td><code>Double_tag</code></td><td><code>case Double_tag</code></td></tr>
+<tr><td>float array</td><td><code>Double_array_tag</code></td><td><code>case Double_array_tag</code></td></tr>
+<tr><td>abstract datatype</td><td><code>Abstract_tag</code></td><td>invalid <code>abstract value</code></td></tr>
+<tr><td>function (closure)</td><td><code>Closure_tag</code></td><td>invalid <code>functional value</code></td></tr>
+<tr><td>(handling effects inside callbacks)</td><td><code>Cont_tag</code></td><td>invalid <code>continuation value</code></td></tr>
+<tr><td>object</td><td><code>Object_tag</code></td><td>via <code>Oid_val</code></td></tr>
+</tbody></table>
+</div>
+<h2 id="discussion"><a class="header" href="#discussion">Discussion</a></h2>
+<p>Some omitted code in <code>compare.c</code> above is for GC interrupts. It's heavily discussed in <a href="https://github.com/ocaml/ocaml/pull/12128">ocaml/#12128</a>.</p>
+<p>Polymorphic compare is also dicussed in e.g. OCaml Discuss <a href="https://discuss.ocaml.org/t/removing-polymorphic-compare-from-core/2994">removing-polymorphic-compare</a> and even over <a href="https://blog.janestreet.com/the-perils-of-polymorphic-compare/">a decade ago</a>.</p>
+<p>The post makes a rough but clear explanation. <del>Only use it with care.</del></p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="map-set-and-hashtables"><a class="header" href="#map-set-and-hashtables">Map, Set and Hashtables</a></h1>
 <p>What are exact functions required for distinct data containers?</p>
 <p>Afterr all, what collections are in <code>Base</code> and <code>Core</code>?</p>
@@ -683,210 +904,8 @@ let _ = Hash_set.create (module Int_set_as_element)
 <tr><td></td><td><code>Univ_map</code></td><td>/</td><td>container</td><td></td><td></td></tr>
 <tr><td></td><td><code>Validate</code></td><td>/</td><td>std</td><td></td><td></td></tr>
 <tr><td></td><td><code>Weak</code></td><td>/</td><td>std</td><td></td><td></td></tr>
-<tr><td></td><td>``</td><td>/</td><td>std</td><td></td><td></td></tr>
-</tbody></table>
-</div><div style="break-before: page; page-break-before: always;"></div><h1 id="what-is-polymorphic-compare"><a class="header" href="#what-is-polymorphic-compare">What is polymorphic compare</a></h1>
-<p><img src="internals//img/camel-compare.png" alt="Camel Compare" /></p>
-<h2 id="the-compare-function"><a class="header" href="#the-compare-function">The <code>compare</code> function</a></h2>
-<p>OCaml's polymorphic compare is easy-to-use but hard-to-reason.</p>
-<p>In the <a href="https://v2.ocaml.org/api/Stdlib.html#1_Comparisons">manual</a>, polymorphic <code>compare</code> is <code>val (=) : 'a -&gt; 'a -&gt; bool</code> where</p>
-<blockquote>
-<p><code>e1 = e2</code> tests for structural equality of <code>e1</code> and <code>e2</code>. Mutable structures (e.g. references and arrays) are equal if and only if their current contents are structurally equal, even if the two mutable objects are not the same physical object. Equality between functional values raises <code>Invalid_argument</code>. Equality between cyclic data structures may not terminate.</p>
-</blockquote>
-<p>In the source, <code>Stdlib.comare</code> is provided as an FFI and the actual implementation is in C code of the runtime:</p>
-<pre><code class="language-ocaml">(* https://github.com/ocaml/ocaml/blob/trunk/stdlib/stdlib.ml#L72 *)
-external compare : 'a -&gt; 'a -&gt; int = &quot;%compare&quot;
-
-(* https://github.com/ocaml/ocaml/blob/trunk/runtime/compare.c#L339 *)
-CAMLprim value caml_compare(value v1, value v2)
-{
-  intnat res = compare_val(v1, v2, 1);
-  if (res &lt; 0)
-    return Val_int(LESS);
-  else if (res &gt; 0)
-    return Val_int(GREATER);
-  else
-    return Val_int(EQUAL);
-}
-</code></pre>
-<p>The other sibing functions are also wrapping <code>compare_val</code> e.g. <code>&lt;&gt;</code>(<code>notequal</code>), <code>&lt;</code>(<code>lessthan</code>), <code>&lt;=</code>(<code>lessequal</code>) and the implementation is easy to infer. The third argument <code>total</code> is only set to <code>1</code> for <code>caml_compare</code> (a.k.a <code>Stdlib.compare</code>) and <code>0</code> otherwise.</p>
-<pre><code class="language-c">// https://github.com/ocaml/ocaml/blob/trunk/runtime/compare.c#L88C42-L88C42
-static intnat compare_val(value v1, value v2, int total)
-{
-  struct compare_stack stk;
-  intnat res;
-  stk.stack = stk.init_stack;
-  stk.limit = stk.stack + COMPARE_STACK_INIT_SIZE;
-  res = do_compare_val(&amp;stk, v1, v2, total);
-  compare_free_stack(&amp;stk);
-  return res;
-}
-</code></pre>
-<p><code>campare_val</code> prepares a stack and invokes a payload <code>do_compare_val</code> to perform the comparison. Conceptual, <code>do_compare_val</code> also performs the strucutral comparison on the low-level representations. By keeping only the tag casing part, a simplied <code>do_compare_val</code> now looks like this:</p>
-<pre><code class="language-c">static intnat do_compare_val(struct compare_stack* stk,
-                             value v1, value v2, int total)
-{
-  struct compare_item * sp;
-  tag_t t1, t2;
-
-  sp = stk-&gt;stack;
-  while (...) {
-    while (...) {
-      if (v1 == v2 &amp;&amp; total) goto next_item;
-      if (Is_long(v1)) {
-        if (v1 == v2) goto next_item;
-        if (Is_long(v2))
-          return Long_val(v1) - Long_val(v2);
-        switch (Tag_val(v2)) {
-          case Forward_tag:
-            v2 = Forward_val(v2);
-            continue;
-          case Custom_tag: {
-            int res = compare(v1, v2);
-            if (Caml_state-&gt;compare_unordered &amp;&amp; !total) return UNORDERED;
-            if (res != 0) return res;
-            goto next_item;
-          }
-          default: /*fallthrough*/;
-          }
-        return LESS;                /* v1 long &lt; v2 block */
-      }
-      if (Is_long(v2)) {
-          // ... symmetry of the above code
-        }
-        return GREATER;            /* v1 block &gt; v2 long */
-      }
-      t1 = Tag_val(v1);
-      t2 = Tag_val(v2);
-      if (t1 != t2) {
-          if (t1 == Forward_tag) { v1 = Forward_val (v1); continue; }
-          if (t2 == Forward_tag) { v2 = Forward_val (v2); continue; }
-          if (t1 == Infix_tag) t1 = Closure_tag;
-          if (t2 == Infix_tag) t2 = Closure_tag;
-          if (t1 != t2)
-              return (intnat)t1 - (intnat)t2;
-      }
-      switch(t1) {
-      case Forward_tag: {
-          v1 = Forward_val (v1);
-          v2 = Forward_val (v2);
-          continue;
-      }
-      case String_tag: // ... string case
-
-      case Double_tag: // ... double case
-
-      case Double_array_tag: // ... double array case
-      
-      case Abstract_tag:
-      case Closure_tag:
-      case Infix_tag:
-      case Cont_tag: // ... invalid cases
-
-      case Object_tag: {
-        intnat oid1 = Oid_val(v1);
-        intnat oid2 = Oid_val(v2);
-        if (oid1 != oid2) return oid1 - oid2;
-        break;
-      }
-      case Custom_tag: {
-        int res;
-        int (*compare)(value v1, value v2) = Custom_ops_val(v1)-&gt;compare;
-        /* Hardening against comparisons between different types */
-        if (compare != Custom_ops_val(v2)-&gt;compare) {
-          return strcmp(Custom_ops_val(v1)-&gt;identifier,
-                        Custom_ops_val(v2)-&gt;identifier) &lt; 0
-                 ? LESS : GREATER;
-        }
-        if (compare == NULL) {
-          compare_free_stack(stk);
-          caml_invalid_argument(&quot;compare: abstract value&quot;);
-        }
-        Caml_state-&gt;compare_unordered = 0;
-        res = compare(v1, v2);
-        if (Caml_state-&gt;compare_unordered &amp;&amp; !total) return UNORDERED;
-        if (res != 0) return res;
-        break;
-      }
-      default: {
-        mlsize_t sz1 = Wosize_val(v1);
-        mlsize_t sz2 = Wosize_val(v2);
-        /* Compare sizes first for speed */
-        if (sz1 != sz2) return sz1 - sz2;
-        if (sz1 == 0) break;
-        /* Remember that we still have to compare fields 1 ... sz - 1. */
-        if (sz1 &gt; 1) {
-          if (sp &gt;= stk-&gt;limit) sp = compare_resize_stack(stk, sp);
-          struct compare_item* next = sp++;
-          next-&gt;v1 = v1;
-          next-&gt;v2 = v2;
-          next-&gt;size = Val_long(sz1);
-          next-&gt;offset = Val_long(1);
-        }
-        /* Continue comparison with first field */
-        v1 = Field(v1, 0);
-        v2 = Field(v2, 0);
-        continue;
-      }
-      }
-    next_item:
-      /* Pop one more item to compare, if any */
-      if (sp == stk-&gt;stack) return EQUAL; /* we're done */
-
-      struct compare_item* last = sp-1;
-      v1 = Field(last-&gt;v1, Long_val(last-&gt;offset));
-      v2 = Field(last-&gt;v2, Long_val(last-&gt;offset));
-      last-&gt;offset += 2;/* Long_val(last-&gt;offset) += 1 */
-      if (last-&gt;offset == last-&gt;size) sp--;
-    }
-  }
-}
-</code></pre>
-<p>The code here is the skeleton to compare two element tag-wise. The code omitted is details of specific tag cases. The stack is to store elements to compare, getting from compound values.</p>
-<p>Displamer (TODO): At this moment, I am not clear when elements are pushed into the stack. <code>Begin_roots2(root_v1, root_v2); run_pending_actions(stk, sp);</code> is doubty.</p>
-<h2 id="value-and-tag"><a class="header" href="#value-and-tag"><code>value</code> and <code>tag</code></a></h2>
-<p>OCaml value is stored as a <em>value</em> in memory at runtime. <code>value</code> and tag functions e.g. <code>Is_long</code>, <code>Tag_val</code> is defined in <a href="https://github.com/ocaml/ocaml/blob/trunk/runtime/caml/mlvalues.h"><code>runtime/caml/mlvalues.h</code></a>. OCaml manual explains tags in Chapter 22 <a href="https://v2.ocaml.org/manual/intfc.html#ss:c-blocks">Interfacing C with OCaml</a>. RWO has a clear explanation in chapter 23 <a href="https://dev.realworldocaml.org/runtime-memory-layout.html">Memory Representation of Values</a>. Here is my recap:</p>
-<p>Memory <em>value</em> can be immediate integer or a pointer to some other memory. An OCaml value of primitive types e.g. <code>bool</code>, <code>int</code>, <code>unit</code> and some others encodes to an immediate integer. The rest uses a pointer to store the extra <em>blocks</em>. The last bit of a memory word is used to identify them: <code>1</code> marks immediate integers and <code>0</code> marks a pointer. OCaml enforces word-aligned memory addresses.</p>
-<p>A block, which a pointer value points to, contains a header. The header has a tag which identifies whether to interpret the payload as opage bytes or OCaml values.</p>
-<div class="table-wrapper"><table><thead><tr><th>OCaml type</th><th>Value/Tag</th><th>Compare case</th><th>Comment</th></tr></thead><tbody>
-<tr><td>int</td><td>immediate</td><td><code>Is_long</code></td><td></td></tr>
-<tr><td>enforced lazy value</td><td><code>Forward_tag</code></td><td>via <code>Forward_val</code></td><td><code>runtime/obj.c</code></td></tr>
-<tr><td>abstract datatype with user functions</td><td><code>Custom_tag</code></td><td>via <code>-&gt;compare_ext</code></td><td></td></tr>
-<tr><td>function (closure)</td><td><code>Infix_tag</code></td><td>via <code>Closure_tag</code></td><td>a special <code>Closure</code> tag (used in <code>asmcomp/cmmgen.ml</code>)</td></tr>
-<tr><td>string</td><td><code>String_tag</code></td><td><code>case String_tag</code></td><td></td></tr>
-<tr><td>float</td><td><code>Double_tag</code></td><td><code>case Double_tag</code></td><td></td></tr>
-<tr><td>float array</td><td><code>Double_array_tag</code></td><td><code>case Double_array_tag</code></td><td></td></tr>
-<tr><td>abstract datatype</td><td><code>Abstract_tag</code></td><td>invalid <code>abstract value</code></td><td></td></tr>
-<tr><td>function (closure)</td><td><code>Closure_tag</code></td><td>invalid <code>functional value</code></td><td></td></tr>
-<tr><td>(handling effects inside callbacks)</td><td><code>Cont_tag</code></td><td>invalid <code>continuation value</code></td><td></td></tr>
-<tr><td>object</td><td><code>Object_tag</code></td><td>via <code>Oid_val</code></td><td></td></tr>
 </tbody></table>
 </div>
-<h2 id="to-do"><a class="header" href="#to-do">To-do</a></h2>
-<p>Some omitted code in <code>compare</code> above is for GC interrupts. It's heavivy discussed in <a href="https://github.com/ocaml/ocaml/pull/12128">ocaml/#12128</a>.</p>
-<p>Demostrating a nice example to explain why polymorphic compare is worriable will improve this post a lot.</p>
-<p>The example is like</p>
-<pre><code class="language-ocaml">module IntSet = Set.Make(Int);;
-let a = IntSet.(add 1 (singleton 0));;
-let b = IntSet.(add 0 (singleton 1));;
-
-a = b;; (* (bool = false) *)
-IntSet.equal a b;; (* bool = true *)
-
-(* ocamldumpobj or https://github.com/favonia/ocaml-objdump *)
-utop # Format.printf &quot;@[%a@]@.&quot; pp (a, ());;
-variant0(
-  variant0(int(0),int(0),variant0(int(0),int(1),int(0),int(1)),int(2)),
-  int(0))
-- : unit = ()
-
-utop # Format.printf &quot;@[%a@]@.&quot; pp (b, ());;
-variant0(
-  variant0(variant0(int(0),int(0),int(0),int(1)),int(1),int(0),int(2)),
-  int(0))
-- : unit = ()
-</code></pre>
-
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">

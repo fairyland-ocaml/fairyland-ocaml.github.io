@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="../preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="../libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="../core/container-elements.html" class="active">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="../core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><a href="../internals/polymorphic-compare.html">What is polymorphic compare</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Command-line</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="../preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="../libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="../core/container-elements.html" class="active">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="../internals/polymorphic-compare.html">What is polymorphic compare?</a></li><li class="chapter-item expanded affix "><a href="../core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Understanding Ocamlgraph</div></li><li class="chapter-item expanded affix "><div>Command-line</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -187,17 +187,20 @@
 <pre><code class="language-ocaml">type foo1 = P1 of int * string [@@deriving_inline equal]
 
 let _ = fun (_ : foo1) -&gt; ()
+
 let equal_foo1 =
-  (fun a__008_ -&gt;
-     fun b__009_ -&gt;
-       if Stdlib.(==) a__008_ b__009_
-       then true
-       else
-         (match (a__008_, b__009_) with
-          | (P1 (_a__010_, _a__012_), P1 (_b__011_, _b__013_)) -&gt;
-              Stdlib.(&amp;&amp;) (equal_int _a__010_ _b__011_)
-                (equal_string _a__012_ _b__013_)) : foo1 -&gt; foo1 -&gt; bool)
+  (fun a__008_ b__009_ -&gt;
+     if Stdlib.( == ) a__008_ b__009_ then true
+     else
+       match (a__008_, b__009_) with
+       | P1 (_a__010_, _a__012_), P1 (_b__011_, _b__013_) -&gt;
+           Stdlib.( &amp;&amp; )
+             (equal_int _a__010_ _b__011_)
+             (equal_string _a__012_ _b__013_)
+    : foo1 -&gt; foo1 -&gt; bool)
+
 let _ = equal_foo1
+
 [@@@end]
 </code></pre>
 <p><code>equal</code> is straightforward. Two values are equal if they are physically equal i.e. at the same memory address. Otherwises, they need to be equal piecewise-ly. <code>Core</code> doesn't shadow OCaml vanilla standard library <code>Stdlib</code>.</p>
@@ -205,18 +208,20 @@ let _ = equal_foo1
 <pre><code class="language-ocaml">type foo2 = P2 of int * string [@@deriving_inline compare]
 
 let _ = fun (_ : foo2) -&gt; ()
+
 let compare_foo2 =
-  (fun a__014_ -&gt;
-     fun b__015_ -&gt;
-       if Stdlib.(==) a__014_ b__015_
-       then 0
-       else
-         (match (a__014_, b__015_) with
-          | (P2 (_a__016_, _a__018_), P2 (_b__017_, _b__019_)) -&gt;
-              (match compare_int _a__016_ _b__017_ with
-               | 0 -&gt; compare_string _a__018_ _b__019_
-               | n -&gt; n)) : foo2 -&gt; foo2 -&gt; int)
+  (fun a__014_ b__015_ -&gt;
+     if Stdlib.( == ) a__014_ b__015_ then 0
+     else
+       match (a__014_, b__015_) with
+       | P2 (_a__016_, _a__018_), P2 (_b__017_, _b__019_) -&gt; (
+           match compare_int _a__016_ _b__017_ with
+           | 0 -&gt; compare_string _a__018_ _b__019_
+           | n -&gt; n)
+    : foo2 -&gt; foo2 -&gt; int)
+
 let _ = compare_foo2
+
 [@@@end]
 </code></pre>
 <p><code>compare</code> is similar to <code>equal</code>. <code>Stdlib.compare : 'a -&gt; 'a -&gt; int</code> the polymorphic compare is not used in <code>Core</code>, however, the convertion should be observed: <code>compare x y</code> returns 0 if x is equal to y, a negative integer if x is less than y, and a positive integer if x is greater than y.</p>
@@ -224,37 +229,42 @@ let _ = compare_foo2
 <pre><code class="language-ocaml">type foo3 = P3 of int * string [@@deriving_inline sexp]
 
 let _ = fun (_ : foo3) -&gt; ()
+
 let foo3_of_sexp =
   (let error_source__022_ = &quot;src-ocaml/elements.ml.foo3&quot; in
    function
-   | Sexplib0.Sexp.List ((Sexplib0.Sexp.Atom
-       (&quot;p3&quot; | &quot;P3&quot; as _tag__025_))::sexp_args__026_) as _sexp__024_ -&gt;
-       (match sexp_args__026_ with
-        | arg0__027_::arg1__028_::[] -&gt;
-            let res0__029_ = int_of_sexp arg0__027_
-            and res1__030_ = string_of_sexp arg1__028_ in
-            P3 (res0__029_, res1__030_)
-        | _ -&gt;
-            Sexplib0.Sexp_conv_error.stag_incorrect_n_args error_source__022_
-              _tag__025_ _sexp__024_)
+   | Sexplib0.Sexp.List
+       (Sexplib0.Sexp.Atom ((&quot;p3&quot; | &quot;P3&quot;) as _tag__025_) :: sexp_args__026_) as
+     _sexp__024_ -&gt; (
+       match sexp_args__026_ with
+       | [ arg0__027_; arg1__028_ ] -&gt;
+           let res0__029_ = int_of_sexp arg0__027_
+           and res1__030_ = string_of_sexp arg1__028_ in
+           P3 (res0__029_, res1__030_)
+       | _ -&gt;
+           Sexplib0.Sexp_conv_error.stag_incorrect_n_args error_source__022_
+             _tag__025_ _sexp__024_)
    | Sexplib0.Sexp.Atom (&quot;p3&quot; | &quot;P3&quot;) as sexp__023_ -&gt;
        Sexplib0.Sexp_conv_error.stag_takes_args error_source__022_ sexp__023_
-   | Sexplib0.Sexp.List ((Sexplib0.Sexp.List _)::_) as sexp__021_ -&gt;
+   | Sexplib0.Sexp.List (Sexplib0.Sexp.List _ :: _) as sexp__021_ -&gt;
        Sexplib0.Sexp_conv_error.nested_list_invalid_sum error_source__022_
          sexp__021_
    | Sexplib0.Sexp.List [] as sexp__021_ -&gt;
        Sexplib0.Sexp_conv_error.empty_list_invalid_sum error_source__022_
          sexp__021_
    | sexp__021_ -&gt;
-       Sexplib0.Sexp_conv_error.unexpected_stag error_source__022_ sexp__021_ :
-  Sexplib0.Sexp.t -&gt; foo3)
+       Sexplib0.Sexp_conv_error.unexpected_stag error_source__022_ sexp__021_
+    : Sexplib0.Sexp.t -&gt; foo3)
+
 let _ = foo3_of_sexp
+
 let sexp_of_foo3 =
   (fun (P3 (arg0__031_, arg1__032_)) -&gt;
      let res0__033_ = sexp_of_int arg0__031_
      and res1__034_ = sexp_of_string arg1__032_ in
-     Sexplib0.Sexp.List [Sexplib0.Sexp.Atom &quot;P3&quot;; res0__033_; res1__034_] :
-  foo3 -&gt; Sexplib0.Sexp.t)
+     Sexplib0.Sexp.List [ Sexplib0.Sexp.Atom &quot;P3&quot;; res0__033_; res1__034_ ]
+    : foo3 -&gt; Sexplib0.Sexp.t)
+
 let _ = sexp_of_foo3
 
 [@@@end]
@@ -348,7 +358,7 @@ let _ = Hash_set.create (module Int_set_as_element)
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../core/maps-and-hashtables.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../internals/polymorphic-compare.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -362,7 +372,7 @@ let _ = Hash_set.create (module Int_set_as_element)
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../core/maps-and-hashtables.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../internals/polymorphic-compare.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

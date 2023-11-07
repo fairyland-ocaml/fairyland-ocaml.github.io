@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>What is polymorphic compare - Fairyland OCaml</title>
+        <title>What is polymorphic compare? - Fairyland OCaml</title>
 
 
         <!-- Custom HTML head -->
@@ -83,7 +83,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="../preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="../libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="../core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="../core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><a href="../internals/polymorphic-compare.html" class="active">What is polymorphic compare</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Command-line</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="../preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="../libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="../core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="../internals/polymorphic-compare.html" class="active">What is polymorphic compare?</a></li><li class="chapter-item expanded affix "><a href="../core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Understanding Ocamlgraph</div></li><li class="chapter-item expanded affix "><div>Command-line</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -144,15 +144,43 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="what-is-polymorphic-compare"><a class="header" href="#what-is-polymorphic-compare">What is polymorphic compare</a></h1>
-<p><img src="/img/camel-compare.png" alt="Camel Compare" /></p>
+                        <h1 id="what-is-polymorphic-compare"><a class="header" href="#what-is-polymorphic-compare">What is polymorphic compare?</a></h1>
 <h2 id="the-compare-function"><a class="header" href="#the-compare-function">The <code>compare</code> function</a></h2>
-<p>OCaml's polymorphic compare is easy-to-use but hard-to-reason.</p>
-<p>In the <a href="https://v2.ocaml.org/api/Stdlib.html#1_Comparisons">manual</a>, polymorphic <code>compare</code> is <code>val (=) : 'a -&gt; 'a -&gt; bool</code> where</p>
+<p>OCaml's polymorphic compare (or <code>Stdlib.compare</code>) is tempting to use but hard to reason.</p>
+<p>Polymorphic <code>compare</code> in the <a href="https://v2.ocaml.org/api/Stdlib.html#1_Comparisons">manual</a> says:</p>
 <blockquote>
+<p><code>val (=) : 'a -&gt; 'a -&gt; bool</code> </p>
 <p><code>e1 = e2</code> tests for structural equality of <code>e1</code> and <code>e2</code>. Mutable structures (e.g. references and arrays) are equal if and only if their current contents are structurally equal, even if the two mutable objects are not the same physical object. Equality between functional values raises <code>Invalid_argument</code>. Equality between cyclic data structures may not terminate.</p>
 </blockquote>
-<p>In the source, <code>Stdlib.comare</code> is provided as an FFI and the actual implementation is in C code of the runtime:</p>
+<p>Intuitionally, it compares two values structurally for their representations in memory.</p>
+<p>This function is error-prone. A quick example to show here is to compare two values of <code>IntSet</code>. They are <em>equal</em> respecting their elements but <em>unequal</em> respecting their memory objects. <code>Objdump</code> is from <a href="https://github.com/favonia/ocaml-objdump">favonia/ocaml-objdump</a>. <code>Stdlib.Set</code> uses a balance-tree in the implementation. A tree containing two elements has multiple morphs to be balanced.</p>
+<!-- $MDX skip -->
+<pre><code class="language-ocaml"># module IntSet = Set.Make(Int);;
+
+# let a = IntSet.(add 1 (singleton 0));;
+val a : IntSet.t = &lt;abstr&gt;
+# let b = IntSet.(add 0 (singleton 1));;
+val b : IntSet.t = &lt;abstr&gt;
+
+# a = b;;
+- : bool = false
+# IntSet.equal a b;;
+- : bool = true
+
+# #require &quot;objdump&quot;;;
+# Format.printf &quot;@[%a@]@.&quot; Objdump.pp a;;
+variant0(int(0),int(0),variant0(int(0),int(1),int(0),int(1)),int(2))
+
+- : unit = ()
+# Format.printf &quot;@[%a@]@.&quot; Objdump.pp b;;
+variant0(variant0(int(0),int(0),int(0),int(1)),int(1),int(0),int(2))
+
+- : unit = ()
+</code></pre>
+<p><img src="/img/camel-compare.png" alt="Camel Compare" /></p>
+<h2 id="compare-in-the-source"><a class="header" href="#compare-in-the-source"><code>compare</code> in the source</a></h2>
+<p>In the source, <code>Stdlib.compare</code> is provided as an FFI, and the actual implementation is in the C code of the runtime:</p>
+<!-- $MDX skip -->
 <pre><code class="language-ocaml">(* https://github.com/ocaml/ocaml/blob/trunk/stdlib/stdlib.ml#L72 *)
 external compare : 'a -&gt; 'a -&gt; int = &quot;%compare&quot;
 
@@ -181,7 +209,7 @@ static intnat compare_val(value v1, value v2, int total)
   return res;
 }
 </code></pre>
-<p><code>campare_val</code> prepares a stack and invokes a payload <code>do_compare_val</code> to perform the comparison. Conceptual, <code>do_compare_val</code> also performs the strucutral comparison on the low-level representations. By keeping only the tag casing part, a simplied <code>do_compare_val</code> now looks like this:</p>
+<p><code>campare_val</code> prepares a stack and invokes a worker function <code>do_compare_val</code> to perform the comparison. <code>do_compare_val</code> performs the structural comparison on the low-level representations. By keeping only the tag cases, a simplified <code>do_compare_val</code> is:</p>
 <pre><code class="language-c">static intnat do_compare_val(struct compare_stack* stk,
                              value v1, value v2, int total)
 {
@@ -301,59 +329,43 @@ static intnat compare_val(value v1, value v2, int total)
   }
 }
 </code></pre>
-<p>The code here is the skeleton to compare two element tag-wise. The code omitted is details of specific tag cases. The stack is to store elements to compare, getting from compound values.</p>
-<p>Displamer (TODO): At this moment, I am not clear when elements are pushed into the stack. <code>Begin_roots2(root_v1, root_v2); run_pending_actions(stk, sp);</code> is doubty.</p>
+<p>The code here is the skeleton to compare two elements tag-wise. The code omitted is details of specific tag cases. The stack is to store elements to compare, getting from compound values.</p>
+<p>At this moment, I am not clear when elements are pushed into the stack. <code>Begin_roots2(root_v1, root_v2); run_pending_actions(stk, sp);</code> is doubty.</p>
 <h2 id="value-and-tag"><a class="header" href="#value-and-tag"><code>value</code> and <code>tag</code></a></h2>
-<p>OCaml value is stored as a <em>value</em> in memory at runtime. <code>value</code> and tag functions e.g. <code>Is_long</code>, <code>Tag_val</code> is defined in <a href="https://github.com/ocaml/ocaml/blob/trunk/runtime/caml/mlvalues.h"><code>runtime/caml/mlvalues.h</code></a>. OCaml manual explains tags in Chapter 22 <a href="https://v2.ocaml.org/manual/intfc.html#ss:c-blocks">Interfacing C with OCaml</a>. RWO has a clear explanation in chapter 23 <a href="https://dev.realworldocaml.org/runtime-memory-layout.html">Memory Representation of Values</a>. Here is my recap:</p>
-<p>Memory <em>value</em> can be immediate integer or a pointer to some other memory. An OCaml value of primitive types e.g. <code>bool</code>, <code>int</code>, <code>unit</code> and some others encodes to an immediate integer. The rest uses a pointer to store the extra <em>blocks</em>. The last bit of a memory word is used to identify them: <code>1</code> marks immediate integers and <code>0</code> marks a pointer. OCaml enforces word-aligned memory addresses.</p>
-<p>A block, which a pointer value points to, contains a header. The header has a tag which identifies whether to interpret the payload as opage bytes or OCaml values.</p>
-<div class="table-wrapper"><table><thead><tr><th>OCaml type</th><th>Value/Tag</th><th>Compare case</th><th>Comment</th></tr></thead><tbody>
-<tr><td>int</td><td>immediate</td><td><code>Is_long</code></td><td></td></tr>
-<tr><td>enforced lazy value</td><td><code>Forward_tag</code></td><td>via <code>Forward_val</code></td><td><code>runtime/obj.c</code></td></tr>
-<tr><td>abstract datatype with user functions</td><td><code>Custom_tag</code></td><td>via <code>-&gt;compare_ext</code></td><td></td></tr>
-<tr><td>function (closure)</td><td><code>Infix_tag</code></td><td>via <code>Closure_tag</code></td><td>a special <code>Closure</code> tag (used in <code>asmcomp/cmmgen.ml</code>)</td></tr>
-<tr><td>string</td><td><code>String_tag</code></td><td><code>case String_tag</code></td><td></td></tr>
-<tr><td>float</td><td><code>Double_tag</code></td><td><code>case Double_tag</code></td><td></td></tr>
-<tr><td>float array</td><td><code>Double_array_tag</code></td><td><code>case Double_array_tag</code></td><td></td></tr>
-<tr><td>abstract datatype</td><td><code>Abstract_tag</code></td><td>invalid <code>abstract value</code></td><td></td></tr>
-<tr><td>function (closure)</td><td><code>Closure_tag</code></td><td>invalid <code>functional value</code></td><td></td></tr>
-<tr><td>(handling effects inside callbacks)</td><td><code>Cont_tag</code></td><td>invalid <code>continuation value</code></td><td></td></tr>
-<tr><td>object</td><td><code>Object_tag</code></td><td>via <code>Oid_val</code></td><td></td></tr>
+<p>OCaml value is stored as a <em>value</em> in memory at runtime. <code>value</code> and tag functions, e.g. <code>Is_long</code> and <code>Tag_val</code> are defined in <a href="https://github.com/ocaml/ocaml/blob/trunk/runtime/caml/mlvalues.h"><code>runtime/caml/mlvalues.h</code></a>. OCaml manual explains tags in Chapter 22 <a href="https://v2.ocaml.org/manual/intfc.html#ss:c-blocks">Interfacing C with OCaml</a>. RWO has a clear explanation in chapter 23 <a href="https://dev.realworldocaml.org/runtime-memory-layout.html">Memory Representation of Values</a>. Here is my recap:</p>
+<p>Memory <em>value</em> can be an immediate integer or a pointer to other memory. An OCaml value of primitive types e.g. <code>bool</code>, <code>int</code>, <code>unit</code> encodes to an immediate integer. The rest uses a pointer to store the extra <em>blocks</em>. The last bit of a memory word is used to identify them: <code>1</code> marks immediate integers and <code>0</code> marks a pointer. OCaml enforces word-aligned memory addresses.</p>
+<p>A block, which a pointer value points to, contains a header and variable-length data. The header has the size of the block and a tag identifying whether to interpret the payload data as opaque bytes or OCaml values.</p>
+<p>Here is a rusty table pairing the summary from RWO and the handling case from <code>compare.c</code>.</p>
+<div class="table-wrapper"><table><thead><tr><th>OCaml type</th><th>Value/Tag</th><th>Compare case</th></tr></thead><tbody>
+<tr><td>int</td><td>immediate</td><td><code>Is_long</code></td></tr>
+<tr><td>enforced lazy value</td><td><code>Forward_tag</code></td><td>via <code>Forward_val</code></td></tr>
+<tr><td>abstract datatype with user functions</td><td><code>Custom_tag</code></td><td>via <code>-&gt;compare_ext</code></td></tr>
+<tr><td>function (closure)</td><td><code>Infix_tag</code></td><td>via <code>Closure_tag</code></td></tr>
+<tr><td>string</td><td><code>String_tag</code></td><td><code>case String_tag</code></td></tr>
+<tr><td>float</td><td><code>Double_tag</code></td><td><code>case Double_tag</code></td></tr>
+<tr><td>float array</td><td><code>Double_array_tag</code></td><td><code>case Double_array_tag</code></td></tr>
+<tr><td>abstract datatype</td><td><code>Abstract_tag</code></td><td>invalid <code>abstract value</code></td></tr>
+<tr><td>function (closure)</td><td><code>Closure_tag</code></td><td>invalid <code>functional value</code></td></tr>
+<tr><td>(handling effects inside callbacks)</td><td><code>Cont_tag</code></td><td>invalid <code>continuation value</code></td></tr>
+<tr><td>object</td><td><code>Object_tag</code></td><td>via <code>Oid_val</code></td></tr>
 </tbody></table>
 </div>
-<h2 id="to-do"><a class="header" href="#to-do">To-do</a></h2>
-<p>Some omitted code in <code>compare</code> above is for GC interrupts. It's heavivy discussed in <a href="https://github.com/ocaml/ocaml/pull/12128">ocaml/#12128</a>.</p>
-<p>Demostrating a nice example to explain why polymorphic compare is worriable will improve this post a lot.</p>
-<p>The example is like</p>
-<pre><code class="language-ocaml">module IntSet = Set.Make(Int);;
-let a = IntSet.(add 1 (singleton 0));;
-let b = IntSet.(add 0 (singleton 1));;
-
-a = b;; (* (bool = false) *)
-IntSet.equal a b;; (* bool = true *)
-
-(* ocamldumpobj or https://github.com/favonia/ocaml-objdump *)
-utop # Format.printf &quot;@[%a@]@.&quot; pp (a, ());;
-variant0(
-  variant0(int(0),int(0),variant0(int(0),int(1),int(0),int(1)),int(2)),
-  int(0))
-- : unit = ()
-
-utop # Format.printf &quot;@[%a@]@.&quot; pp (b, ());;
-variant0(
-  variant0(variant0(int(0),int(0),int(0),int(1)),int(1),int(0),int(2)),
-  int(0))
-- : unit = ()
-</code></pre>
+<h2 id="discussion"><a class="header" href="#discussion">Discussion</a></h2>
+<p>Some omitted code in <code>compare.c</code> above is for GC interrupts. It's heavily discussed in <a href="https://github.com/ocaml/ocaml/pull/12128">ocaml/#12128</a>.</p>
+<p>Polymorphic compare is also dicussed in e.g. OCaml Discuss <a href="https://discuss.ocaml.org/t/removing-polymorphic-compare-from-core/2994">removing-polymorphic-compare</a> and even over <a href="https://blog.janestreet.com/the-perils-of-polymorphic-compare/">a decade ago</a>.</p>
+<p>The post makes a rough but clear explanation. <del>Only use it with care.</del></p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../core/maps-and-hashtables.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../core/container-elements.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
+                            <a rel="next" href="../core/maps-and-hashtables.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -361,10 +373,13 @@ variant0(
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../core/maps-and-hashtables.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../core/container-elements.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
+                    <a rel="next" href="../core/maps-and-hashtables.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
