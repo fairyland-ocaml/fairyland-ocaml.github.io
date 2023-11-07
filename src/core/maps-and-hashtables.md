@@ -151,4 +151,3 @@ Afterr all, what collections are in `Base` and `Core`?
 |                             | `Univ_map`                             | /                        | container |                          |                                                                                |
 |                             | `Validate`                             | /                        | std       |                          |                                                                                |
 |                             | `Weak`                                 | /                        | std       |                          |                                                                                |
-|                             | ``                                     | /                        | std       |                          |                                                                                |

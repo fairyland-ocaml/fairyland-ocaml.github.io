@@ -17,14 +17,16 @@ More comprehensive discussion after RWO.
 
 [What are [@@deriving compare, sexp_of, hash] for?](core/container-elements.md)
 
-[Understanding Data Collections in `Core`](core/maps-and-hashtables.md)
-
 ## Section: OCaml Internals
 
-[What is polymorphic compare](internals/polymorphic-compare.md)
+[What is polymorphic compare?](internals/polymorphic-compare.md)
 
 
-## 🚧🚧 **Below is under construction** 🚧🚧
+## 🚧 **Under Construction** 🚧
+
+[Understanding Data Collections in `Core`](core/maps-and-hashtables.md)
+
+## 📝 **In My Plan** 📝
 
 Section: Library Gems
 
@@ -34,7 +36,7 @@ Section: Library Gems
 
 [Using `Fix`]() (libraries/fix-examples.md)
 
-<!-- - https://github.com/search?q=repo%3Aocaml%2Focaml%20equal&type=code -->
+[Understanding `Ocamlgraph`]() (libraries/ocamlgraph.md)
 
 [Command-line]() (topics/command-line.md)
 

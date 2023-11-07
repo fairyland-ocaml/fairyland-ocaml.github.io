@@ -55,17 +55,20 @@ The idea of all these function deriver are type-based structural traversal. Don'
 type foo1 = P1 of int * string [@@deriving_inline equal]
 
 let _ = fun (_ : foo1) -> ()
+
 let equal_foo1 =
-  (fun a__008_ ->
-     fun b__009_ ->
-       if Stdlib.(==) a__008_ b__009_
-       then true
-       else
-         (match (a__008_, b__009_) with
-          | (P1 (_a__010_, _a__012_), P1 (_b__011_, _b__013_)) ->
-              Stdlib.(&&) (equal_int _a__010_ _b__011_)
-                (equal_string _a__012_ _b__013_)) : foo1 -> foo1 -> bool)
+  (fun a__008_ b__009_ ->
+     if Stdlib.( == ) a__008_ b__009_ then true
+     else
+       match (a__008_, b__009_) with
+       | P1 (_a__010_, _a__012_), P1 (_b__011_, _b__013_) ->
+           Stdlib.( && )
+             (equal_int _a__010_ _b__011_)
+             (equal_string _a__012_ _b__013_)
+    : foo1 -> foo1 -> bool)
+
 let _ = equal_foo1
+
 [@@@end]
 ```
 
@@ -76,18 +79,20 @@ let _ = equal_foo1
 type foo2 = P2 of int * string [@@deriving_inline compare]
 
 let _ = fun (_ : foo2) -> ()
+
 let compare_foo2 =
-  (fun a__014_ ->
-     fun b__015_ ->
-       if Stdlib.(==) a__014_ b__015_
-       then 0
-       else
-         (match (a__014_, b__015_) with
-          | (P2 (_a__016_, _a__018_), P2 (_b__017_, _b__019_)) ->
-              (match compare_int _a__016_ _b__017_ with
-               | 0 -> compare_string _a__018_ _b__019_
-               | n -> n)) : foo2 -> foo2 -> int)
+  (fun a__014_ b__015_ ->
+     if Stdlib.( == ) a__014_ b__015_ then 0
+     else
+       match (a__014_, b__015_) with
+       | P2 (_a__016_, _a__018_), P2 (_b__017_, _b__019_) -> (
+           match compare_int _a__016_ _b__017_ with
+           | 0 -> compare_string _a__018_ _b__019_
+           | n -> n)
+    : foo2 -> foo2 -> int)
+
 let _ = compare_foo2
+
 [@@@end]
 ```
 
@@ -98,37 +103,42 @@ let _ = compare_foo2
 type foo3 = P3 of int * string [@@deriving_inline sexp]
 
 let _ = fun (_ : foo3) -> ()
+
 let foo3_of_sexp =
   (let error_source__022_ = "src-ocaml/elements.ml.foo3" in
    function
-   | Sexplib0.Sexp.List ((Sexplib0.Sexp.Atom
-       ("p3" | "P3" as _tag__025_))::sexp_args__026_) as _sexp__024_ ->
-       (match sexp_args__026_ with
-        | arg0__027_::arg1__028_::[] ->
-            let res0__029_ = int_of_sexp arg0__027_
-            and res1__030_ = string_of_sexp arg1__028_ in
-            P3 (res0__029_, res1__030_)
-        | _ ->
-            Sexplib0.Sexp_conv_error.stag_incorrect_n_args error_source__022_
-              _tag__025_ _sexp__024_)
+   | Sexplib0.Sexp.List
+       (Sexplib0.Sexp.Atom (("p3" | "P3") as _tag__025_) :: sexp_args__026_) as
+     _sexp__024_ -> (
+       match sexp_args__026_ with
+       | [ arg0__027_; arg1__028_ ] ->
+           let res0__029_ = int_of_sexp arg0__027_
+           and res1__030_ = string_of_sexp arg1__028_ in
+           P3 (res0__029_, res1__030_)
+       | _ ->
+           Sexplib0.Sexp_conv_error.stag_incorrect_n_args error_source__022_
+             _tag__025_ _sexp__024_)
    | Sexplib0.Sexp.Atom ("p3" | "P3") as sexp__023_ ->
        Sexplib0.Sexp_conv_error.stag_takes_args error_source__022_ sexp__023_
-   | Sexplib0.Sexp.List ((Sexplib0.Sexp.List _)::_) as sexp__021_ ->
+   | Sexplib0.Sexp.List (Sexplib0.Sexp.List _ :: _) as sexp__021_ ->
        Sexplib0.Sexp_conv_error.nested_list_invalid_sum error_source__022_
          sexp__021_
    | Sexplib0.Sexp.List [] as sexp__021_ ->
        Sexplib0.Sexp_conv_error.empty_list_invalid_sum error_source__022_
          sexp__021_
    | sexp__021_ ->
-       Sexplib0.Sexp_conv_error.unexpected_stag error_source__022_ sexp__021_ :
-  Sexplib0.Sexp.t -> foo3)
+       Sexplib0.Sexp_conv_error.unexpected_stag error_source__022_ sexp__021_
+    : Sexplib0.Sexp.t -> foo3)
+
 let _ = foo3_of_sexp
+
 let sexp_of_foo3 =
   (fun (P3 (arg0__031_, arg1__032_)) ->
      let res0__033_ = sexp_of_int arg0__031_
      and res1__034_ = sexp_of_string arg1__032_ in
-     Sexplib0.Sexp.List [Sexplib0.Sexp.Atom "P3"; res0__033_; res1__034_] :
-  foo3 -> Sexplib0.Sexp.t)
+     Sexplib0.Sexp.List [ Sexplib0.Sexp.Atom "P3"; res0__033_; res1__034_ ]
+    : foo3 -> Sexplib0.Sexp.t)
+
 let _ = sexp_of_foo3
 
 [@@@end]
