@@ -1,17 +1,51 @@
-# What is polymorphic compare
-
-![Camel Compare](/img/camel-compare.png)
+# What is polymorphic compare?
 
 ## The `compare` function
 
-OCaml's polymorphic compare is easy-to-use but hard-to-reason.
+OCaml's polymorphic compare (or `Stdlib.compare`) is tempting to use but hard to reason.
 
-In the [manual](https://v2.ocaml.org/api/Stdlib.html#1_Comparisons), polymorphic `compare` is `val (=) : 'a -> 'a -> bool` where
+Polymorphic `compare` in the [manual](https://v2.ocaml.org/api/Stdlib.html#1_Comparisons) says:
 
+> `val (=) : 'a -> 'a -> bool` 
+> 
 > `e1 = e2` tests for structural equality of `e1` and `e2`. Mutable structures (e.g. references and arrays) are equal if and only if their current contents are structurally equal, even if the two mutable objects are not the same physical object. Equality between functional values raises `Invalid_argument`. Equality between cyclic data structures may not terminate.
 
-In the source, `Stdlib.comare` is provided as an FFI and the actual implementation is in C code of the runtime:
+Intuitionally, it compares two values structurally for their representations in memory.
 
+This function is error-prone. A quick example to show here is to compare two values of `IntSet`. They are _equal_ respecting their elements but _unequal_ respecting their memory objects. `Objdump` is from [favonia/ocaml-objdump](https://github.com/favonia/ocaml-objdump). `Stdlib.Set` uses a balance-tree in the implementation. A tree containing two elements has multiple morphs to be balanced.
+
+<!-- $MDX skip -->
+```ocaml
+# module IntSet = Set.Make(Int);;
+
+# let a = IntSet.(add 1 (singleton 0));;
+val a : IntSet.t = <abstr>
+# let b = IntSet.(add 0 (singleton 1));;
+val b : IntSet.t = <abstr>
+
+# a = b;;
+- : bool = false
+# IntSet.equal a b;;
+- : bool = true
+
+# #require "objdump";;
+# Format.printf "@[%a@]@." Objdump.pp a;;
+variant0(int(0),int(0),variant0(int(0),int(1),int(0),int(1)),int(2))
+
+- : unit = ()
+# Format.printf "@[%a@]@." Objdump.pp b;;
+variant0(variant0(int(0),int(0),int(0),int(1)),int(1),int(0),int(2))
+
+- : unit = ()
+```
+
+![Camel Compare](/img/camel-compare.png)
+
+## `compare` in the source
+
+In the source, `Stdlib.compare` is provided as an FFI, and the actual implementation is in the C code of the runtime:
+
+<!-- $MDX skip -->
 ```ocaml
 (* https://github.com/ocaml/ocaml/blob/trunk/stdlib/stdlib.ml#L72 *)
 external compare : 'a -> 'a -> int = "%compare"
@@ -45,7 +79,7 @@ static intnat compare_val(value v1, value v2, int total)
 }
 ```
 
-`campare_val` prepares a stack and invokes a payload `do_compare_val` to perform the comparison. Conceptual, `do_compare_val` also performs the strucutral comparison on the low-level representations. By keeping only the tag casing part, a simplied `do_compare_val` now looks like this:
+`campare_val` prepares a stack and invokes a worker function `do_compare_val` to perform the comparison. `do_compare_val` performs the structural comparison on the low-level representations. By keeping only the tag cases, a simplified `do_compare_val` is:
 
 ```c
 static intnat do_compare_val(struct compare_stack* stk,
@@ -168,58 +202,38 @@ static intnat do_compare_val(struct compare_stack* stk,
 }
 ```
 
-The code here is the skeleton to compare two element tag-wise. The code omitted is details of specific tag cases. The stack is to store elements to compare, getting from compound values.
+The code here is the skeleton to compare two elements tag-wise. The code omitted is details of specific tag cases. The stack is to store elements to compare, getting from compound values.
 
-Displamer (TODO): At this moment, I am not clear when elements are pushed into the stack. `Begin_roots2(root_v1, root_v2); run_pending_actions(stk, sp);` is doubty.
+At this moment, I am not clear when elements are pushed into the stack. `Begin_roots2(root_v1, root_v2); run_pending_actions(stk, sp);` is doubty.
 
 ## `value` and `tag`
 
-OCaml value is stored as a _value_ in memory at runtime. `value` and tag functions e.g. `Is_long`, `Tag_val` is defined in [`runtime/caml/mlvalues.h`](https://github.com/ocaml/ocaml/blob/trunk/runtime/caml/mlvalues.h). OCaml manual explains tags in Chapter 22 [Interfacing C with OCaml](https://v2.ocaml.org/manual/intfc.html#ss:c-blocks). RWO has a clear explanation in chapter 23 [Memory Representation of Values](https://dev.realworldocaml.org/runtime-memory-layout.html). Here is my recap:
+OCaml value is stored as a _value_ in memory at runtime. `value` and tag functions, e.g. `Is_long` and `Tag_val` are defined in [`runtime/caml/mlvalues.h`](https://github.com/ocaml/ocaml/blob/trunk/runtime/caml/mlvalues.h). OCaml manual explains tags in Chapter 22 [Interfacing C with OCaml](https://v2.ocaml.org/manual/intfc.html#ss:c-blocks). RWO has a clear explanation in chapter 23 [Memory Representation of Values](https://dev.realworldocaml.org/runtime-memory-layout.html). Here is my recap:
 
-Memory _value_ can be immediate integer or a pointer to some other memory. An OCaml value of primitive types e.g. `bool`, `int`, `unit` and some others encodes to an immediate integer. The rest uses a pointer to store the extra _blocks_. The last bit of a memory word is used to identify them: `1` marks immediate integers and `0` marks a pointer. OCaml enforces word-aligned memory addresses.
+Memory _value_ can be an immediate integer or a pointer to other memory. An OCaml value of primitive types e.g. `bool`, `int`, `unit` encodes to an immediate integer. The rest uses a pointer to store the extra _blocks_. The last bit of a memory word is used to identify them: `1` marks immediate integers and `0` marks a pointer. OCaml enforces word-aligned memory addresses.
 
-A block, which a pointer value points to, contains a header. The header has a tag which identifies whether to interpret the payload as opage bytes or OCaml values.
+A block, which a pointer value points to, contains a header and variable-length data. The header has the size of the block and a tag identifying whether to interpret the payload data as opaque bytes or OCaml values.
 
-| OCaml type                            | Value/Tag          | Compare case                 | Comment                                               |
-| ------------------------------------- | ------------------ | ---------------------------- | ----------------------------------------------------- |
-| int                                   | immediate          | `Is_long`                    |                                                       |
-| enforced lazy value                   | `Forward_tag`      | via `Forward_val`            | `runtime/obj.c`                                       |
-| abstract datatype with user functions | `Custom_tag`       | via `->compare_ext`          |                                                       |
-| function (closure)                    | `Infix_tag`        | via `Closure_tag`            | a special `Closure` tag (used in `asmcomp/cmmgen.ml`) |
-| string                                | `String_tag`       | `case String_tag`            |                                                       |
-| float                                 | `Double_tag`       | `case Double_tag`            |                                                       |
-| float array                           | `Double_array_tag` | `case Double_array_tag`      |                                                       |
-| abstract datatype                     | `Abstract_tag`     | invalid `abstract value`     |                                                       |
-| function (closure)                    | `Closure_tag`      | invalid `functional value`   |                                                       |
-| (handling effects inside callbacks)   | `Cont_tag`         | invalid `continuation value` |                                                       |
-| object                                | `Object_tag`       | via `Oid_val`                |                                                       |
+Here is a rusty table pairing the summary from RWO and the handling case from `compare.c`.
 
-## To-do
+| OCaml type                            | Value/Tag          | Compare case                 |
+| ------------------------------------- | ------------------ | ---------------------------- |
+| int                                   | immediate          | `Is_long`                    |
+| enforced lazy value                   | `Forward_tag`      | via `Forward_val`            |
+| abstract datatype with user functions | `Custom_tag`       | via `->compare_ext`          |
+| function (closure)                    | `Infix_tag`        | via `Closure_tag`            |
+| string                                | `String_tag`       | `case String_tag`            |
+| float                                 | `Double_tag`       | `case Double_tag`            |
+| float array                           | `Double_array_tag` | `case Double_array_tag`      |
+| abstract datatype                     | `Abstract_tag`     | invalid `abstract value`     |
+| function (closure)                    | `Closure_tag`      | invalid `functional value`   |
+| (handling effects inside callbacks)   | `Cont_tag`         | invalid `continuation value` |
+| object                                | `Object_tag`       | via `Oid_val`                |
 
-Some omitted code in `compare` above is for GC interrupts. It's heavivy discussed in [ocaml/#12128](https://github.com/ocaml/ocaml/pull/12128).
+## Discussion
 
-Demostrating a nice example to explain why polymorphic compare is worriable will improve this post a lot.
+Some omitted code in `compare.c` above is for GC interrupts. It's heavily discussed in [ocaml/#12128](https://github.com/ocaml/ocaml/pull/12128).
 
-The example is like
+Polymorphic compare is also dicussed in e.g. OCaml Discuss [removing-polymorphic-compare](https://discuss.ocaml.org/t/removing-polymorphic-compare-from-core/2994) and even over [a decade ago](https://blog.janestreet.com/the-perils-of-polymorphic-compare/).
 
-```ocaml
-module IntSet = Set.Make(Int);;
-let a = IntSet.(add 1 (singleton 0));;
-let b = IntSet.(add 0 (singleton 1));;
-
-a = b;; (* (bool = false) *)
-IntSet.equal a b;; (* bool = true *)
-
-(* ocamldumpobj or https://github.com/favonia/ocaml-objdump *)
-utop # Format.printf "@[%a@]@." pp (a, ());;
-variant0(
-  variant0(int(0),int(0),variant0(int(0),int(1),int(0),int(1)),int(2)),
-  int(0))
-- : unit = ()
-
-utop # Format.printf "@[%a@]@." pp (b, ());;
-variant0(
-  variant0(variant0(int(0),int(0),int(0),int(1)),int(1),int(0),int(2)),
-  int(0))
-- : unit = ()
-```
+The post makes a rough but clear explanation. ~~Only use it with care.~~
