@@ -10,7 +10,6 @@ Good libraries deserve more explanaion.
 
 [Understanding `Hashcons`](libraries/hashcons.md)
 
-
 ## Section: Using `Core`
 
 More comprehensive discussion after RWO.
@@ -38,7 +37,7 @@ Section: Library Gems
 
 [Understanding `Ocamlgraph`]() (libraries/ocamlgraph.md)
 
-[Command-line]() (topics/command-line.md)
+[Command-line Argparse]() (topics/argparse.md)
 
 [Profiling]() (topics/profiling.md)
 
