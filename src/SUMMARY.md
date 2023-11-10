@@ -23,6 +23,8 @@ More comprehensive discussion after RWO.
 
 ## 🚧 **Under Construction** 🚧
 
+[CUnderstanding `Core.Command` and `Cmdliner`](libraries/argparse.md)
+
 [Understanding Data Collections in `Core`](core/maps-and-hashtables.md)
 
 ## 📝 **In My Plan** 📝
@@ -36,8 +38,6 @@ Section: Library Gems
 [Using `Fix`]() (libraries/fix-examples.md)
 
 [Understanding `Ocamlgraph`]() (libraries/ocamlgraph.md)
-
-[Command-line Argparse]() (topics/argparse.md)
 
 [Profiling]() (topics/profiling.md)
 
