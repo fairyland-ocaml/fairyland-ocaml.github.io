@@ -258,8 +258,6 @@ The last step to make it familiar to RWO readers is to use `let%map_open` instea
 - : Command.t = <abstr>
 ```
 
-TODO: fix mermaid
-
 TODO: fmap for Cmdliner
 
 TODO: examples.

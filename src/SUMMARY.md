@@ -23,7 +23,7 @@ More comprehensive discussion after RWO.
 
 ## 🚧 **Under Construction** 🚧
 
-[CUnderstanding `Core.Command` and `Cmdliner`](libraries/argparse.md)
+[Understanding `Core.Command` and `Cmdliner`](libraries/argparse.md)
 
 [Understanding Data Collections in `Core`](core/maps-and-hashtables.md)
 
