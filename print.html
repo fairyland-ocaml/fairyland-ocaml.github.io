@@ -84,7 +84,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="internals/polymorphic-compare.html">What is polymorphic compare?</a></li><li class="chapter-item expanded affix "><a href="core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Understanding Ocamlgraph</div></li><li class="chapter-item expanded affix "><div>Command-line Argparse</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="internals/polymorphic-compare.html">What is polymorphic compare?</a></li><li class="chapter-item expanded affix "><a href="libraries/argparse.html">CUnderstanding Core.Command and Cmdliner</a></li><li class="chapter-item expanded affix "><a href="core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Understanding Ocamlgraph</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -157,6 +157,7 @@
 <h2 id="section-ocaml-internals"><a class="header" href="#section-ocaml-internals">Section: OCaml Internals</a></h2>
 <p><a href="internals/polymorphic-compare.html">What is polymorphic compare?</a></p>
 <h2 id="-under-construction-"><a class="header" href="#-under-construction-">🚧 <strong>Under Construction</strong> 🚧</a></h2>
+<p><a href="libraries/argparse.html">CUnderstanding <code>Core.Command</code> and <code>Cmdliner</code></a></p>
 <p><a href="core/maps-and-hashtables.html">Understanding Data Collections in <code>Core</code></a></p>
 <h2 id="-in-my-plan-"><a class="header" href="#-in-my-plan-">📝 <strong>In My Plan</strong> 📝</a></h2>
 <p>Section: Library Gems</p>
@@ -164,7 +165,6 @@
 <p><a href="">Understanding <code>Fix</code></a> (libraries/fix.md)</p>
 <p><a href="">Using <code>Fix</code></a> (libraries/fix-examples.md)</p>
 <p><a href="">Understanding <code>Ocamlgraph</code></a> (libraries/ocamlgraph.md)</p>
-<p><a href="">Command-line Argparse</a> (topics/argparse.md)</p>
 <p><a href="">Profiling</a> (topics/profiling.md)</p>
 <p>Section: OCaml Internals</p>
 <p><a href="">Deriving print</a> (internals/deriving-print.md)</p>
@@ -756,6 +756,227 @@ static intnat compare_val(value v1, value v2, int total)
 <p>Some omitted code in <code>compare.c</code> above is for GC interrupts. It's heavily discussed in <a href="https://github.com/ocaml/ocaml/pull/12128">ocaml/#12128</a>.</p>
 <p>Polymorphic compare is also dicussed in e.g. OCaml Discuss <a href="https://discuss.ocaml.org/t/removing-polymorphic-compare-from-core/2994">removing-polymorphic-compare</a> and even over <a href="https://blog.janestreet.com/the-perils-of-polymorphic-compare/">a decade ago</a>.</p>
 <p>The post makes a rough but clear explanation. <del>Only use it with care.</del></p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="command-line-argparse"><a class="header" href="#command-line-argparse">Command-line Argparse</a></h1>
+<p>Unlike OCaml which itself is straightforward, command-line parse libraries e.g. <code>Core.Command</code> and <code>Cmdliner</code> in OCaml is notoriously difficult to understand and use. The tension may come from sometime people requires a quick solution, while both these libraries are shipping concepts and tools for a full-feathered tool. This post aims to provide alternative tutorials for them. Their official tutorials are at <a href="https://dev.realworldocaml.org/command-line-parsing.html">RWO/Command-Line Parsing</a> and <a href="https://erratique.ch/software/cmdliner/doc/tutorial.html">cmdliner/tutorial</a>. OCaml also has build-in <code>Sys.argv</code> and standard library <code>Arg</code> module (<a href="https://ocaml.org/docs/cli-arguments">tutorial</a>).</p>
+<h2 id="what-are-the-driver-functions"><a class="header" href="#what-are-the-driver-functions">What are the Driver Functions?</a></h2>
+<p>The first myth to break is they provide driver functions taking raw string of command-line and returning a parsing result. No!</p>
+<p><code>Core.Command</code> doesn't provide any driver functions at all. After all, <code>Core.Command</code> helps to build a <code>Command.t</code> which specifies:</p>
+<ul>
+<li>Step 2: how to parse command-line and get the parsed result</li>
+<li>Step 3: how to handle parsed result (and return a <code>unit</code>)</li>
+</ul>
+<p>The driver function <code>Core.Command.run</code> , in <code>core_unix.command_unix</code>, takes the <code>Core.Command.t</code> and start the work:</p>
+<ul>
+<li>Step 1: take the commend-line <code>Sys.argv</code> and perform step 2 &amp; 3.</li>
+</ul>
+<p><code>Cmdliner</code> has a variant of driver functions e.g. <code>Cmdliner.Cmd.eval</code> like the above step 1. They each takes a <code>Cmdliner.Cmd.t</code> like the above step 2 &amp; 3 and returns a standard error code.</p>
+<p>⚠️Warning: Since I don't understand the motivation of this design, I usually hack the driver functions and get the parsed result back via a mutable reference.</p>
+<h2 id="how-to-parse"><a class="header" href="#how-to-parse">How to Parse?</a></h2>
+<p>Both <code>Core.Command</code> and <code>Cmdliner</code> have two-layered compositional primitive functions</p>
+<p>The inner layer for <code>Core.Command</code> is a compositional <code>Core.Command.Param.t</code> to compose single key-value parsing. e.g. a argparser for <code>-a=1 -b=t</code> is composed from a argparser for <code>-a=1</code> and a argparser <code>-b=t</code>. The inner layer for <code>Cmdliner</code> is a compositional <code>Cmdliner.Term.t</code>.</p>
+<p>The inner layer data are wrapped into outer layer data <code>Core.Command.t</code> or <code>Cmdliner.Cmd.t</code> via packing function <code>Core.Command.basic</code> or <code>Cmdliner.Cmd.v</code>. A outer layer data is usually used for argparsing one command-line case. The outer layer data is also composable and are usually used to handle cases for sub-commands. <a href="https://v3.ocaml.org/p/core/latest/doc/Core/Command/index.html#val-group"><code>Core.Command.group</code></a> takes <code>(string * Core.Command.t) list</code> and returns a <code>Core.Command.t</code>. <a href="https://erratique.ch/software/cmdliner/doc/Cmdliner/Cmd/index.html#val-group"><code>Cmdlinder.Cmd.group</code></a> takes <code>Cmdliner.Cmd.t list</code> and returns a <code>Cmdliner.Cmd.t</code>.</p>
+<pre><code class="language-mermaid">---
+title: Figure 1.1 - Diagram for Core.Command
+---
+flowchart LR
+  subgraph sp [Param]
+    direction LR
+    P1[Param.t]--- |*| P2[Param.t] --- |*| P3[Param.t]
+  end
+  C1[Command.t]
+  P3 --&gt; |Command.basic| C1
+
+  subgraph sp2 [Param]
+    direction LR
+    Q1[Param.t]--- |*| Q2[Param.t] --- |*| Q3[Param.t]
+  end
+  C2[Command.t]
+  Q3 --&gt; |Command.basic| C2
+
+  subgraph sg [Command.group]
+    direction LR
+    C0[Command.t]
+    C1 --&gt; C0
+    C2 --&gt; C0
+  end
+
+  subgraph sd [Driver]
+    direction LR
+    Cr(Command.run)
+    C1 -.-&gt; Cr
+    C0 --&gt; Cr
+    C2 -.-&gt; Cr
+  end
+</code></pre>
+<pre><code class="language-mermaid">---
+title: Figure 1.2 - Diagram for Cmdliner
+---
+flowchart LR
+  subgraph sp [Term]
+    direction LR
+    P1[Term.t]--- |*| P2[Term.t] --- |*| P3[Term.t]
+  end
+  C1[Cmd.t]
+  P3 --&gt; |Cmd.v| C1
+
+  subgraph sp2 [Term]
+    direction LR
+    Q1[Term.t]--- |*| Q2[Term.t] --- |*| Q3[Term.t]
+  end
+  C2[Cmd.t]
+  Q3 --&gt; |Cmd.v| C2
+
+  subgraph sg [Cmd.group]
+    direction LR
+    C0[Cmd.v]
+    C1 --&gt; C0
+    C2 --&gt; C0
+  end
+
+  subgraph sd [Driver]
+    direction LR
+    Cr(Cmd.eval)
+    C1 -.-&gt; Cr
+    C0 --&gt; Cr
+    C2 -.-&gt; Cr
+  end
+</code></pre>
+<h2 id="how-paramt-and-termt-are-made"><a class="header" href="#how-paramt-and-termt-are-made">How <code>Param.t</code> and <code>Term.t</code> are made</a></h2>
+<p>The type variable <code>'a</code> is omitted for simplicity before this section. This diagrams above show the their compositional components. <code>*</code> in <code>Param</code> and <code>Term</code> represents their possible combinations. For readers who are familiar with typeclasspedia, both of <code>'a Param.t</code> and <code>'a Term.t</code> are <em>Contravariant</em> (TODO: See post [Contravariant]). They can compose just like how parser combinator or prettyprinter does. </p>
+<p>One <code>'a Param.t</code> or <code>'a Term.t</code> specifies how to parse a segment in the raw command-line string to get a value of <code>'a</code>. <code>('a * 'b) Param.t</code> or or <code>('a * 'b) Term.t</code> specifies how to get a value of <code>'a * 'b</code>.</p>
+<p>Then the question how <code>Param.t</code> and <code>Term.t</code> composes becomes almost the same question that how these two libraries design the AST nodes of the command-line language.</p>
+<p>A <code>Core.Command.t</code> is consists of the <em>flagged</em> parameters (or pure flags) and <em>anonymous</em> (flag-less) parameters. A <code>Cmdlinder.t</code> is consists of <em>optional arguments</em> and <em>positional arguments</em>. They are very similar correspondingly.</p>
+<p>In <code>Core.Command</code>, A primitive <code>'a Param.t</code> can made up from ingridients</p>
+<ol>
+<li>a <code>'a Flag.t</code> wraps a <code>'a Arg_type.t</code> as <code>required</code>, <code>optional</code>, or <code>optional_with_default</code></li>
+<li>a <code>'a Arg_type.t</code> on how to parse from <code>string</code> to <code>'a</code></li>
+<li>a <code>'bool Flag.t</code> requires no <code>'a Arg_type.t</code>. Therefore its existence denotes a <code>true</code> or <code>false</code></li>
+<li>a <code>'a Anons.t</code> which wraps a <code>'a Arg_type.t</code></li>
+<li>a <code>Param.flag</code> makes a <code>'a Flag.t</code> a <code>'a Param.t</code></li>
+<li>a <code>Param.anons</code> makes a <code>'a Anons.t</code> a <code>'a Param.t</code></li>
+</ol>
+<p>As what <code>Cmdliner.Cmd</code> is to <code>Core.Command</code>, what <code>Cmdliner.Term</code> is to <code>Command.Para</code>, <code>Cmdlinder.Arg</code> is to <code>Core.Command.Arg_type</code>.</p>
+<p>In <code>Cmdlinder</code>, the ingridients to make up a primitive <code>'a Term.t</code> are:</p>
+<ol>
+<li><code>Arg.flag</code> makes a pure flag optional argument <code>bool Arg.t</code></li>
+<li><code>'a Arg.conv</code> defines both a parser and a printer for <code>'a</code></li>
+<li><code>Arg.opt</code> wraps <code>'a Arg.conv</code> an optional flagged argument <code>'a Arg.t</code>.</li>
+<li><code>Arg.pos</code> wraps <code>'a Arg.conv</code> and makes a positional argument at certain index <code>'a Arg.t</code></li>
+<li><code>Arg.value</code> makes a <code>'a Arg.t</code> a <code>'a Term.t</code></li>
+</ol>
+<p>Their diagrams are quite alike.</p>
+<pre><code class="language-mermaid">---
+title: Figure 2.1 - Diagram for Core.Command.Param
+---
+graph LR
+  subgraph at [Arg_type]
+    AT1[Arg_type.t]
+    AT2[Arg_type.t]
+  end
+
+  subgraph fa [Flag &amp; Anons]
+    CF1[Flag.t]
+    CA1[Anons.t]
+  end
+
+  subgraph sp [Param]
+    AT1 --&gt; |Param.required| CF1
+    CF1 --&gt; |Param.flag| P1
+
+    AT2 --&gt; |&quot;Anons.(%:)&quot;| CA1
+    CA1--&gt; |Param.anons| P2
+
+    P1[Param.t] --&gt; |*| P0[Param.t]
+    P2[Param.t] --&gt; |*| P0[Param.t]
+  end
+  P0 --&gt; |Command.basic| C0
+
+  subgraph sg [Command.group]
+    C0[Command.t]
+  end
+
+  subgraph sd [Driver]
+    Cr(Command.run)
+    C0 --&gt; Cr
+  end
+</code></pre>
+<pre><code class="language-mermaid">---
+title: Figure 2.2 - Diagram for Cmdliner.Term
+---
+graph LR
+  subgraph ar [Arg]
+    AC1[Arg.flag]
+    AC2[Arg.conv]
+  end
+
+  subgraph at [Arg.t]
+    AT1[Arg.t]
+    AT2[Arg.t]
+  end
+
+  subgraph sp [Term]
+    direction LR
+    AC1 --&gt; |Arg.opt| AT1
+    AT1 --&gt; |Arg.value| P1
+
+    AC2 --&gt; |Arg.pos| AT2
+    AT2 --&gt; |Arg.value| P2
+
+    P1[Term.t] --&gt; |*| P0[Term.t]
+    P2[Term.t] --&gt; |*| P0[Term.t]
+  end
+  P0 --&gt; |Cmd.v| C0
+
+  subgraph sg [Cmd.group]
+    direction LR
+    C0[Cmd.v]
+  end
+
+  subgraph sd [Driver]
+    direction LR
+    Cr(Cmd.eval)
+    C0 --&gt; Cr
+  end
+</code></pre>
+<h2 id="from-commandparamt-to-commandt-from-cmdlinertermt-to-cmdlinercmdt"><a class="header" href="#from-commandparamt-to-commandt-from-cmdlinertermt-to-cmdlinercmdt">From <code>Command.Param.t</code> to <code>Command.t</code>, From <code>Cmdliner.Term.t</code> to <code>Cmdliner.Cmd.t</code></a></h2>
+<p>Since driver as the last step is to run the command function, the second-to-last step is to construct that function. Using the prettyprint analogy, after constructing a prettyprint for <code>'a</code>, we will then create a function to consume the prettyprint (The driver function in this analogy is to print to stdout). This step may be another ripple to understand for functional programming non-experts.</p>
+<p>The basic question is, given a <code>'a Command.Param.t</code> or <code>'a Term.t</code>, users are required to provide a function to consume this <code>'a</code>. The answer is <em>fmap</em>: for <code>Core.Command</code>, it's <code>Core.Command.map</code>; for <code>Term.t</code>, it's <code>Command.Cmd.v</code>. Another fact is currently the driver function <em>almost</em> only accepts <code>unit Command.t</code> (or <code>unit Cmdliner.t</code>).</p>
+<p>In <code>Core.Command</code>, <code>Command.basic</code> is the only method to achieve <em>fmap</em> from <code>'a Command.Param.t</code> to <code>unit Command.t</code>. </p>
+<pre><code class="language-ocaml"># #require &quot;core&quot;;;
+# open Core;;
+# Command.Param.map;;
+- : 'a Command.Spec.param -&gt; f:('a -&gt; 'b) -&gt; 'b Command.Spec.param = &lt;fun&gt;
+
+# #show Command.basic;;
+val basic : unit Command.basic_command
+
+# #show Command.basic_command;;
+type nonrec 'result basic_command =
+    summary:string -&gt;
+    ?readme:(unit -&gt; string) -&gt;
+    (unit -&gt; 'result) Command.Spec.param -&gt; Command.t
+</code></pre>
+<p>Type <code>Command.Spec.param</code> is an alias for <code>Command.Param.t</code>. We can see the first argument and the return type of <code>Command.Param.map</code> and the second-to-last argument of <code>Command.basic_command</code>, are all <code>Command.Param.t</code>. <code>'result</code> is set to be <code>unit</code> in <code>Command.basic</code>.</p>
+<p>The following two lines are equal. It's a partially applied <code>Param.map</code> from <code>string Param.t</code> to an unknown <code>~f : string -&gt; '_weak</code>:</p>
+<pre><code class="language-ocaml"># Command.Param.(map (anon (&quot;filename&quot; %: string)));;
+- : f:(string -&gt; '_weak1) -&gt; '_weak1 Command.Spec.param = &lt;fun&gt;
+
+# Command.(let s : string Param.Arg_type.t = Param.string in let a = Anons.(%:) &quot;filename&quot; s in Param.map (Param.anon a));;
+- : f:(string -&gt; '_weak2) -&gt; '_weak2 Command.Spec.param = &lt;fun&gt;
+</code></pre>
+<p>Now we can figure out a usage for <code>Command.basic</code>. And this <code>Command.t</code> is safe to use in the driver function <code>Command.run</code>.</p>
+<pre><code class="language-ocaml"># Command.basic ~summary:&quot;fairy file&quot; Command.Param.(map (anon (&quot;filename&quot; %: string)) ~f:(fun file () -&gt; ignore file));;
+- : Command.t = &lt;abstr&gt;
+</code></pre>
+<p>The observation here is <code>Command.basic</code> requires an argument of type <code>(unit -&gt; unit) Command.Spec.param</code>. The user code is usually made by <code>Param.map a_b_c_param ~f:(fun a b c () -&gt; ... ()) : (unit -&gt; unit) Command.Spec.param</code>. The parsed result is passed before the last <code>unit</code> argument.</p>
+<p>The last step to make it familiar to RWO readers is to use <code>let%map_open</code> instead of <code>Param.map</code>. The code is equivalent to the above one:</p>
+<pre><code class="language-ocaml"># #require &quot;ppx_jane&quot;;;
+# Command.basic ~summary:&quot;fairy file&quot; (let%map_open.Command file = (anon (&quot;filename&quot; %: string)) in fun () -&gt; ignore file);;
+- : Command.t = &lt;abstr&gt;
+</code></pre>
+<p>TODO: fix mermaid</p>
+<p>TODO: fmap for Cmdliner</p>
+<p>TODO: examples.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="map-set-and-hashtables"><a class="header" href="#map-set-and-hashtables">Map, Set and Hashtables</a></h1>
 <p>What are exact functions required for distinct data containers?</p>
 <p>Afterr all, what collections are in <code>Base</code> and <code>Core</code>?</p>
