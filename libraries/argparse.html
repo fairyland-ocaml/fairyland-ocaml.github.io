@@ -163,7 +163,7 @@
 <p>Both <code>Core.Command</code> and <code>Cmdliner</code> have two-layered compositional primitive functions</p>
 <p>The inner layer for <code>Core.Command</code> is a compositional <code>Core.Command.Param.t</code> to compose single key-value parsing. e.g. a argparser for <code>-a=1 -b=t</code> is composed from a argparser for <code>-a=1</code> and a argparser <code>-b=t</code>. The inner layer for <code>Cmdliner</code> is a compositional <code>Cmdliner.Term.t</code>.</p>
 <p>The inner layer data are wrapped into outer layer data <code>Core.Command.t</code> or <code>Cmdliner.Cmd.t</code> via packing function <code>Core.Command.basic</code> or <code>Cmdliner.Cmd.v</code>. A outer layer data is usually used for argparsing one command-line case. The outer layer data is also composable and are usually used to handle cases for sub-commands. <a href="https://v3.ocaml.org/p/core/latest/doc/Core/Command/index.html#val-group"><code>Core.Command.group</code></a> takes <code>(string * Core.Command.t) list</code> and returns a <code>Core.Command.t</code>. <a href="https://erratique.ch/software/cmdliner/doc/Cmdliner/Cmd/index.html#val-group"><code>Cmdlinder.Cmd.group</code></a> takes <code>Cmdliner.Cmd.t list</code> and returns a <code>Cmdliner.Cmd.t</code>.</p>
-<pre><code class="language-mermaid">---
+<pre class="mermaid">---
 title: Figure 1.1 - Diagram for Core.Command
 ---
 flowchart LR
@@ -195,8 +195,8 @@ flowchart LR
     C0 --&gt; Cr
     C2 -.-&gt; Cr
   end
-</code></pre>
-<pre><code class="language-mermaid">---
+</pre>
+<pre class="mermaid">---
 title: Figure 1.2 - Diagram for Cmdliner
 ---
 flowchart LR
@@ -228,7 +228,7 @@ flowchart LR
     C0 --&gt; Cr
     C2 -.-&gt; Cr
   end
-</code></pre>
+</pre>
 <h2 id="how-paramt-and-termt-are-made"><a class="header" href="#how-paramt-and-termt-are-made">How <code>Param.t</code> and <code>Term.t</code> are made</a></h2>
 <p>The type variable <code>'a</code> is omitted for simplicity before this section. This diagrams above show the their compositional components. <code>*</code> in <code>Param</code> and <code>Term</code> represents their possible combinations. For readers who are familiar with typeclasspedia, both of <code>'a Param.t</code> and <code>'a Term.t</code> are <em>Contravariant</em> (TODO: See post [Contravariant]). They can compose just like how parser combinator or prettyprinter does. </p>
 <p>One <code>'a Param.t</code> or <code>'a Term.t</code> specifies how to parse a segment in the raw command-line string to get a value of <code>'a</code>. <code>('a * 'b) Param.t</code> or or <code>('a * 'b) Term.t</code> specifies how to get a value of <code>'a * 'b</code>.</p>
@@ -253,7 +253,7 @@ flowchart LR
 <li><code>Arg.value</code> makes a <code>'a Arg.t</code> a <code>'a Term.t</code></li>
 </ol>
 <p>Their diagrams are quite alike.</p>
-<pre><code class="language-mermaid">---
+<pre class="mermaid">---
 title: Figure 2.1 - Diagram for Core.Command.Param
 ---
 graph LR
@@ -287,8 +287,8 @@ graph LR
     Cr(Command.run)
     C0 --&gt; Cr
   end
-</code></pre>
-<pre><code class="language-mermaid">---
+</pre>
+<pre class="mermaid">---
 title: Figure 2.2 - Diagram for Cmdliner.Term
 ---
 graph LR
@@ -325,7 +325,7 @@ graph LR
     Cr(Cmd.eval)
     C0 --&gt; Cr
   end
-</code></pre>
+</pre>
 <h2 id="from-commandparamt-to-commandt-from-cmdlinertermt-to-cmdlinercmdt"><a class="header" href="#from-commandparamt-to-commandt-from-cmdlinertermt-to-cmdlinercmdt">From <code>Command.Param.t</code> to <code>Command.t</code>, From <code>Cmdliner.Term.t</code> to <code>Cmdliner.Cmd.t</code></a></h2>
 <p>Since driver as the last step is to run the command function, the second-to-last step is to construct that function. Using the prettyprint analogy, after constructing a prettyprint for <code>'a</code>, we will then create a function to consume the prettyprint (The driver function in this analogy is to print to stdout). This step may be another ripple to understand for functional programming non-experts.</p>
 <p>The basic question is, given a <code>'a Command.Param.t</code> or <code>'a Term.t</code>, users are required to provide a function to consume this <code>'a</code>. The answer is <em>fmap</em>: for <code>Core.Command</code>, it's <code>Core.Command.map</code>; for <code>Term.t</code>, it's <code>Command.Cmd.v</code>. Another fact is currently the driver function <em>almost</em> only accepts <code>unit Command.t</code> (or <code>unit Cmdliner.t</code>).</p>
