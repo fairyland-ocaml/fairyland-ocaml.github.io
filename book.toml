@@ -8,6 +8,7 @@ title = "Fairyland OCaml"
 [output.html]
 mathjax-support = true
 additional-js = ["asset/mermaid.min.js", "asset/mermaid-init.js"]
+additional-css = ["asset/custom.css"]
 
 [preprocessor.graphviz]
 command = "mdbook-graphviz"
