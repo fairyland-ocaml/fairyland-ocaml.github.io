@@ -1,5 +1,5 @@
 (library
  (name elements)
- (libraries core)
+ (libraries core cmdliner)
  (preprocess
   (pps ppx_jane)))

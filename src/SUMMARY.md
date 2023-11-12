@@ -10,6 +10,8 @@ Good libraries deserve more explanaion.
 
 [Understanding `Hashcons`](libraries/hashcons.md)
 
+[Understanding `Core.Command` and `Cmdliner`](libraries/argparse.md)
+
 ## Section: Using `Core`
 
 More comprehensive discussion after RWO.
@@ -22,8 +24,6 @@ More comprehensive discussion after RWO.
 
 
 ## 🚧 **Under Construction** 🚧
-
-[Understanding `Core.Command` and `Cmdliner`](libraries/argparse.md)
 
 [Understanding Data Collections in `Core`](core/maps-and-hashtables.md)
 
