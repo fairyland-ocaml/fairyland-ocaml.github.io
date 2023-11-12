@@ -2,11 +2,11 @@
 
 ## Introduction
 
-Command-line parse libraries e.g. `Core.Command` and `Cmdliner` is notoriously difficult to understand and use. The tension may come from sometimes people require a quick solution, while both these libraries target to be full-feathered tools with abstractions and concepts. This post aims to provide a understanding guide for them. Their official tutorials are at [RWO/Command-Line Parsing](https://dev.realworldocaml.org/command-line-parsing.html) and [cmdliner/tutorial](https://erratique.ch/software/cmdliner/doc/tutorial.html). I hope you can be much clear to back to them after reading this guide.
+Command-line parse libraries e.g. `Core.Command` and `Cmdliner` are notoriously difficult to understand and use. The tension may come from people require a quick solution, while both these libraries target to be full-feathered tools with abstractions and concepts. This post aims to provide an understanding guide for them. Their official tutorials are at [RWO/Command-Line Parsing](https://dev.realworldocaml.org/command-line-parsing.html) and [cmdliner/tutorial](https://erratique.ch/software/cmdliner/doc/tutorial.html). I hope you can be much clear to jump back to them after reading this guide.
 
 ## Four Concepts
 
-Both libraires provide four level of concepts:
+Both libraires provide four levels of concepts:
 
 | Concept          | Stage  | Composable | Core.Command     | Cmdliner                               |
 | ---------------- | ------ | ---------- | ---------------- | -------------------------------------- |
@@ -17,27 +17,25 @@ Both libraires provide four level of concepts:
 
 <div style="text-align: center"> Table 1 - Concepts for Core.Command and Cmdliner </div>
 
-**Argument Parser** provides functions to parse a raw string to the expected type. They both provides some common usage parsers inside [Core/Command/Spec](https://v3.ocaml.org/p/core/latest/doc/Core/Command/Spec/index.html#val-string) and [Cmdliner/Predefined_converters](https://erratique.ch/software/cmdliner/doc/Cmdliner/Arg/index.html#converters). `Cmdliner.Arg.conv` is a design choice to pair a printer with a parser.
+**Argument Parser** provides functions to parse a raw string to the expected type `'a`. They both provide parsers inside [Core/Command/Spec](https://v3.ocaml.org/p/core/latest/doc/Core/Command/Spec/index.html#val-string) and [Cmdliner/Predefined_converters](https://erratique.ch/software/cmdliner/doc/Cmdliner/Arg/index.html#converters) for common types. `Cmdliner.Arg.conv` is a pair of a parser with a printer.
 
-**Argument Handler** fulfills parsers with extra properties to handle command-line argument e.g. it's required or optional, with a flag or not, the doc string for it. **Parsing** may be the central work for an argument but a **handler** is the small complete unit in both libraries.
+**Argument Handler** wraps a parser with extra properties to handle command-line argument e.g. whether it's required or optional, whether it's repeated, with a flag or not, the doc string for it. **Argument Handler** may not need **Parsing** in examples that a flag argument carries no values. The existence or not means a boolean parameter e.g. `-v` (rather than `-log=WARNING`).
 
-**Argument Handler** may not need **Parsing** in examples that a flag argument carries no values. The existence or not means a boolean parameter e.g. `-v` (rather than `-log=WARNING`).
+In both libraries, **Argument Handlers** are not directed used by **Drivers**. **Argument Handlers** are packed into a **Command Item**, and then **drivers** take **Command Item** and perform the real parsing work. A **Command Item** for a whole sub-command e.g. `push ...` in `git push ...`. You may have other sub-commands like `git clone`, `git pull`, and you need to group these **Command Items** into a compound **Command Item**.
 
-Both libraries, **Argument Handlers** are not directed used by **Drivers**. **Argument Handlers** are wrapped into a **Command Item** and **drivers** take **Command Item** and do the real parsing work. A **Command Item** for a whole sub-command .e.g `push ...` in `git push ...`. You may have separate sub-commands for `git clone`, `git pull` and you need to group these **Command Items** into a compound **Command Items**.
+In Table 1, The Column **Stage** lists the time order during a real command-line parsing. 
 
-Column **stage** in the table lists the order during a real command-line parsing. 
-
-- Step 1: **Driver** are usually the unique top function of your program. It takes the `Sys.argv` and invodes your `Command Item`.
+- Step 1: **Driver** are usually the unique top function of your program. It takes the `Sys.argv` and invodes your **Command Item**.
 - Step 2: **Driver** dispatches to the **Command Item**.
-- Step 3: **Argument Handler** performs the parsing and handling.
+- Step 3: **Argument Handler** performs the parsing and handling, with the **Argument Parser** in it if having one.
 
 ## Driver functions
 
-`Core.Command` is only in charge to build a `Command.t` and it doesn't provide any driver functions. The driver function `Core.Command.run` is in another library `core_unix.command_unix`. It takes the `Core.Command.t` and start the work.
+`Core.Command` can only build up to a `Command.t`. It doesn't provide any driver functions. The **driver function** `Core.Command.run` is defined in another library `core_unix.command_unix`. It takes the `Core.Command.t` and start the work.
 
-`Cmdliner` has a variant of driver functions `Cmd.eval` and `Cmd.eval_value`. Since they're supposed to be the unique top functions, `Cmd.eval` returns a `unit` while `Cmd.eval` returns a `int` (standard error code) that is used by `exit`. 
+`Cmdliner` has a variant of **driver functions** e.g. `Cmd.eval` and `Cmd.eval_value`. Since they're supposed to be the unique top functions, `Cmd.eval` returns a `unit` while `Cmd.eval` returns a `int` (standard error code) that is used by `exit`. 
 
-It's a common myth that people including me seek to get the unboxed parsed result. Such a function is not even provided in `Core.Command`. It's do-able with `Cmdliner.Cmd.eval_value : ... -> ?argv:string array -> 'a Cmd.t -> ('a Cmd.eval_ok, Cmd.eval_error) result`. However, you need to tokenize to get `argv` yourself (Imparient readers can jump to Section [Elimination](#elimination)).
+It's a common myth that people seek to get the unboxed parsed result. Such a function is not even provided in `Core.Command`. It's do-able with `Cmdliner.Cmd.eval_value : ... -> ?argv:string array -> 'a Cmd.t -> ('a Cmd.eval_ok, Cmd.eval_error) result`. However, you need to tokenize to get `argv` yourself (Imparient readers can jump to Section [Elimination](#elimination)).
 
 ## Diagrams for `Core.Command` and `Cmdliner`
 
@@ -59,7 +57,7 @@ The inner layer for `Cmdliner` is a compositional `Term.t`. We will have four `T
 
 The inner layer data are wrapped into outer layer data `Core.Command.t` or `Cmdliner.Cmd.t` via packing function `Core.Command.basic` or `Cmdliner.Cmd.v`. A outer layer data is usually used for argparsing one command-line case. It is also composable and is used to group sub-commands. [`Core.Command.group`](https://v3.ocaml.org/p/core/latest/doc/Core/Command/index.html#val-group) takes `(string * Core.Command.t) list` and returns a `Core.Command.t`. [`Cmdlinder.Cmd.group`](https://erratique.ch/software/cmdliner/doc/Cmdliner/Cmd/index.html#val-group) takes `Cmdliner.Cmd.t list` and returns a `Cmdliner.Cmd.t`.
 
-Their diagrams are quite alike in the respective of our **four concepts**. I omit all the doc-related components to make it clear. A rectangle corespond to a type. A edge is a function that transforms datatype. A rounded rectangle is also a function but at an endpoint (It's rare. Only two driver functions and one `Arg.flag`). Four compositional datatypes `Param.t` `Command.t` `Term.t` `Cmd.t` should be in stacked rectangles (but here I just use a rectangle with double edges).
+Their diagrams are very alike in the respective of our **four concepts**. A rectangle corresponds to a type. An edge is a function that transforms datatype. A rounded rectangle is also a function but at an endpoint (It's rare. Only two driver functions and one `Arg.flag`). Four compositional datatypes `Param.t` `Command.t` `Term.t` `Cmd.t` should be in stacked rectangles (but here I just use a rectangle with double edges). I omit the doc-related components to make it clear. 
 
 ```mermaid
 ---
@@ -82,7 +80,7 @@ graph LR
 
     P0[[Param.t]] --> |"Param.map"| P0
 
-    CA1--> |Param.anons| P0
+    CA1--> |Param.anon| P0
     CF1 --> |Param.flag| P0
     CF2 --> |Param.flag| P0
   end
@@ -144,7 +142,7 @@ graph LR
 
 ## How `Param.t` and `Term.t` are made
 
-A `Core.Command.t` is consists of the _flagged_ parameters (or pure flags) and _anonymous_ (flag-less) parameters. A `Cmdlinder.t` is consists of _optional arguments_ and _positional arguments_. They are very similar correspondingly as **Argument Handlers**. **Argument Handlers** can use **Argument Parser**.
+A `Core.Command.t` consists of the _flagged_ parameters and _anonymous_ (flag-less) parameters. A `Cmdlinder.t` is consists of _optional arguments_ and _positional arguments_. They are **Argument Handlers**. Note **Argument Handlers** use **Argument Parsers**.
 
 In `Core.Command`, A primitive `'a Param.t` can made up from ingridients
 
@@ -153,7 +151,7 @@ In `Core.Command`, A primitive `'a Param.t` can made up from ingridients
 3. `'bool Flag.t` requires no `'a Arg_type.t`. Therefore its existence denotes a `true` or `false`
 4. `'a Anons.t` which wraps `'a Arg_type.t`
 5. `Param.flag` makes `'a Flag.t` a `'a Param.t`
-6. `Param.anons` makes `'a Anons.t` a `'a Param.t`
+6. `Param.anon` makes `'a Anons.t` a `'a Param.t`
 
 In `Cmdlinder`, the ingridients to make up a primitive `'a Term.t` are:
 
@@ -165,9 +163,9 @@ In `Cmdlinder`, the ingridients to make up a primitive `'a Term.t` are:
 
 The listing and the diagram are not complete, but they are sufficient to illuminate.
 
-## Pack **Argument Handler** to **Command Ttem**
+## Pack **Argument Handler** to **Command Item**
 
-Driver functions takes a **Command Item**. It's packed from a **Argument Handler**. `Param.t` and `Term.t` can compose just like parser combinator or prettyprinter. They should be `Applicative` (or also `Contravariant` ?)
+**Driver** functions takes a **Command Item** packed from a **Argument Handler**. `Param.t` and `Term.t` can compose just like parser combinator or prettyprinter. They should be `Applicative` (or also `Contravariant` ?)
 
 ### Pack `Command.Param.t` to `Command.t`
 
@@ -196,14 +194,20 @@ The task left for users is to provide a function that maps parsed result `'a Par
 The following two lines are equal. It's a partially applied `Param.map` from `string Param.t` to an unknown `~f : string -> '_weak`:
 
 ```ocaml
+# Command.Param.(%:);;
+- : string -> 'a Command/2.Arg_type.t -> 'a Command.Spec.anons = <fun>
+
+# Command.Param.string;;
+- : string Command/2.Arg_type.t = <abstr>
+
 # Command.Param.(map (anon ("filename" %: string)));;
 - : f:(string -> '_weak1) -> '_weak1 Command.Spec.param = <fun>
 
-# Command.(let s : string Param.Arg_type.t = Param.string in let a = Anons.(%:) "filename" s in Param.map (Param.anon a));;
+# Command.(let s : string Param.Arg_type.t = Param.string in let a = Param.(%:) "filename" s in Param.map (Param.anon a));;
 - : f:(string -> '_weak2) -> '_weak2 Command.Spec.param = <fun>
 ```
 
-In the following example of `Command.basic`, our function `(fun file () -> ignore file)` satisfied the type requirement. The observation here is `Command.basic` requires an argument of type `(unit -> unit) Command.Spec.param`. The user code to consume the parsed result is usually like `Param.map a_b_c_param ~f:(fun a b c () -> ...; () ) : (unit -> unit) Command.Spec.param`. The parsed result is passed before the last argument `()`.
+In the following example of `Command.basic`, our function `(fun file () -> ignore file)` satisfied the type requirement. The observation here is `Command.basic` requires an argument of type `(unit -> unit) Command.Spec.param`. The user _comsume-all-parsed_ code is usually like `Param.map a_b_c_param ~f:(fun a b c () -> ...; () ) : (unit -> unit) Command.Spec.param`. The parsed result is passed before the last argument `()`.
 
 ```ocaml
 # Command.basic ~summary:"fairy file" Command.Param.(map (anon ("filename" %: string)) ~f:(fun file () -> ignore file));;
@@ -224,11 +228,20 @@ To make it familiar to RWO readers, we use `let%map_open` instead of `Param.map`
 
 ### Pack `Cmdliner.Term.t` to `Cmdliner.Cmd.t`
 
-`Cmdliner` uses _pure_ (`Term.const : 'a -> 'a t`) and _ap_ (`Term.($) : ('a -> 'b) t -> 'a t -> 'b t`) to compose `Term.t`. Unlike `Command.basic`, the user code to consume the parsed result is usually `Term.(const (fun a b c -> ...; () )) $ a_param $ b_param $ c_param : unit Term.t`. `Term.v` takes this value to get a `Cmd.t`, then this `Cmd.t` can be used in the driver function `Cmd.eval`.
+`Cmdliner` uses _pure_ (`Term.const : 'a -> 'a t`) and _ap_ (`Term.($) : ('a -> 'b) t -> 'a t -> 'b t`) to compose `Term.t`. Unlike `Command.basic`, the user _comsume-all-parsed_ code is usually like `Term.(const (fun a b c -> ...; () )) $ a_param $ b_param $ c_param : unit Term.t`. `Term.v` packs this value to get a `Cmd.t`, then this `Cmd.t` can be used in the driver function `Cmd.eval`.
 
 ```ocaml
 # #require "cmdliner";;
 # open Cmdliner;;
+
+# Arg.(&);;
+- : ('a -> 'b) -> 'a -> 'b = <fun>
+
+# Arg.value;;
+- : 'a Cmdliner.Arg.t -> 'a Term.t = <fun>
+
+# Arg.string;;
+- : string Arg.converter = (<fun>, <fun>)
 
 # let file = Arg.(value & pos 0 string "default_name" (Arg.info []));;
 val file : string Term.t = <abstr>
@@ -237,7 +250,7 @@ val file : string Term.t = <abstr>
 - : unit Cmd.t = <abstr>
 ```
 
-The difference between their approaches is `Command` puts the _comsume-all_ function at last while `Cmdliner` puts it at first. They both use functional jargons e.g. `let%map_open`, `Anon.(%:)`, `Arg.(&)` and `Term.($)`. They help to compact the code, at the cost of confusing newcomers.
+The difference between their approaches is `Command` puts the _comsume-all-parsed_ function at last while `Cmdliner` puts it at first. They both use functional jargons e.g. `let%map_open`, `Anon.(%:)`, `Arg.(&)` and `Term.($)`. They help to compact the code, at the cost of confusing newcomers.
 
 ## Syntax for Command-line Languages
 
@@ -291,7 +304,7 @@ Try ' --help' for more information.
 
 ## Summary and Questions 
 
-To recap, after skipping documenting, escaping, error code, auto-completing, two of the most popular command-line lianguages `Core.Command` and `Cmdliner` can be grasped via four concepts i.e. **Argument Parser**, **Argument Handler**, **Command Item**, and **Driver**. The [diagram](#diagrams-for-corecommand-and-cmdliner) not only shows their internal relation, but also reveal the similarity between them. I don't have time to re-comment all their documents and tutorials from my viewpoint, but I suggest to go back to them ((for [`Command`](https://dev.realworldocaml.org/command-line-parsing.html) and for [`Cmdliner`](https://erratique.ch/software/cmdliner/doc/tutorial.html))) after this post. 
+To recap, after skipping documenting, escaping, error code, auto-completing, two of the most popular command-line libraries `Core.Command` and `Cmdliner` can be grasped via four concepts i.e. **Argument Parser**, **Argument Handler**, **Command Item**, and **Driver**. The [diagram](#diagrams-for-corecommand-and-cmdliner) not only shows their internal relation, but also reveal the similarity between them. I don't have time to re-comment all their documents and tutorials from my viewpoint, but you're well equipped to go back for them ((for [`Command`](https://dev.realworldocaml.org/command-line-parsing.html) and for [`Cmdliner`](https://erratique.ch/software/cmdliner/doc/tutorial.html))) after this post. 
 
 Explicit syntax for for command-line languages and static safety typed parsing arise very interesting problems to me. I will delve into it in future posts.
 
