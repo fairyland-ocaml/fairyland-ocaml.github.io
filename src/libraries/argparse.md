@@ -10,7 +10,7 @@ Both libraires provide four levels of concepts:
 
 | Concept          | Stage  | Composable | Core.Command     | Cmdliner                               |
 | ---------------- | ------ | ---------- | ---------------- | -------------------------------------- |
-| Argument Parser  | Step 3 | no         | `'a Arg_type.t`  | `'a Arg.conv = 'a parser * 'a printer` |
+| Argument Parser  | Step 4 | no         | `'a Arg_type.t`  | `'a Arg.conv = 'a parser * 'a printer` |
 | Argument Handler | Step 3 | yes        | `'a Param.t`     | `'a Term.t`                            |
 | Command Item     | Step 2 | yes        | `unit Command.t` | `'a Cmd.t`                             |
 | Driver           | Step 1 | no         | `Command.run`    | `Cmd.eval`,  `Cmd.eval_value`          |
@@ -33,9 +33,9 @@ In Table 1, The Column **Stage** lists the time order during a real command-line
 
 `Core.Command` can only build up to a `Command.t`. It doesn't provide any driver functions. The **driver function** `Core.Command.run` is defined in another library `core_unix.command_unix`. It takes the `Core.Command.t` and start the work.
 
-`Cmdliner` has a variant of **driver functions** e.g. `Cmd.eval` and `Cmd.eval_value`. Since they're supposed to be the unique top functions, `Cmd.eval` returns a `unit` while `Cmd.eval` returns a `int` (standard error code) that is used by `exit`. 
+`Cmdliner` has a variant of **driver functions** e.g. `Cmd.eval` and `Cmd.eval_value`. Since it's supposed to be the unique top function, `Cmd.eval` returns a `int` (standard error code) that is used by `exit`. 
 
-It's a common myth that people seek to get the unboxed parsed result. Such a function is not even provided in `Core.Command`. It's do-able with `Cmdliner.Cmd.eval_value : ... -> ?argv:string array -> 'a Cmd.t -> ('a Cmd.eval_ok, Cmd.eval_error) result`. However, you need to tokenize to get `argv` yourself (Imparient readers can jump to Section [Elimination](#elimination)).
+It's a common myth that people seek to get the unboxed parsed result. Such a function is not even provided in `Core.Command`. It's do-able with `Cmdliner.Cmd.eval_value : ... -> ?argv:string array -> 'a Cmd.t -> ('a Cmd.eval_ok, Cmd.eval_error) result`. However, you need to tokenize to get `argv` yourself (Impatient readers can jump to Section [Elimination](#elimination)).
 
 ## Diagrams for `Core.Command` and `Cmdliner`
 
@@ -55,7 +55,7 @@ The inner layer for `Cmdliner` is a compositional `Term.t`. We will have four `T
 - `string Term.t` for `-b=t` in which a `string Arg.conv` to parse `t`
 - `int Term.t` for `42` in which a `int Arg.conv` to parse `42`
 
-The inner layer data are wrapped into outer layer data `Core.Command.t` or `Cmdliner.Cmd.t` via packing function `Core.Command.basic` or `Cmdliner.Cmd.v`. A outer layer data is usually used for argparsing one command-line case. It is also composable and is used to group sub-commands. [`Core.Command.group`](https://v3.ocaml.org/p/core/latest/doc/Core/Command/index.html#val-group) takes `(string * Core.Command.t) list` and returns a `Core.Command.t`. [`Cmdlinder.Cmd.group`](https://erratique.ch/software/cmdliner/doc/Cmdliner/Cmd/index.html#val-group) takes `Cmdliner.Cmd.t list` and returns a `Cmdliner.Cmd.t`.
+The inner layer data are wrapped into outer layer data `Core.Command.t` or `Cmdliner.Cmd.t` via packing function `Core.Command.basic` or `Cmdliner.Cmd.v`. An outer layer data is usually used for argparsing one command-line case. It is also composable and is used to group sub-commands. [`Core.Command.group`](https://v3.ocaml.org/p/core/latest/doc/Core/Command/index.html#val-group) takes `(string * Core.Command.t) list` and returns a `Core.Command.t`. [`Cmdlinder.Cmd.group`](https://erratique.ch/software/cmdliner/doc/Cmdliner/Cmd/index.html#val-group) takes `Cmdliner.Cmd.t list` and returns a `Cmdliner.Cmd.t`.
 
 Their diagrams are very alike in the respective of our **four concepts**. A rectangle corresponds to a type. An edge is a function that transforms datatype. A rounded rectangle is also a function but at an endpoint (It's rare. Only two driver functions and one `Arg.flag`). Four compositional datatypes `Param.t` `Command.t` `Term.t` `Cmd.t` should be in stacked rectangles (but here I just use a rectangle with double edges). I omit the doc-related components to make it clear. 
 
@@ -144,7 +144,7 @@ graph LR
 
 A `Core.Command.t` consists of the _flagged_ parameters and _anonymous_ (flag-less) parameters. A `Cmdlinder.t` is consists of _optional arguments_ and _positional arguments_. They are **Argument Handlers**. Note **Argument Handlers** use **Argument Parsers**.
 
-In `Core.Command`, A primitive `'a Param.t` can made up from ingridients
+In `Core.Command`, A primitive `'a Param.t` can made up from ingredients
 
 1. `'a Arg_type.t` parses `string` to `'a`
 2. `'a Flag.t` can wrap `'a Arg_type.t` as `required`, `optional`, or `optional_with_default`
@@ -153,7 +153,7 @@ In `Core.Command`, A primitive `'a Param.t` can made up from ingridients
 5. `Param.flag` makes `'a Flag.t` a `'a Param.t`
 6. `Param.anon` makes `'a Anons.t` a `'a Param.t`
 
-In `Cmdlinder`, the ingridients to make up a primitive `'a Term.t` are:
+In `Cmdlinder`, the ingredients to make up a primitive `'a Term.t` are:
 
 1. `'a Arg.conv` defines both a parser and a printer for `'a`
 2. `Arg.opt` wraps `'a Arg.conv` an optional flagged argument `'a Arg.t`.
