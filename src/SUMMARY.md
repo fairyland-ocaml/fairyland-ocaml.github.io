@@ -50,6 +50,8 @@ Section: OCaml Internals
 
 [Understanding module `Format`]() (internals/module-format.md)
 
+[Understanding destructive substitution]() (internals/destructive-substitution.md)
+
 
 Section: Concepts
 

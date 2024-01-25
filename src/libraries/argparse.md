@@ -304,7 +304,7 @@ Try ' --help' for more information.
 
 ## Summary and Questions 
 
-To recap, after skipping documenting, escaping, error code, auto-completing, two of the most popular command-line libraries `Core.Command` and `Cmdliner` can be grasped via four concepts i.e. **Argument Parser**, **Argument Handler**, **Command Item**, and **Driver**. The [diagram](#diagrams-for-corecommand-and-cmdliner) not only shows their internal relation, but also reveal the similarity between them. I don't have time to re-comment all their documents and tutorials from my viewpoint, but you're well equipped to go back for them ((for [`Command`](https://dev.realworldocaml.org/command-line-parsing.html) and for [`Cmdliner`](https://erratique.ch/software/cmdliner/doc/tutorial.html))) after this post. 
+To recap, after skipping documenting, escaping, error code, auto-completing, two of the most popular command-line libraries `Core.Command` and `Cmdliner` can be grasped via four concepts i.e. **Argument Parser**, **Argument Handler**, **Command Item**, and **Driver**. The [diagram](#diagrams-for-corecommand-and-cmdliner) not only shows their internal relation, but also reveal the similarity between them. I don't have time to re-comment all their documents and tutorials from my viewpoint, but you're well equipped to go back for them ((for [`Command`](https://dev.realworldocaml.org/command-line-parsing.html) and for [`Cmdliner`](https://erratique.ch/software/cmdliner/doc/tutorial.html))) after this post.
 
 Explicit syntax for for command-line languages and static safety typed parsing arise very interesting problems to me. I will delve into it in future posts.
 
