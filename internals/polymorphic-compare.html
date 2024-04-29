@@ -84,7 +84,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="../preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="../libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="../libraries/argparse.html">Understanding Core.Command and Cmdliner</a></li><li class="chapter-item expanded affix "><a href="../core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="../internals/polymorphic-compare.html" class="active">What is polymorphic compare?</a></li><li class="chapter-item expanded affix "><a href="../core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Understanding Ocamlgraph</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Understanding destructive substitution</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="../preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="../libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="../libraries/argparse.html">Understanding Core.Command and Cmdliner</a></li><li class="chapter-item expanded affix "><a href="../libraries/z3-datatype.html">Using Z3.Datatype</a></li><li class="chapter-item expanded affix "><a href="../core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="../internals/polymorphic-compare.html" class="active">What is polymorphic compare?</a></li><li class="chapter-item expanded affix "><a href="../core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Understanding Ocamlgraph</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Understanding destructive substitution</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -150,7 +150,7 @@
 <p>OCaml's polymorphic compare (or <code>Stdlib.compare</code>) is tempting to use but hard to reason.</p>
 <p>Polymorphic <code>compare</code> in the <a href="https://v2.ocaml.org/api/Stdlib.html#1_Comparisons">manual</a> says:</p>
 <blockquote>
-<p><code>val (=) : 'a -&gt; 'a -&gt; bool</code> </p>
+<p><code>val (=) : 'a -&gt; 'a -&gt; bool</code></p>
 <p><code>e1 = e2</code> tests for structural equality of <code>e1</code> and <code>e2</code>. Mutable structures (e.g. references and arrays) are equal if and only if their current contents are structurally equal, even if the two mutable objects are not the same physical object. Equality between functional values raises <code>Invalid_argument</code>. Equality between cyclic data structures may not terminate.</p>
 </blockquote>
 <p>Intuitionally, it compares two values structurally for their representations in memory.</p>
@@ -168,12 +168,12 @@ val b : IntSet.t = &lt;abstr&gt;
 # IntSet.equal a b;;
 - : bool = true
 
-# #require &quot;objdump&quot;;;
-# Format.printf &quot;@[%a@]@.&quot; Objdump.pp a;;
+# #require "objdump";;
+# Format.printf "@[%a@]@." Objdump.pp a;;
 variant0(int(0),int(0),variant0(int(0),int(1),int(0),int(1)),int(2))
 
 - : unit = ()
-# Format.printf &quot;@[%a@]@.&quot; Objdump.pp b;;
+# Format.printf "@[%a@]@." Objdump.pp b;;
 variant0(variant0(int(0),int(0),int(0),int(1)),int(1),int(0),int(2))
 
 - : unit = ()
@@ -183,7 +183,7 @@ variant0(variant0(int(0),int(0),int(0),int(1)),int(1),int(0),int(2))
 <p>In the source, <code>Stdlib.compare</code> is provided as an FFI, and the actual implementation is in the C code of the runtime:</p>
 <!-- $MDX skip -->
 <pre><code class="language-ocaml">(* https://github.com/ocaml/ocaml/blob/trunk/stdlib/stdlib.ml#L72 *)
-external compare : 'a -&gt; 'a -&gt; int = &quot;%compare&quot;
+external compare : 'a -&gt; 'a -&gt; int = "%compare"
 
 (* https://github.com/ocaml/ocaml/blob/trunk/runtime/compare.c#L339 *)
 CAMLprim value caml_compare(value v1, value v2)
@@ -288,7 +288,7 @@ static intnat compare_val(value v1, value v2, int total)
         }
         if (compare == NULL) {
           compare_free_stack(stk);
-          caml_invalid_argument(&quot;compare: abstract value&quot;);
+          caml_invalid_argument("compare: abstract value");
         }
         Caml_state-&gt;compare_unordered = 0;
         res = compare(v1, v2);

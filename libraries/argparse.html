@@ -84,7 +84,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="../preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="../libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="../libraries/argparse.html" class="active">Understanding Core.Command and Cmdliner</a></li><li class="chapter-item expanded affix "><a href="../core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="../internals/polymorphic-compare.html">What is polymorphic compare?</a></li><li class="chapter-item expanded affix "><a href="../core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Understanding Ocamlgraph</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Understanding destructive substitution</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="../preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="../libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="../libraries/argparse.html" class="active">Understanding Core.Command and Cmdliner</a></li><li class="chapter-item expanded affix "><a href="../libraries/z3-datatype.html">Using Z3.Datatype</a></li><li class="chapter-item expanded affix "><a href="../core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="../internals/polymorphic-compare.html">What is polymorphic compare?</a></li><li class="chapter-item expanded affix "><a href="../core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Understanding Ocamlgraph</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Understanding destructive substitution</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -160,7 +160,7 @@
 <p><strong>Argument Parser</strong> provides functions to parse a raw string to the expected type <code>'a</code>. They both provide parsers inside <a href="https://v3.ocaml.org/p/core/latest/doc/Core/Command/Spec/index.html#val-string">Core/Command/Spec</a> and <a href="https://erratique.ch/software/cmdliner/doc/Cmdliner/Arg/index.html#converters">Cmdliner/Predefined_converters</a> for common types. <code>Cmdliner.Arg.conv</code> is a pair of a parser with a printer.</p>
 <p><strong>Argument Handler</strong> wraps a parser with extra properties to handle command-line argument e.g. whether it's required or optional, whether it's repeated, with a flag or not, the doc string for it. <strong>Argument Handler</strong> may not need <strong>Parsing</strong> in examples that a flag argument carries no values. The existence or not means a boolean parameter e.g. <code>-v</code> (rather than <code>-log=WARNING</code>).</p>
 <p>In both libraries, <strong>Argument Handlers</strong> are not directed used by <strong>Drivers</strong>. <strong>Argument Handlers</strong> are packed into a <strong>Command Item</strong>, and then <strong>drivers</strong> take <strong>Command Item</strong> and perform the real parsing work. A <strong>Command Item</strong> for a whole sub-command e.g. <code>push ...</code> in <code>git push ...</code>. You may have other sub-commands like <code>git clone</code>, <code>git pull</code>, and you need to group these <strong>Command Items</strong> into a compound <strong>Command Item</strong>.</p>
-<p>In Table 1, The Column <strong>Stage</strong> lists the time order during a real command-line parsing. </p>
+<p>In Table 1, The Column <strong>Stage</strong> lists the time order during a real command-line parsing.</p>
 <ul>
 <li>Step 1: <strong>Driver</strong> are usually the unique top function of your program. It takes the <code>Sys.argv</code> and invodes your <strong>Command Item</strong>.</li>
 <li>Step 2: <strong>Driver</strong> dispatches to the <strong>Command Item</strong>.</li>
@@ -168,7 +168,7 @@
 </ul>
 <h2 id="driver-functions"><a class="header" href="#driver-functions">Driver functions</a></h2>
 <p><code>Core.Command</code> can only build up to a <code>Command.t</code>. It doesn't provide any driver functions. The <strong>driver function</strong> <code>Core.Command.run</code> is defined in another library <code>core_unix.command_unix</code>. It takes the <code>Core.Command.t</code> and start the work.</p>
-<p><code>Cmdliner</code> has a variant of <strong>driver functions</strong> e.g. <code>Cmd.eval</code> and <code>Cmd.eval_value</code>. Since they're supposed to be the unique top functions, <code>Cmd.eval</code> returns a <code>unit</code> while <code>Cmd.eval</code> returns a <code>int</code> (standard error code) that is used by <code>exit</code>. </p>
+<p><code>Cmdliner</code> has a variant of <strong>driver functions</strong> e.g. <code>Cmd.eval</code> and <code>Cmd.eval_value</code>. Since they're supposed to be the unique top functions, <code>Cmd.eval</code> returns a <code>unit</code> while <code>Cmd.eval</code> returns a <code>int</code> (standard error code) that is used by <code>exit</code>.</p>
 <p>It's a common myth that people seek to get the unboxed parsed result. Such a function is not even provided in <code>Core.Command</code>. It's do-able with <code>Cmdliner.Cmd.eval_value : ... -&gt; ?argv:string array -&gt; 'a Cmd.t -&gt; ('a Cmd.eval_ok, Cmd.eval_error) result</code>. However, you need to tokenize to get <code>argv</code> yourself (Imparient readers can jump to Section <a href="#elimination">Elimination</a>).</p>
 <h2 id="diagrams-for-corecommand-and-cmdliner"><a class="header" href="#diagrams-for-corecommand-and-cmdliner">Diagrams for <code>Core.Command</code> and <code>Cmdliner</code></a></h2>
 <p>Both <code>Core.Command</code> and <code>Cmdliner</code> have two-layered compositional datatypes. An element in the inner layer is to parse one key-value pair (or key-only or value-only). For example, we're going to parse <code>-v -a=1 -b=t 42</code>.</p>
@@ -187,7 +187,7 @@
 <li><code>int Term.t</code> for <code>42</code> in which a <code>int Arg.conv</code> to parse <code>42</code></li>
 </ul>
 <p>The inner layer data are wrapped into outer layer data <code>Core.Command.t</code> or <code>Cmdliner.Cmd.t</code> via packing function <code>Core.Command.basic</code> or <code>Cmdliner.Cmd.v</code>. A outer layer data is usually used for argparsing one command-line case. It is also composable and is used to group sub-commands. <a href="https://v3.ocaml.org/p/core/latest/doc/Core/Command/index.html#val-group"><code>Core.Command.group</code></a> takes <code>(string * Core.Command.t) list</code> and returns a <code>Core.Command.t</code>. <a href="https://erratique.ch/software/cmdliner/doc/Cmdliner/Cmd/index.html#val-group"><code>Cmdlinder.Cmd.group</code></a> takes <code>Cmdliner.Cmd.t list</code> and returns a <code>Cmdliner.Cmd.t</code>.</p>
-<p>Their diagrams are very alike in the respective of our <strong>four concepts</strong>. A rectangle corresponds to a type. An edge is a function that transforms datatype. A rounded rectangle is also a function but at an endpoint (It's rare. Only two driver functions and one <code>Arg.flag</code>). Four compositional datatypes <code>Param.t</code> <code>Command.t</code> <code>Term.t</code> <code>Cmd.t</code> should be in stacked rectangles (but here I just use a rectangle with double edges). I omit the doc-related components to make it clear. </p>
+<p>Their diagrams are very alike in the respective of our <strong>four concepts</strong>. A rectangle corresponds to a type. An edge is a function that transforms datatype. A rounded rectangle is also a function but at an endpoint (It's rare. Only two driver functions and one <code>Arg.flag</code>). Four compositional datatypes <code>Param.t</code> <code>Command.t</code> <code>Term.t</code> <code>Cmd.t</code> should be in stacked rectangles (but here I just use a rectangle with double edges). I omit the doc-related components to make it clear.</p>
 <pre class="mermaid">---
 title: Figure 1.1 - Diagram for Core.Command
 ---
@@ -289,7 +289,7 @@ graph LR
 <p><strong>Driver</strong> functions takes a <strong>Command Item</strong> packed from a <strong>Argument Handler</strong>. <code>Param.t</code> and <code>Term.t</code> can compose just like parser combinator or prettyprinter. They should be <code>Applicative</code> (or also <code>Contravariant</code> ?)</p>
 <h3 id="pack-commandparamt-to-commandt"><a class="header" href="#pack-commandparamt-to-commandt">Pack <code>Command.Param.t</code> to <code>Command.t</code></a></h3>
 <p>The pack function for <code>Command</code> is <code>Command.basic</code>.</p>
-<pre><code class="language-ocaml"># #require &quot;core&quot;;;
+<pre><code class="language-ocaml"># #require "core";;
 # open Core;;
 # Command.Param.map;;
 - : 'a Command.Spec.param -&gt; f:('a -&gt; 'b) -&gt; 'b Command.Spec.param = &lt;fun&gt;
@@ -312,28 +312,28 @@ type nonrec 'result basic_command =
 # Command.Param.string;;
 - : string Command/2.Arg_type.t = &lt;abstr&gt;
 
-# Command.Param.(map (anon (&quot;filename&quot; %: string)));;
+# Command.Param.(map (anon ("filename" %: string)));;
 - : f:(string -&gt; '_weak1) -&gt; '_weak1 Command.Spec.param = &lt;fun&gt;
 
-# Command.(let s : string Param.Arg_type.t = Param.string in let a = Param.(%:) &quot;filename&quot; s in Param.map (Param.anon a));;
+# Command.(let s : string Param.Arg_type.t = Param.string in let a = Param.(%:) "filename" s in Param.map (Param.anon a));;
 - : f:(string -&gt; '_weak2) -&gt; '_weak2 Command.Spec.param = &lt;fun&gt;
 </code></pre>
 <p>In the following example of <code>Command.basic</code>, our function <code>(fun file () -&gt; ignore file)</code> satisfied the type requirement. The observation here is <code>Command.basic</code> requires an argument of type <code>(unit -&gt; unit) Command.Spec.param</code>. The user <em>comsume-all-parsed</em> code is usually like <code>Param.map a_b_c_param ~f:(fun a b c () -&gt; ...; () ) : (unit -&gt; unit) Command.Spec.param</code>. The parsed result is passed before the last argument <code>()</code>.</p>
-<pre><code class="language-ocaml"># Command.basic ~summary:&quot;fairy file&quot; Command.Param.(map (anon (&quot;filename&quot; %: string)) ~f:(fun file () -&gt; ignore file));;
+<pre><code class="language-ocaml"># Command.basic ~summary:"fairy file" Command.Param.(map (anon ("filename" %: string)) ~f:(fun file () -&gt; ignore file));;
 - : Command.t = &lt;abstr&gt;
 </code></pre>
 <p>To make it familiar to RWO readers, we use <code>let%map_open</code> instead of <code>Param.map</code>. The code is equivalent to the above one:</p>
-<pre><code class="language-ocaml"># #require &quot;ppx_jane&quot;;;
+<pre><code class="language-ocaml"># #require "ppx_jane";;
 
-# let%map_open.Command file = (anon (&quot;filename&quot; %: string)) in file;;
+# let%map_open.Command file = (anon ("filename" %: string)) in file;;
 - : string Command.Spec.param = &lt;abstr&gt;
 
-# Command.basic ~summary:&quot;fairy file&quot; (let%map_open.Command file = (anon (&quot;filename&quot; %: string)) in fun () -&gt; ignore file);;
+# Command.basic ~summary:"fairy file" (let%map_open.Command file = (anon ("filename" %: string)) in fun () -&gt; ignore file);;
 - : Command.t = &lt;abstr&gt;
 </code></pre>
 <h3 id="pack-cmdlinertermt-to-cmdlinercmdt"><a class="header" href="#pack-cmdlinertermt-to-cmdlinercmdt">Pack <code>Cmdliner.Term.t</code> to <code>Cmdliner.Cmd.t</code></a></h3>
 <p><code>Cmdliner</code> uses <em>pure</em> (<code>Term.const : 'a -&gt; 'a t</code>) and <em>ap</em> (<code>Term.($) : ('a -&gt; 'b) t -&gt; 'a t -&gt; 'b t</code>) to compose <code>Term.t</code>. Unlike <code>Command.basic</code>, the user <em>comsume-all-parsed</em> code is usually like <code>Term.(const (fun a b c -&gt; ...; () )) $ a_param $ b_param $ c_param : unit Term.t</code>. <code>Term.v</code> packs this value to get a <code>Cmd.t</code>, then this <code>Cmd.t</code> can be used in the driver function <code>Cmd.eval</code>.</p>
-<pre><code class="language-ocaml"># #require &quot;cmdliner&quot;;;
+<pre><code class="language-ocaml"># #require "cmdliner";;
 # open Cmdliner;;
 
 # Arg.(&amp;);;
@@ -345,30 +345,30 @@ type nonrec 'result basic_command =
 # Arg.string;;
 - : string Arg.converter = (&lt;fun&gt;, &lt;fun&gt;)
 
-# let file = Arg.(value &amp; pos 0 string &quot;default_name&quot; (Arg.info []));;
+# let file = Arg.(value &amp; pos 0 string "default_name" (Arg.info []));;
 val file : string Term.t = &lt;abstr&gt;
 
-# Cmd.v (Cmd.info &quot;fairy file&quot;) Term.((const (fun filename -&gt; ignore filename)) $ file );;
+# Cmd.v (Cmd.info "fairy file") Term.((const (fun filename -&gt; ignore filename)) $ file );;
 - : unit Cmd.t = &lt;abstr&gt;
 </code></pre>
 <p>The difference between their approaches is <code>Command</code> puts the <em>comsume-all-parsed</em> function at last while <code>Cmdliner</code> puts it at first. They both use functional jargons e.g. <code>let%map_open</code>, <code>Anon.(%:)</code>, <code>Arg.(&amp;)</code> and <code>Term.($)</code>. They help to compact the code, at the cost of confusing newcomers.</p>
 <h2 id="syntax-for-command-line-languages"><a class="header" href="#syntax-for-command-line-languages">Syntax for Command-line Languages</a></h2>
 <p>It's not explicitly specified, but their design and APIs suggest (or <em>check</em>) possible syntax for the command-line languages. e.g. for the flag-less parts, <code>Command</code> treats them as anonymous arguments and allow the a sequence of them. The run-time validity of <code>Param.t</code> is less powerful than its static type. In this example, Anonymous <code>int</code> after a list of anonymous <code>string</code> causes an exception for its syntax.</p>
 <pre><code class="language-ocaml"># let my_param = 
-    (let%map_open.Command str_lst = anon (sequence (&quot;str&quot; %: string)) 
-    and extra_int = anon (&quot;int&quot; %: int) in 
+    (let%map_open.Command str_lst = anon (sequence ("str" %: string)) 
+    and extra_int = anon ("int" %: int) in 
     fun () -&gt; ());;
 val my_param : (unit -&gt; unit) Command.Spec.param = &lt;abstr&gt;
 
-# Command.basic ~summary:&quot;my_param&quot; my_param ;;
+# Command.basic ~summary:"my_param" my_param ;;
 Exception:
 Failure
- &quot;the grammar [STR ...] INT for anonymous arguments is not supported because there is the possibility for arguments (INT) following a variable number of arguments ([STR ...]).  Supporting such grammars would complicate the implementation significantly.&quot;.
-Raised at Stdlib.failwith in file &quot;stdlib.ml&quot;, line 29, characters 17-33
-Called from Base__List0.fold in file &quot;src/list0.ml&quot;, line 37, characters 27-37
-Called from Command.Anons.Grammar.concat in file &quot;command/src/command.ml&quot;, line 1000, characters 10-729
-Called from Command.basic in file &quot;command/src/command.ml&quot;, line 2373, characters 14-22
-Called from Topeval.load_lambda in file &quot;toplevel/byte/topeval.ml&quot;, line 89, characters 4-14
+ "the grammar [STR ...] INT for anonymous arguments is not supported because there is the possibility for arguments (INT) following a variable number of arguments ([STR ...]).  Supporting such grammars would complicate the implementation significantly.".
+Raised at Stdlib.failwith in file "stdlib.ml", line 29, characters 17-33
+Called from Base__List0.fold in file "src/list0.ml", line 37, characters 27-37
+Called from Command.Anons.Grammar.concat in file "command/src/command.ml", line 1000, characters 10-729
+Called from Command.basic in file "command/src/command.ml", line 2373, characters 14-22
+Called from Topeval.load_lambda in file "toplevel/byte/topeval.ml", line 89, characters 4-14
 </code></pre>
 <p><code>Cmdliner</code> treats flag-less parts as positional arguments. The manual warns it's the user's <em>duty</em> to ensure the unique use of a position. <code>Arg</code> provides functions to either preciously points to one position index, or to range all, or to cover the left/right to a given position index. Duplication of position index will trigger run-time exception.</p>
 <pre><code class="language-ocaml"># let top_t =
@@ -382,14 +382,14 @@ Called from Topeval.load_lambda in file &quot;toplevel/byte/topeval.ml&quot;, li
 val top_t : unit Term.t = &lt;abstr&gt;
 
 # let c =
-  let i = Cmd.info &quot;&quot; in
+  let i = Cmd.info "" in
   Cmd.v i top_t ;;
 val c : unit Cmd.t = &lt;abstr&gt;
 
-# Cmd.eval_value ~argv:[| &quot;a&quot;; &quot;2&quot; |] c;;
+# Cmd.eval_value ~argv:[| "a"; "2" |] c;;
 - : (unit Cmd.eval_ok, Cmd.eval_error) result = Stdlib.Ok (`Ok ())
 
-# Cmd.eval_value ~argv:[| &quot;a&quot;; &quot;b&quot; |] c;;
+# Cmd.eval_value ~argv:[| "a"; "b" |] c;;
 : invalid value 'b', expected an integer
 Usage:  [OPTION]… [ARG]…
 Try ' --help' for more information.
@@ -401,8 +401,8 @@ Try ' --help' for more information.
 <h2 id="elimination"><a class="header" href="#elimination">Elimination</a></h2>
 <p>For command-line parsing, OCaml has build-in <code>Sys.argv</code> and standard library <code>Arg</code> module (<a href="https://ocaml.org/docs/cli-arguments">tutorial</a>).</p>
 <p>⚠️ We can let <code>Core.Command</code> return the parsed result with a mutable reference, even its pack function and driver function requires a <code>unit</code> return value. When a functional program is <a href="https://dl.acm.org/doi/pdf/10.1145/317636.317775">not</a> a functional program?</p>
-<pre><code class="language-ocaml"># let store = ref &quot;&quot; in 
-  Command.basic ~summary:&quot;fairy file&quot; Command.Param.(map (anon (&quot;filename&quot; %: string)) ~f:(fun file () -&gt; store := file; ()));;
+<pre><code class="language-ocaml"># let store = ref "" in 
+  Command.basic ~summary:"fairy file" Command.Param.(map (anon ("filename" %: string)) ~f:(fun file () -&gt; store := file; ()));;
 - : Command.t = &lt;abstr&gt;
 </code></pre>
 
@@ -414,7 +414,7 @@ Try ' --help' for more information.
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next" href="../core/container-elements.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../libraries/z3-datatype.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -428,7 +428,7 @@ Try ' --help' for more information.
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next" href="../core/container-elements.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../libraries/z3-datatype.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

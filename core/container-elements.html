@@ -84,7 +84,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="../preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="../libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="../libraries/argparse.html">Understanding Core.Command and Cmdliner</a></li><li class="chapter-item expanded affix "><a href="../core/container-elements.html" class="active">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="../internals/polymorphic-compare.html">What is polymorphic compare?</a></li><li class="chapter-item expanded affix "><a href="../core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Understanding Ocamlgraph</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Understanding destructive substitution</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="../preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="../libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="../libraries/argparse.html">Understanding Core.Command and Cmdliner</a></li><li class="chapter-item expanded affix "><a href="../libraries/z3-datatype.html">Using Z3.Datatype</a></li><li class="chapter-item expanded affix "><a href="../core/container-elements.html" class="active">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="../internals/polymorphic-compare.html">What is polymorphic compare?</a></li><li class="chapter-item expanded affix "><a href="../core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Understanding Ocamlgraph</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Understanding destructive substitution</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -183,7 +183,7 @@
 <h2 id="deriving-functions"><a class="header" href="#deriving-functions">Deriving Functions</a></h2>
 <p>These ppx deriver are <a href="https://github.com/janestreet/ppx_compare">janestreet/ppx_compare</a> for <code>equal</code> and <code>compare</code>, <a href="https://github.com/janestreet/ppx_sexp_conv">janestreet/ppx_sexp_conv</a> for <code>sexp_of</code> and <code>of_sexp</code>, and <a href="https://github.com/janestreet/ppx_hash">janestreet/ppx_hash</a> for <code>hash</code> and <code>hash_fold</code>.</p>
 <p>A quick way to inspect the deriving result is to change <code>[@@deriving &lt;ppx&gt;]</code> to <code>[@@deriving_inline &lt;ppx&gt;] [@@@end]</code> so there we can read the generated code between tags.</p>
-<p>The idea of all these function deriver are type-based structural traversal. Don't be disturbed by the variable names in the generated code. </p>
+<p>The idea of all these function deriver are type-based structural traversal. Don't be disturbed by the variable names in the generated code.</p>
 <!-- $MDX file=../../src-ocaml/elements.ml,part=pair_inline_equal -->
 <pre><code class="language-ocaml">type foo1 = P1 of int * string [@@deriving_inline equal]
 
@@ -232,10 +232,10 @@ let _ = compare_foo2
 let _ = fun (_ : foo3) -&gt; ()
 
 let foo3_of_sexp =
-  (let error_source__022_ = &quot;src-ocaml/elements.ml.foo3&quot; in
+  (let error_source__022_ = "src-ocaml/elements.ml.foo3" in
    function
    | Sexplib0.Sexp.List
-       (Sexplib0.Sexp.Atom ((&quot;p3&quot; | &quot;P3&quot;) as _tag__025_) :: sexp_args__026_) as
+       (Sexplib0.Sexp.Atom (("p3" | "P3") as _tag__025_) :: sexp_args__026_) as
      _sexp__024_ -&gt; (
        match sexp_args__026_ with
        | [ arg0__027_; arg1__028_ ] -&gt;
@@ -245,7 +245,7 @@ let foo3_of_sexp =
        | _ -&gt;
            Sexplib0.Sexp_conv_error.stag_incorrect_n_args error_source__022_
              _tag__025_ _sexp__024_)
-   | Sexplib0.Sexp.Atom (&quot;p3&quot; | &quot;P3&quot;) as sexp__023_ -&gt;
+   | Sexplib0.Sexp.Atom ("p3" | "P3") as sexp__023_ -&gt;
        Sexplib0.Sexp_conv_error.stag_takes_args error_source__022_ sexp__023_
    | Sexplib0.Sexp.List (Sexplib0.Sexp.List _ :: _) as sexp__021_ -&gt;
        Sexplib0.Sexp_conv_error.nested_list_invalid_sum error_source__022_
@@ -263,7 +263,7 @@ let sexp_of_foo3 =
   (fun (P3 (arg0__031_, arg1__032_)) -&gt;
      let res0__033_ = sexp_of_int arg0__031_
      and res1__034_ = sexp_of_string arg1__032_ in
-     Sexplib0.Sexp.List [ Sexplib0.Sexp.Atom &quot;P3&quot;; res0__033_; res1__034_ ]
+     Sexplib0.Sexp.List [ Sexplib0.Sexp.Atom "P3"; res0__033_; res1__034_ ]
     : foo3 -&gt; Sexplib0.Sexp.t)
 
 let _ = sexp_of_foo3
@@ -355,7 +355,7 @@ let _ = Hash_set.create (module Int_set_as_element)
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../libraries/argparse.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../libraries/z3-datatype.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
@@ -369,7 +369,7 @@ let _ = Hash_set.create (module Int_set_as_element)
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../libraries/argparse.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../libraries/z3-datatype.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 

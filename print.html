@@ -85,7 +85,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="libraries/argparse.html">Understanding Core.Command and Cmdliner</a></li><li class="chapter-item expanded affix "><a href="core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="internals/polymorphic-compare.html">What is polymorphic compare?</a></li><li class="chapter-item expanded affix "><a href="core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Understanding Ocamlgraph</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Understanding destructive substitution</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="libraries/argparse.html">Understanding Core.Command and Cmdliner</a></li><li class="chapter-item expanded affix "><a href="libraries/z3-datatype.html">Using Z3.Datatype</a></li><li class="chapter-item expanded affix "><a href="core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="internals/polymorphic-compare.html">What is polymorphic compare?</a></li><li class="chapter-item expanded affix "><a href="core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Understanding Ocamlgraph</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Understanding destructive substitution</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -153,6 +153,7 @@
 <p>Good libraries deserve more explanaion.</p>
 <p><a href="libraries/hashcons.html">Understanding <code>Hashcons</code></a></p>
 <p><a href="libraries/argparse.html">Understanding <code>Core.Command</code> and <code>Cmdliner</code></a></p>
+<p><a href="libraries/z3-datatype.html">Using <code>Z3.Datatype</code></a></p>
 <h2 id="section-using-core"><a class="header" href="#section-using-core">Section: Using <code>Core</code></a></h2>
 <p>More comprehensive discussion after RWO.</p>
 <p><a href="core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></p>
@@ -180,7 +181,7 @@
 <p><a href="">OCaml source reading</a> (reading/ocaml-source-reading.md)</p>
 <!-- - https://discuss.ocaml.org/t/readable-ml-ocaml-sml-etc-compilers/13318 --><div style="break-before: page; page-break-before: always;"></div><p><img src="img/fairyland-camel.png" alt="Fairyland Camel" /></p>
 <h1 id="preface"><a class="header" href="#preface">Preface</a></h1>
-<p>Fairyland OCaml <sup class="footnote-reference"><a href="#image">1</a></sup> is a blog by <a href="https://www.prover.me/">Shiwei Weng</a> to write my OCaml experience. I used to share OCaml snippets and understanding in our research group <a href="https://pl.cs.jhu.edu/">JHU PL Lab</a>. I decided to port them here for a <a href="http://carl.flax.ie/dothingstellpeople.html">broader audience</a>. The intuition often comes from my learning and research experience and the fantastic students from two <a href="https://pl.cs.jhu.edu/fpse/">functional</a> <a href="https://pl.cs.jhu.edu/pl/">programming</a> courses at JHU. </p>
+<p>Fairyland OCaml <sup class="footnote-reference"><a href="#image">1</a></sup> is a blog by <a href="https://www.prover.me/">Shiwei Weng</a> to write my OCaml experience. I used to share OCaml snippets and understanding in our research group <a href="https://pl.cs.jhu.edu/">JHU PL Lab</a>. I decided to port them here for a <a href="http://carl.flax.ie/dothingstellpeople.html">broader audience</a>. The intuition often comes from my learning and research experience and the fantastic students from two <a href="https://pl.cs.jhu.edu/fpse/">functional</a> <a href="https://pl.cs.jhu.edu/pl/">programming</a> courses at JHU.</p>
 <p>The blog name is obviously from <a href="https://dev.realworldocaml.org/">Real World OCaml</a>.</p>
 <div class="footnote-definition" id="image"><sup class="footnote-definition-label">1</sup>
 <p>The picture <em>Fairyland Camel</em> is generated at <a href="https://www.canva.com/">Canva</a> by my wife.</p>
@@ -252,18 +253,18 @@ let var s = H.hashcons ht (Var s)
 let app t1 t2 = H.hashcons ht (App (t1,t2))
 let lam s t = H.hashcons ht (Lam (s,t))
 
-let x = var &quot;x&quot;
-let delta = lam &quot;x&quot; (app x x)
+let x = var "x"
+let delta = lam "x" (app x x)
 let omega = app delta delta
 
-let () = assert (var &quot;x&quot; == x)
+let () = assert (var "x" == x)
 let () = assert (app x x == app x x)
 </code></pre>
 <p><code>X.hash</code> is the data's <code>hash</code>. Global <code>hash</code> is used both in <code>X.hash</code> inside of <a href="https://github.com/backtracking/ocaml-hashcons/blob/872594154dd263334a8f79822f99f1065832d383/hashcons.ml#L110"><code>H.hashcons</code></a>. <code>X.equal</code> uses physical equality for objects. <code>X.hash</code> also uses the unique ids for components. The last two <code>assert</code>s check the objects created at different application shares the same memory addresses.</p>
 <p>Module <code>Hashcons</code> also provides <code>Hset</code> and <code>Hmap</code>. They're external containers which is aware of your hash-consed data. Don't confuse them with the internal storage, which is also a hash-based container.</p>
 <h3 id="fpottierfix"><a class="header" href="#fpottierfix"><code>fpottier/fix</code></a></h3>
 <p>The repo is <a href="https://gitlab.inria.fr/fpottier/fix">fpottier/fix</a>.</p>
-<p><code>Fix.HashCons</code>(<a href="https://gitlab.inria.fr/fpottier/fix/-/blob/master/src/HashCons.ml">ml</a>,<a href="https://gitlab.inria.fr/fpottier/fix/-/blob/master/src/HashCons.mli">mli</a>) looks very lightweighted because the internal storage is achieved by another module <code>Fix.MEMOIZER</code>. </p>
+<p><code>Fix.HashCons</code>(<a href="https://gitlab.inria.fr/fpottier/fix/-/blob/master/src/HashCons.ml">ml</a>,<a href="https://gitlab.inria.fr/fpottier/fix/-/blob/master/src/HashCons.mli">mli</a>) looks very lightweighted because the internal storage is achieved by another module <code>Fix.MEMOIZER</code>.</p>
 <pre><code class="language-ocaml">type 'data cell =
   { id: int; data: 'data }
 </code></pre>
@@ -328,8 +329,8 @@ let example() =
 
 let () =
   assert (example() == example());
-  Printf.printf &quot;Size of example tree is %d.\n&quot; (size (example()));
-  print_endline &quot;Success.&quot;
+  Printf.printf "Size of example tree is %d.\n" (size (example()));
+  print_endline "Success."
 </code></pre>
 <p><code>MySkeleton</code> provides <code>equal</code> and <code>hash</code>, which require another <code>equal</code> and <code>hash</code> as arguments respectively. The hash-consing aware <code>equal</code> and <code>hash</code> is provided in <code>HashCons.ForHashedTypeWeak</code>. The resulting code shares the same motivation as the previous demo.</p>
 <h2 id="summary-and-questions-to-do"><a class="header" href="#summary-and-questions-to-do">Summary and Questions (To-do)</a></h2>
@@ -358,7 +359,7 @@ let () =
 <p><strong>Argument Parser</strong> provides functions to parse a raw string to the expected type <code>'a</code>. They both provide parsers inside <a href="https://v3.ocaml.org/p/core/latest/doc/Core/Command/Spec/index.html#val-string">Core/Command/Spec</a> and <a href="https://erratique.ch/software/cmdliner/doc/Cmdliner/Arg/index.html#converters">Cmdliner/Predefined_converters</a> for common types. <code>Cmdliner.Arg.conv</code> is a pair of a parser with a printer.</p>
 <p><strong>Argument Handler</strong> wraps a parser with extra properties to handle command-line argument e.g. whether it's required or optional, whether it's repeated, with a flag or not, the doc string for it. <strong>Argument Handler</strong> may not need <strong>Parsing</strong> in examples that a flag argument carries no values. The existence or not means a boolean parameter e.g. <code>-v</code> (rather than <code>-log=WARNING</code>).</p>
 <p>In both libraries, <strong>Argument Handlers</strong> are not directed used by <strong>Drivers</strong>. <strong>Argument Handlers</strong> are packed into a <strong>Command Item</strong>, and then <strong>drivers</strong> take <strong>Command Item</strong> and perform the real parsing work. A <strong>Command Item</strong> for a whole sub-command e.g. <code>push ...</code> in <code>git push ...</code>. You may have other sub-commands like <code>git clone</code>, <code>git pull</code>, and you need to group these <strong>Command Items</strong> into a compound <strong>Command Item</strong>.</p>
-<p>In Table 1, The Column <strong>Stage</strong> lists the time order during a real command-line parsing. </p>
+<p>In Table 1, The Column <strong>Stage</strong> lists the time order during a real command-line parsing.</p>
 <ul>
 <li>Step 1: <strong>Driver</strong> are usually the unique top function of your program. It takes the <code>Sys.argv</code> and invodes your <strong>Command Item</strong>.</li>
 <li>Step 2: <strong>Driver</strong> dispatches to the <strong>Command Item</strong>.</li>
@@ -366,7 +367,7 @@ let () =
 </ul>
 <h2 id="driver-functions"><a class="header" href="#driver-functions">Driver functions</a></h2>
 <p><code>Core.Command</code> can only build up to a <code>Command.t</code>. It doesn't provide any driver functions. The <strong>driver function</strong> <code>Core.Command.run</code> is defined in another library <code>core_unix.command_unix</code>. It takes the <code>Core.Command.t</code> and start the work.</p>
-<p><code>Cmdliner</code> has a variant of <strong>driver functions</strong> e.g. <code>Cmd.eval</code> and <code>Cmd.eval_value</code>. Since they're supposed to be the unique top functions, <code>Cmd.eval</code> returns a <code>unit</code> while <code>Cmd.eval</code> returns a <code>int</code> (standard error code) that is used by <code>exit</code>. </p>
+<p><code>Cmdliner</code> has a variant of <strong>driver functions</strong> e.g. <code>Cmd.eval</code> and <code>Cmd.eval_value</code>. Since they're supposed to be the unique top functions, <code>Cmd.eval</code> returns a <code>unit</code> while <code>Cmd.eval</code> returns a <code>int</code> (standard error code) that is used by <code>exit</code>.</p>
 <p>It's a common myth that people seek to get the unboxed parsed result. Such a function is not even provided in <code>Core.Command</code>. It's do-able with <code>Cmdliner.Cmd.eval_value : ... -&gt; ?argv:string array -&gt; 'a Cmd.t -&gt; ('a Cmd.eval_ok, Cmd.eval_error) result</code>. However, you need to tokenize to get <code>argv</code> yourself (Imparient readers can jump to Section <a href="libraries/argparse.html#elimination">Elimination</a>).</p>
 <h2 id="diagrams-for-corecommand-and-cmdliner"><a class="header" href="#diagrams-for-corecommand-and-cmdliner">Diagrams for <code>Core.Command</code> and <code>Cmdliner</code></a></h2>
 <p>Both <code>Core.Command</code> and <code>Cmdliner</code> have two-layered compositional datatypes. An element in the inner layer is to parse one key-value pair (or key-only or value-only). For example, we're going to parse <code>-v -a=1 -b=t 42</code>.</p>
@@ -385,7 +386,7 @@ let () =
 <li><code>int Term.t</code> for <code>42</code> in which a <code>int Arg.conv</code> to parse <code>42</code></li>
 </ul>
 <p>The inner layer data are wrapped into outer layer data <code>Core.Command.t</code> or <code>Cmdliner.Cmd.t</code> via packing function <code>Core.Command.basic</code> or <code>Cmdliner.Cmd.v</code>. A outer layer data is usually used for argparsing one command-line case. It is also composable and is used to group sub-commands. <a href="https://v3.ocaml.org/p/core/latest/doc/Core/Command/index.html#val-group"><code>Core.Command.group</code></a> takes <code>(string * Core.Command.t) list</code> and returns a <code>Core.Command.t</code>. <a href="https://erratique.ch/software/cmdliner/doc/Cmdliner/Cmd/index.html#val-group"><code>Cmdlinder.Cmd.group</code></a> takes <code>Cmdliner.Cmd.t list</code> and returns a <code>Cmdliner.Cmd.t</code>.</p>
-<p>Their diagrams are very alike in the respective of our <strong>four concepts</strong>. A rectangle corresponds to a type. An edge is a function that transforms datatype. A rounded rectangle is also a function but at an endpoint (It's rare. Only two driver functions and one <code>Arg.flag</code>). Four compositional datatypes <code>Param.t</code> <code>Command.t</code> <code>Term.t</code> <code>Cmd.t</code> should be in stacked rectangles (but here I just use a rectangle with double edges). I omit the doc-related components to make it clear. </p>
+<p>Their diagrams are very alike in the respective of our <strong>four concepts</strong>. A rectangle corresponds to a type. An edge is a function that transforms datatype. A rounded rectangle is also a function but at an endpoint (It's rare. Only two driver functions and one <code>Arg.flag</code>). Four compositional datatypes <code>Param.t</code> <code>Command.t</code> <code>Term.t</code> <code>Cmd.t</code> should be in stacked rectangles (but here I just use a rectangle with double edges). I omit the doc-related components to make it clear.</p>
 <pre class="mermaid">---
 title: Figure 1.1 - Diagram for Core.Command
 ---
@@ -487,7 +488,7 @@ graph LR
 <p><strong>Driver</strong> functions takes a <strong>Command Item</strong> packed from a <strong>Argument Handler</strong>. <code>Param.t</code> and <code>Term.t</code> can compose just like parser combinator or prettyprinter. They should be <code>Applicative</code> (or also <code>Contravariant</code> ?)</p>
 <h3 id="pack-commandparamt-to-commandt"><a class="header" href="#pack-commandparamt-to-commandt">Pack <code>Command.Param.t</code> to <code>Command.t</code></a></h3>
 <p>The pack function for <code>Command</code> is <code>Command.basic</code>.</p>
-<pre><code class="language-ocaml"># #require &quot;core&quot;;;
+<pre><code class="language-ocaml"># #require "core";;
 # open Core;;
 # Command.Param.map;;
 - : 'a Command.Spec.param -&gt; f:('a -&gt; 'b) -&gt; 'b Command.Spec.param = &lt;fun&gt;
@@ -510,28 +511,28 @@ type nonrec 'result basic_command =
 # Command.Param.string;;
 - : string Command/2.Arg_type.t = &lt;abstr&gt;
 
-# Command.Param.(map (anon (&quot;filename&quot; %: string)));;
+# Command.Param.(map (anon ("filename" %: string)));;
 - : f:(string -&gt; '_weak1) -&gt; '_weak1 Command.Spec.param = &lt;fun&gt;
 
-# Command.(let s : string Param.Arg_type.t = Param.string in let a = Param.(%:) &quot;filename&quot; s in Param.map (Param.anon a));;
+# Command.(let s : string Param.Arg_type.t = Param.string in let a = Param.(%:) "filename" s in Param.map (Param.anon a));;
 - : f:(string -&gt; '_weak2) -&gt; '_weak2 Command.Spec.param = &lt;fun&gt;
 </code></pre>
 <p>In the following example of <code>Command.basic</code>, our function <code>(fun file () -&gt; ignore file)</code> satisfied the type requirement. The observation here is <code>Command.basic</code> requires an argument of type <code>(unit -&gt; unit) Command.Spec.param</code>. The user <em>comsume-all-parsed</em> code is usually like <code>Param.map a_b_c_param ~f:(fun a b c () -&gt; ...; () ) : (unit -&gt; unit) Command.Spec.param</code>. The parsed result is passed before the last argument <code>()</code>.</p>
-<pre><code class="language-ocaml"># Command.basic ~summary:&quot;fairy file&quot; Command.Param.(map (anon (&quot;filename&quot; %: string)) ~f:(fun file () -&gt; ignore file));;
+<pre><code class="language-ocaml"># Command.basic ~summary:"fairy file" Command.Param.(map (anon ("filename" %: string)) ~f:(fun file () -&gt; ignore file));;
 - : Command.t = &lt;abstr&gt;
 </code></pre>
 <p>To make it familiar to RWO readers, we use <code>let%map_open</code> instead of <code>Param.map</code>. The code is equivalent to the above one:</p>
-<pre><code class="language-ocaml"># #require &quot;ppx_jane&quot;;;
+<pre><code class="language-ocaml"># #require "ppx_jane";;
 
-# let%map_open.Command file = (anon (&quot;filename&quot; %: string)) in file;;
+# let%map_open.Command file = (anon ("filename" %: string)) in file;;
 - : string Command.Spec.param = &lt;abstr&gt;
 
-# Command.basic ~summary:&quot;fairy file&quot; (let%map_open.Command file = (anon (&quot;filename&quot; %: string)) in fun () -&gt; ignore file);;
+# Command.basic ~summary:"fairy file" (let%map_open.Command file = (anon ("filename" %: string)) in fun () -&gt; ignore file);;
 - : Command.t = &lt;abstr&gt;
 </code></pre>
 <h3 id="pack-cmdlinertermt-to-cmdlinercmdt"><a class="header" href="#pack-cmdlinertermt-to-cmdlinercmdt">Pack <code>Cmdliner.Term.t</code> to <code>Cmdliner.Cmd.t</code></a></h3>
 <p><code>Cmdliner</code> uses <em>pure</em> (<code>Term.const : 'a -&gt; 'a t</code>) and <em>ap</em> (<code>Term.($) : ('a -&gt; 'b) t -&gt; 'a t -&gt; 'b t</code>) to compose <code>Term.t</code>. Unlike <code>Command.basic</code>, the user <em>comsume-all-parsed</em> code is usually like <code>Term.(const (fun a b c -&gt; ...; () )) $ a_param $ b_param $ c_param : unit Term.t</code>. <code>Term.v</code> packs this value to get a <code>Cmd.t</code>, then this <code>Cmd.t</code> can be used in the driver function <code>Cmd.eval</code>.</p>
-<pre><code class="language-ocaml"># #require &quot;cmdliner&quot;;;
+<pre><code class="language-ocaml"># #require "cmdliner";;
 # open Cmdliner;;
 
 # Arg.(&amp;);;
@@ -543,30 +544,30 @@ type nonrec 'result basic_command =
 # Arg.string;;
 - : string Arg.converter = (&lt;fun&gt;, &lt;fun&gt;)
 
-# let file = Arg.(value &amp; pos 0 string &quot;default_name&quot; (Arg.info []));;
+# let file = Arg.(value &amp; pos 0 string "default_name" (Arg.info []));;
 val file : string Term.t = &lt;abstr&gt;
 
-# Cmd.v (Cmd.info &quot;fairy file&quot;) Term.((const (fun filename -&gt; ignore filename)) $ file );;
+# Cmd.v (Cmd.info "fairy file") Term.((const (fun filename -&gt; ignore filename)) $ file );;
 - : unit Cmd.t = &lt;abstr&gt;
 </code></pre>
 <p>The difference between their approaches is <code>Command</code> puts the <em>comsume-all-parsed</em> function at last while <code>Cmdliner</code> puts it at first. They both use functional jargons e.g. <code>let%map_open</code>, <code>Anon.(%:)</code>, <code>Arg.(&amp;)</code> and <code>Term.($)</code>. They help to compact the code, at the cost of confusing newcomers.</p>
 <h2 id="syntax-for-command-line-languages"><a class="header" href="#syntax-for-command-line-languages">Syntax for Command-line Languages</a></h2>
 <p>It's not explicitly specified, but their design and APIs suggest (or <em>check</em>) possible syntax for the command-line languages. e.g. for the flag-less parts, <code>Command</code> treats them as anonymous arguments and allow the a sequence of them. The run-time validity of <code>Param.t</code> is less powerful than its static type. In this example, Anonymous <code>int</code> after a list of anonymous <code>string</code> causes an exception for its syntax.</p>
 <pre><code class="language-ocaml"># let my_param = 
-    (let%map_open.Command str_lst = anon (sequence (&quot;str&quot; %: string)) 
-    and extra_int = anon (&quot;int&quot; %: int) in 
+    (let%map_open.Command str_lst = anon (sequence ("str" %: string)) 
+    and extra_int = anon ("int" %: int) in 
     fun () -&gt; ());;
 val my_param : (unit -&gt; unit) Command.Spec.param = &lt;abstr&gt;
 
-# Command.basic ~summary:&quot;my_param&quot; my_param ;;
+# Command.basic ~summary:"my_param" my_param ;;
 Exception:
 Failure
- &quot;the grammar [STR ...] INT for anonymous arguments is not supported because there is the possibility for arguments (INT) following a variable number of arguments ([STR ...]).  Supporting such grammars would complicate the implementation significantly.&quot;.
-Raised at Stdlib.failwith in file &quot;stdlib.ml&quot;, line 29, characters 17-33
-Called from Base__List0.fold in file &quot;src/list0.ml&quot;, line 37, characters 27-37
-Called from Command.Anons.Grammar.concat in file &quot;command/src/command.ml&quot;, line 1000, characters 10-729
-Called from Command.basic in file &quot;command/src/command.ml&quot;, line 2373, characters 14-22
-Called from Topeval.load_lambda in file &quot;toplevel/byte/topeval.ml&quot;, line 89, characters 4-14
+ "the grammar [STR ...] INT for anonymous arguments is not supported because there is the possibility for arguments (INT) following a variable number of arguments ([STR ...]).  Supporting such grammars would complicate the implementation significantly.".
+Raised at Stdlib.failwith in file "stdlib.ml", line 29, characters 17-33
+Called from Base__List0.fold in file "src/list0.ml", line 37, characters 27-37
+Called from Command.Anons.Grammar.concat in file "command/src/command.ml", line 1000, characters 10-729
+Called from Command.basic in file "command/src/command.ml", line 2373, characters 14-22
+Called from Topeval.load_lambda in file "toplevel/byte/topeval.ml", line 89, characters 4-14
 </code></pre>
 <p><code>Cmdliner</code> treats flag-less parts as positional arguments. The manual warns it's the user's <em>duty</em> to ensure the unique use of a position. <code>Arg</code> provides functions to either preciously points to one position index, or to range all, or to cover the left/right to a given position index. Duplication of position index will trigger run-time exception.</p>
 <pre><code class="language-ocaml"># let top_t =
@@ -580,14 +581,14 @@ Called from Topeval.load_lambda in file &quot;toplevel/byte/topeval.ml&quot;, li
 val top_t : unit Term.t = &lt;abstr&gt;
 
 # let c =
-  let i = Cmd.info &quot;&quot; in
+  let i = Cmd.info "" in
   Cmd.v i top_t ;;
 val c : unit Cmd.t = &lt;abstr&gt;
 
-# Cmd.eval_value ~argv:[| &quot;a&quot;; &quot;2&quot; |] c;;
+# Cmd.eval_value ~argv:[| "a"; "2" |] c;;
 - : (unit Cmd.eval_ok, Cmd.eval_error) result = Stdlib.Ok (`Ok ())
 
-# Cmd.eval_value ~argv:[| &quot;a&quot;; &quot;b&quot; |] c;;
+# Cmd.eval_value ~argv:[| "a"; "b" |] c;;
 : invalid value 'b', expected an integer
 Usage:  [OPTION]… [ARG]…
 Try ' --help' for more information.
@@ -599,10 +600,265 @@ Try ' --help' for more information.
 <h2 id="elimination"><a class="header" href="#elimination">Elimination</a></h2>
 <p>For command-line parsing, OCaml has build-in <code>Sys.argv</code> and standard library <code>Arg</code> module (<a href="https://ocaml.org/docs/cli-arguments">tutorial</a>).</p>
 <p>⚠️ We can let <code>Core.Command</code> return the parsed result with a mutable reference, even its pack function and driver function requires a <code>unit</code> return value. When a functional program is <a href="https://dl.acm.org/doi/pdf/10.1145/317636.317775">not</a> a functional program?</p>
-<pre><code class="language-ocaml"># let store = ref &quot;&quot; in 
-  Command.basic ~summary:&quot;fairy file&quot; Command.Param.(map (anon (&quot;filename&quot; %: string)) ~f:(fun file () -&gt; store := file; ()));;
+<pre><code class="language-ocaml"># let store = ref "" in 
+  Command.basic ~summary:"fairy file" Command.Param.(map (anon ("filename" %: string)) ~f:(fun file () -&gt; store := file; ()));;
 - : Command.t = &lt;abstr&gt;
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="using-z3datatype"><a class="header" href="#using-z3datatype">Using <code>Z3.Datatype</code></a></h1>
+<h2 id="introduction-1"><a class="header" href="#introduction-1">Introduction</a></h2>
+<p>This post is for explaining some concepts and show usage for library <a href="https://opam.ocaml.org/packages/z3/"><code>ocaml-z3</code></a> and my library <a href="https://github.com/arbipher/ocaml_fairy_z3"><code>fairy_z3</code></a>. My long-time goal is to make <em>Solve Anything</em> easy in OCaml, and this is just a first step.</p>
+<p>Roughly, z3 has coresponding data structures for <em>expressions</em>, <em>primitive types</em> and <em>datatypes</em>, as like these in OCaml. I will not discuss the details of <em>logic</em> or <em>theory</em> used in a SMT solver Z3. We can just treat it as versatile library.</p>
+<p>To clarify,</p>
+<ul>
+<li><em>primitive types</em> in OCaml, e.g. <code>int</code>, <code>boolean</code>, <code>float</code>, <code>string</code>.</li>
+<li><em>datatypes</em> in OCaml, variants or records, <code>type t1 = Foo of int * string | Bar of int</code>, <code>type t2 = {a : int; b : float}</code>.</li>
+</ul>
+<p>In the current ocaml-z3 implementation, there is just one syntactic type <code>Z3.Expr.expr</code> for all z3 expressions and one syntactic type <code>Z3.Sort.sort</code> for the their types. To make this post more clear, we assume there is a better type definition that carries the correct sort of the expression. e.g. <code>Z3Int 42 : Z3_int_exp</code>. (It could be my second step for the long-time goal). Again,</p>
+<ul>
+<li><em>primitive types</em> in z3, e.g. <code>Z3_int</code>, <code>Z3_boolean</code>.</li>
+<li><em>datatypes</em> in Z3 e.g. <code>Z3_t1</code>, <code>Z3_t2</code>.</li>
+</ul>
+<p>Both OCaml and z3 provide the ways to construct and operate on primitive types. In OCaml, a datatype is easy to define. However, it takes some effect to construct a datatype with ocaml-z3 and use it. That's what this post and <code>fairy_z3</code> targets.</p>
+<h2 id="box-unbox-inject-project"><a class="header" href="#box-unbox-inject-project">Box, Unbox, Inject, Project</a></h2>
+<p><img src="libraries/z3-buip.png" alt="Z3-buip" /></p>
+<p>(Mermaid cannot handle nicely diagram in this isometric layout so I have to use excalidraw..)</p>
+<p>We have four arrow groups:</p>
+<ol>
+<li>
+<p>(Solid green lines) In the OCaml land, <code>inj</code>(inject) and <code>prj</code>(project) are supported by the language. Given the type <code>t1</code> above, <code>inj</code> is to construct from primitive values to a value in type <code>t1</code> and the <code>prj</code> is to pattern match a value in type <code>t1</code>.</p>
+</li>
+<li>
+<p>(Solid red/blue lines) Between the primitive types of OCaml land and Z3 land. We choose the terms <code>box</code> and <code>unbox</code> to describe a value is to/from another representation in the perspective of OCaml. These functions are on-the-shelf.</p>
+</li>
+</ol>
+<pre><code class="language-ocaml">let box_int : int -&gt; Z3.Expr.expr = 
+  fun i -&gt;
+    Z3.Arithmetic.Integer.mk_numeral_i ctx i
+
+let unbox_int : Z3.Expr.expr -&gt; int =
+  fun e -&gt; 
+    e |&gt; Z3.Arithmetic.Integer.get_big_int
+      |&gt; Big_int_Z.int_of_big_int
+</code></pre>
+<pre><code class="language-mdx-error">Line 1, characters 22-34:
+Error: Unbound module Z3
+</code></pre>
+<ol start="3">
+<li>
+<p>(Another solid green lines) In the Z3 land, <code>inj</code> and <code>prj</code> are achievable but tedious to write. We will demonstrate it in the later section and then advocate using <code>fairy_z3.ppx</code> to derive them instead.</p>
+</li>
+<li>
+<p>(Dotten red/blue lines) Between the datatypes of OCaml land and Z3 land. The <code>box</code> and <code>unbox</code> for datatypes are made of the above three groups.</p>
+</li>
+</ol>
+<h2 id="making-z3-datatype-by-hand"><a class="header" href="#making-z3-datatype-by-hand">Making Z3 Datatype by hand</a></h2>
+<p>Z3 has <a href="https://microsoft.github.io/z3guide/docs/theories/Datatypes/">tutorial</a> and <a href="https://z3prover.github.io/api/html/ml/Z3.Datatype.html">api manual</a>. Now I cannot remember how I figured out how to use it. Some z3 issues definitely helped.</p>
+<p>If you have a glance of its api, you can find <code>constructor</code>, <code>recognizer</code>, <code>accessor</code> as well as <code>sort</code> and <code>func_decl</code>. Conceptually, <code>func_decl</code> are <em>functions</em> in <strong>Z3 land</strong> and <code>sort</code> are <em>types</em> in <strong>Z3 land</strong>. <code>constructor</code>, <code>recognizer</code> and <code>accessor</code> are certain <em>functions</em> and their functionalities are like the OCaml <em>functions</em> around OCaml <em>datatypes</em> but in <strong>Z3 land</strong>.</p>
+<p>We first prepare the helper Z3 definitions in the group 2.</p>
+<pre><code class="language-ocaml"># #require "z3";;
+
+# open Z3;;
+
+# let ctx = mk_context [];;
+val ctx : context = &lt;abstr&gt;
+# let int_sort = Arithmetic.Integer.mk_sort ctx;;
+val int_sort : Sort.sort = &lt;abstr&gt;
+# let int_sort = Arithmetic.Integer.mk_sort ctx;;
+val int_sort : Sort.sort = &lt;abstr&gt;
+# let string_sort = Seq.mk_string_sort ctx;;
+val string_sort : Sort.sort = &lt;abstr&gt;
+
+# let box_int : int -&gt; Z3.Expr.expr = 
+  fun i -&gt;
+    Z3.Arithmetic.Integer.mk_numeral_i ctx i
+val box_int : int -&gt; Expr.expr = &lt;fun&gt;
+
+# let unbox_int : Z3.Expr.expr -&gt; int =
+  fun e -&gt; 
+    e |&gt; Z3.Arithmetic.Integer.get_big_int
+      |&gt; Big_int_Z.int_of_big_int
+val unbox_int : Expr.expr -&gt; int = &lt;fun&gt;
+
+# let box_string s = Seq.mk_string ctx s;;
+val box_string : string -&gt; Expr.expr = &lt;fun&gt;
+# let unbox_string e = Seq.get_string ctx e;;
+val unbox_string : Expr.expr -&gt; string = &lt;fun&gt;
+</code></pre>
+<p>Then we define the example type <code>t1</code>. We also write a few functions <code>ctor_*_ml</code>(constructor), <code>rzer_*_ml</code>(recognizer), <code>asor_*_ml</code>(accessor) in <strong>OCaml land</strong> just for illustrating.</p>
+<pre><code class="language-ocaml"># type t1 = Foo of int * string | Bar of int;;
+type t1 = Foo of int * string | Bar of int
+
+# let ctor_foo_ml (i,s) = Foo (i,s);;
+val ctor_foo_ml : int * string -&gt; t1 = &lt;fun&gt;
+# let rzer_foo_ml = function | Foo (_, _) -&gt; true | _ -&gt; false;;
+val rzer_foo_ml : t1 -&gt; bool = &lt;fun&gt;
+# let asor_foo_0_ml = function | Foo (i, _) -&gt; i | _ -&gt; failwith "only foo";;
+val asor_foo_0_ml : t1 -&gt; int = &lt;fun&gt;
+</code></pre>
+<p>Now we are in <strong>Z3 land</strong>. We can make the constructors and the <em>sort</em>.</p>
+<pre><code class="language-ocaml"># Datatype.mk_constructor_s;;
+- : context -&gt;
+    string -&gt;
+    Symbol.symbol -&gt;
+    Symbol.symbol list -&gt;
+    Sort.sort option list -&gt; int list -&gt; Datatype.Constructor.constructor
+= &lt;fun&gt;
+
+# let ctor_foo = Datatype.mk_constructor_s ctx "Foo" 
+  (Symbol.mk_string ctx "is-Foo")
+  [ Symbol.mk_string ctx "Foo-0"; Symbol.mk_string ctx "Foo-1" ]
+  [ Some int_sort; Some string_sort ]
+  [ 1; 1 ];;
+val ctor_foo : Datatype.Constructor.constructor = &lt;abstr&gt;
+
+# let ctor_bar = Datatype.mk_constructor_s ctx "Bar"
+  (Symbol.mk_string ctx "is-Bar")
+  [ Symbol.mk_string ctx "Bar-0" ]
+  [ Some int_sort ] [ 1 ];;
+val ctor_bar : Datatype.Constructor.constructor = &lt;abstr&gt;
+
+# let t1_sort = Datatype.mk_sort_s ctx "t1_sort" [ ctor_foo; ctor_bar ];;
+val t1_sort : Sort.sort = &lt;abstr&gt;
+</code></pre>
+<p>We make a constructor for each variant tag e.g. <code>ctor_foo</code> and in each tag we specify each payload type e.g. <code>int</code> (in `Foo of int * string) its name, sort, and whether it's recursive (non-zero means non-recursive).</p>
+<p>A constructor is a variant tag description that used to make a sort. To apply a constructore, we need to first get the associated function a.k.a. <code>func_decl</code> in Z3 land. Then we <em>apply</em> this function in Z3 land via <code>FuncDecl.apply</code>.</p>
+<pre><code class="language-ocaml"># let ctor_f_foo = Datatype.Constructor.get_constructor_decl ctor_foo;;
+val ctor_f_foo : FuncDecl.func_decl = &lt;abstr&gt;
+# let ctor_f_bar = Datatype.Constructor.get_constructor_decl ctor_bar;;
+val ctor_f_bar : FuncDecl.func_decl = &lt;abstr&gt;
+
+# let e1_ = Foo (42, "camel");;
+val e1_ : t1 = Foo (42, "camel")
+
+# let e1 = ctor_foo_ml (42, "camel");;
+val e1 : t1 = Foo (42, "camel")
+
+# let e1_z3 = FuncDecl.apply ctor_f_foo [box_int 42; box_string "camel"];;
+val e1_z3 : Expr.expr = &lt;abstr&gt;
+
+# Expr.to_string e1_z3;;
+- : string = "(Foo 42 \"camel\")"
+</code></pre>
+<p>Now we have already make a Z3 expression of <code>t1_sort</code>. We can also make constraint and solve on it. e.g. we can ask to solve <code>(Foo x "camel") == (Foo 42 "camel")</code> then <code>x</code> is <code>42</code>.</p>
+<pre><code class="language-ocaml"># let solver = Solver.mk_solver ctx None;;
+val solver : Solver.solver = &lt;abstr&gt;
+
+# let e2_z3 = FuncDecl.apply ctor_f_foo [Arithmetic.Integer.mk_const_s ctx "x"; box_string "camel"];;
+val e2_z3 : Expr.expr = &lt;abstr&gt;
+
+# let solver_result = Solver.check solver [Boolean.mk_eq ctx e1_z3 e2_z3];;
+val solver_result : Solver.status = Z3.Solver.SATISFIABLE
+
+# match solver_result with Solver.SATISFIABLE -&gt; 
+  (match Solver.get_model solver with 
+    | Some model -&gt; Model.to_string model
+    | None -&gt; "no model")
+  | _ -&gt; "not sat";;
+- : string = "(define-fun x () Int\n  42)"
+</code></pre>
+<p>Now we have all the ingredients to write <code>inj</code> functions in Z3 land and the <code>box</code> from OCaml to Z3.</p>
+<pre><code class="language-ocaml"># let inj_foo (ei,es) = FuncDecl.apply ctor_f_foo [ei; es];;
+val inj_foo : Expr.expr * Expr.expr -&gt; Expr.expr = &lt;fun&gt;
+# let inj_bar ei = FuncDecl.apply ctor_f_bar [ei];;
+val inj_bar : Expr.expr -&gt; Expr.expr = &lt;fun&gt;
+# let box_t1 = function 
+  | Foo (i,s) -&gt; inj_foo (box_int i, box_string s) 
+  | Bar i -&gt; inj_bar (box_int i);;
+val box_t1 : t1 -&gt; Expr.expr = &lt;fun&gt;
+
+# box_t1 (Foo (101, "dog")) |&gt; Expr.to_string;;
+- : string = "(Foo 101 \"dog\")"
+</code></pre>
+<p><code>rzer_*</code>(recognizer) and <code>asor_*</code>(accessor) are got from <code>t1_sort</code>.</p>
+<pre><code class="language-ocaml"># #show t1;;
+type nonrec t1 = Foo of int * string | Bar of int
+
+# let rzer_foo, rzer_bar = 
+  match Datatype.get_recognizers t1_sort with 
+  | [ rzer_foo; rzer_bar ] -&gt; (rzer_foo, rzer_bar) 
+  | _ -&gt; failwith "recogniziers mismatch";;
+val rzer_foo : FuncDecl.func_decl = &lt;abstr&gt;
+val rzer_bar : FuncDecl.func_decl = &lt;abstr&gt;
+
+# let (asor_foo_0, asor_foo_1), asor_bar_0 = 
+  match Datatype.get_accessors t1_sort with 
+  | [ [ asor_foo_0; asor_foo_1 ]; [ asor_bar_0 ] ] -&gt; ((asor_foo_0, asor_foo_1), (asor_bar_0)) 
+  | _ -&gt; failwith "accessors mismatch";;
+val asor_foo_0 : FuncDecl.func_decl = &lt;abstr&gt;
+val asor_foo_1 : FuncDecl.func_decl = &lt;abstr&gt;
+val asor_bar_0 : FuncDecl.func_decl = &lt;abstr&gt;
+</code></pre>
+<p>Recognizers share the shape of variant cases. Accessors share the shape of variant cases and the inner payload types. It's also the same shape with the constructors.</p>
+<pre><code class="language-ocaml"># let ei = FuncDecl.apply rzer_foo [e1_z3];;
+val ei : Expr.expr = &lt;abstr&gt;
+
+# Expr.to_string ei;;
+- : string = "((_ is Foo) (Foo 42 \"camel\"))"
+</code></pre>
+<p>Here comes the subtle question. <code>FuncDecl.apply</code> builds a function application in Z3 land, but it's just an unevaluated expression.</p>
+<pre><code class="language-ocaml"># let unbox_bool v = match Boolean.get_bool_value v with | L_TRUE -&gt; true | L_FALSE -&gt; false | _ -&gt; failwith "L_UNDEF";;
+val unbox_bool : Expr.expr -&gt; bool = &lt;fun&gt;
+
+# unbox_bool ei;;
+Exception: Failure "L_UNDEF".
+</code></pre>
+<p>It's not a problem for the box direction because we can <strong>evaluate</strong> in OCaml land, box the result, and build the Z3 expression. To force the <strong>evaluation</strong> in Z3 land, we can use <code>Expr.simplify ctx</code>.</p>
+<pre><code class="language-ocaml"># let ei' = Expr.simplify ei None;;
+val ei' : Expr.expr = &lt;abstr&gt;
+
+# Expr.to_string ei';;
+- : string = "true"
+
+# unbox_bool ei';;
+- : bool = true
+</code></pre>
+<p>Now we have all the ingredients to write <code>prj</code> functions in Z3 land and the <code>unbox</code> from Z3 to OCaml.</p>
+<pre><code class="language-ocaml"># let is_foo e = FuncDecl.apply rzer_foo [ e ];;
+val is_foo : Expr.expr -&gt; Expr.expr = &lt;fun&gt;
+# let prj_foo_0 e = FuncDecl.apply asor_foo_0 [ e ];;
+val prj_foo_0 : Expr.expr -&gt; Expr.expr = &lt;fun&gt;
+# let prj_foo_1 e = FuncDecl.apply asor_foo_1 [ e ];;
+val prj_foo_1 : Expr.expr -&gt; Expr.expr = &lt;fun&gt;
+
+# let is_bar e = FuncDecl.apply rzer_bar [ e ];;
+val is_bar : Expr.expr -&gt; Expr.expr = &lt;fun&gt;
+# let prj_bar_0 e = FuncDecl.apply asor_bar_0 [ e ];;
+val prj_bar_0 : Expr.expr -&gt; Expr.expr = &lt;fun&gt;
+
+# let unbox_t1 e = 
+      match e with
+      | _ when Expr.simplify (is_foo e) None |&gt; unbox_bool -&gt;
+          Foo
+            ( Expr.simplify (prj_foo_0 e) None |&gt; unbox_int,
+              Expr.simplify (prj_foo_1 e) None |&gt; unbox_string )
+      | _ when Expr.simplify (is_bar e) None |&gt; unbox_bool -&gt;
+          Bar
+            ( Expr.simplify (prj_bar_0 e) None |&gt; unbox_int )
+      | _ -&gt; failwith "not here";;
+val unbox_t1 : Expr.expr -&gt; t1 = &lt;fun&gt;
+
+# unbox_t1 e1_z3;;
+- : t1 = Foo (42, "camel")
+</code></pre>
+<p>All set for our expected functions!</p>
+<h2 id="making-z3-datatype-by-fairy-magic"><a class="header" href="#making-z3-datatype-by-fairy-magic">Making Z3 Datatype by fairy magic</a></h2>
+<p>If you don't want to write the above functions, just use <code>fairy_z3.ppx</code>. To check the generated function, change <code>[@@deriving ..]</code> to <code>[@@deriving_inline ..] [@@@end]</code>.</p>
+<pre><code class="language-ocaml">type t1 = Foo of int * string | Bar of int
+[@@deriving z3 ~flag ~bv_width:52]
+</code></pre>
+<h2 id="summary-and-to-do"><a class="header" href="#summary-and-to-do">Summary and To-do</a></h2>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Read (ocaml-)z3 source code to understand its datatype API better.</li>
+<li><input disabled="" type="checkbox"/>
+Support more type constructors in OCaml.</li>
+<li><input disabled="" type="checkbox"/>
+Allow more customizing for primitives box and unbox function.</li>
+<li><input disabled="" type="checkbox"/>
+Make it more easier to use.</li>
+<li><input disabled="" type="checkbox"/>
+Add more testing.</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="what-are-deriving-compare-sexp_of-hash-for"><a class="header" href="#what-are-deriving-compare-sexp_of-hash-for">What are [@@deriving compare, sexp_of, hash] for?</a></h1>
 <p>Real World OCaml has a dedicated chapter <a href="https://dev.realworldocaml.org/maps-and-hashtables.html">Maps and Hash Tables</a>. It's an excellent tutorial to start with data containers in Jane Street's <code>core</code> (or <code>Base</code>), an alternative to the OCaml standard library <code>stdlib</code>. For both <code>core</code> and <code>stdlib</code>, elements need to provide required <em>functions</em> to be put into containers. The tutorial gives examples of elements with hand-written functions and derived functions.</p>
 <!-- $MDX file=../../src-ocaml/elements.ml,part=book1 -->
@@ -641,7 +897,7 @@ Try ' --help' for more information.
 <h2 id="deriving-functions"><a class="header" href="#deriving-functions">Deriving Functions</a></h2>
 <p>These ppx deriver are <a href="https://github.com/janestreet/ppx_compare">janestreet/ppx_compare</a> for <code>equal</code> and <code>compare</code>, <a href="https://github.com/janestreet/ppx_sexp_conv">janestreet/ppx_sexp_conv</a> for <code>sexp_of</code> and <code>of_sexp</code>, and <a href="https://github.com/janestreet/ppx_hash">janestreet/ppx_hash</a> for <code>hash</code> and <code>hash_fold</code>.</p>
 <p>A quick way to inspect the deriving result is to change <code>[@@deriving &lt;ppx&gt;]</code> to <code>[@@deriving_inline &lt;ppx&gt;] [@@@end]</code> so there we can read the generated code between tags.</p>
-<p>The idea of all these function deriver are type-based structural traversal. Don't be disturbed by the variable names in the generated code. </p>
+<p>The idea of all these function deriver are type-based structural traversal. Don't be disturbed by the variable names in the generated code.</p>
 <!-- $MDX file=../../src-ocaml/elements.ml,part=pair_inline_equal -->
 <pre><code class="language-ocaml">type foo1 = P1 of int * string [@@deriving_inline equal]
 
@@ -690,10 +946,10 @@ let _ = compare_foo2
 let _ = fun (_ : foo3) -&gt; ()
 
 let foo3_of_sexp =
-  (let error_source__022_ = &quot;src-ocaml/elements.ml.foo3&quot; in
+  (let error_source__022_ = "src-ocaml/elements.ml.foo3" in
    function
    | Sexplib0.Sexp.List
-       (Sexplib0.Sexp.Atom ((&quot;p3&quot; | &quot;P3&quot;) as _tag__025_) :: sexp_args__026_) as
+       (Sexplib0.Sexp.Atom (("p3" | "P3") as _tag__025_) :: sexp_args__026_) as
      _sexp__024_ -&gt; (
        match sexp_args__026_ with
        | [ arg0__027_; arg1__028_ ] -&gt;
@@ -703,7 +959,7 @@ let foo3_of_sexp =
        | _ -&gt;
            Sexplib0.Sexp_conv_error.stag_incorrect_n_args error_source__022_
              _tag__025_ _sexp__024_)
-   | Sexplib0.Sexp.Atom (&quot;p3&quot; | &quot;P3&quot;) as sexp__023_ -&gt;
+   | Sexplib0.Sexp.Atom ("p3" | "P3") as sexp__023_ -&gt;
        Sexplib0.Sexp_conv_error.stag_takes_args error_source__022_ sexp__023_
    | Sexplib0.Sexp.List (Sexplib0.Sexp.List _ :: _) as sexp__021_ -&gt;
        Sexplib0.Sexp_conv_error.nested_list_invalid_sum error_source__022_
@@ -721,7 +977,7 @@ let sexp_of_foo3 =
   (fun (P3 (arg0__031_, arg1__032_)) -&gt;
      let res0__033_ = sexp_of_int arg0__031_
      and res1__034_ = sexp_of_string arg1__032_ in
-     Sexplib0.Sexp.List [ Sexplib0.Sexp.Atom &quot;P3&quot;; res0__033_; res1__034_ ]
+     Sexplib0.Sexp.List [ Sexplib0.Sexp.Atom "P3"; res0__033_; res1__034_ ]
     : foo3 -&gt; Sexplib0.Sexp.t)
 
 let _ = sexp_of_foo3
@@ -813,7 +1069,7 @@ let _ = Hash_set.create (module Int_set_as_element)
 <p>OCaml's polymorphic compare (or <code>Stdlib.compare</code>) is tempting to use but hard to reason.</p>
 <p>Polymorphic <code>compare</code> in the <a href="https://v2.ocaml.org/api/Stdlib.html#1_Comparisons">manual</a> says:</p>
 <blockquote>
-<p><code>val (=) : 'a -&gt; 'a -&gt; bool</code> </p>
+<p><code>val (=) : 'a -&gt; 'a -&gt; bool</code></p>
 <p><code>e1 = e2</code> tests for structural equality of <code>e1</code> and <code>e2</code>. Mutable structures (e.g. references and arrays) are equal if and only if their current contents are structurally equal, even if the two mutable objects are not the same physical object. Equality between functional values raises <code>Invalid_argument</code>. Equality between cyclic data structures may not terminate.</p>
 </blockquote>
 <p>Intuitionally, it compares two values structurally for their representations in memory.</p>
@@ -831,12 +1087,12 @@ val b : IntSet.t = &lt;abstr&gt;
 # IntSet.equal a b;;
 - : bool = true
 
-# #require &quot;objdump&quot;;;
-# Format.printf &quot;@[%a@]@.&quot; Objdump.pp a;;
+# #require "objdump";;
+# Format.printf "@[%a@]@." Objdump.pp a;;
 variant0(int(0),int(0),variant0(int(0),int(1),int(0),int(1)),int(2))
 
 - : unit = ()
-# Format.printf &quot;@[%a@]@.&quot; Objdump.pp b;;
+# Format.printf "@[%a@]@." Objdump.pp b;;
 variant0(variant0(int(0),int(0),int(0),int(1)),int(1),int(0),int(2))
 
 - : unit = ()
@@ -846,7 +1102,7 @@ variant0(variant0(int(0),int(0),int(0),int(1)),int(1),int(0),int(2))
 <p>In the source, <code>Stdlib.compare</code> is provided as an FFI, and the actual implementation is in the C code of the runtime:</p>
 <!-- $MDX skip -->
 <pre><code class="language-ocaml">(* https://github.com/ocaml/ocaml/blob/trunk/stdlib/stdlib.ml#L72 *)
-external compare : 'a -&gt; 'a -&gt; int = &quot;%compare&quot;
+external compare : 'a -&gt; 'a -&gt; int = "%compare"
 
 (* https://github.com/ocaml/ocaml/blob/trunk/runtime/compare.c#L339 *)
 CAMLprim value caml_compare(value v1, value v2)
@@ -951,7 +1207,7 @@ static intnat compare_val(value v1, value v2, int total)
         }
         if (compare == NULL) {
           compare_free_stack(stk);
-          caml_invalid_argument(&quot;compare: abstract value&quot;);
+          caml_invalid_argument("compare: abstract value");
         }
         Caml_state-&gt;compare_unordered = 0;
         res = compare(v1, v2);
