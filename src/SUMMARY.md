@@ -12,6 +12,8 @@ Good libraries deserve more explanaion.
 
 [Understanding `Core.Command` and `Cmdliner`](libraries/argparse.md)
 
+[Using `Z3.Datatype`](libraries/z3-datatype.md)
+
 ## Section: Using `Core`
 
 More comprehensive discussion after RWO.
