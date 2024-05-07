@@ -400,6 +400,28 @@ Make it more easier to use.</li>
 <li><input disabled="" type="checkbox"/>
 Add more testing.</li>
 </ul>
+<h2 id="extra-reconciling-datatypes"><a class="header" href="#extra-reconciling-datatypes">(Extra) Reconciling datatypes</a></h2>
+<p>There is tiny mismatch between the an OCaml type and a z3 datatype. OCaml's primitive types e.g. <code>int</code> lives outside of <code>t1</code> while in (current) Z3 all expressions are <code>Z3.Expr.expr</code>. To reconcile this, we can also rewrite <code>t1</code> to <code>t2</code> to make <code>t2</code> aligns with <code>Z3.Expr.expr</code>. Then we can define just one box function <code>better_box</code> to cover all cases.</p>
+<pre><code class="language-ocaml"># #show_type t1;;
+type nonrec t1 = Foo of int * string | Bar of int
+
+# type _ t2 =
+  | Int : int -&gt; int t2
+  | String : string -&gt; string t2
+  | Foo : int t2 * string t2 -&gt; _ t2
+  | Bar : int t2 -&gt; _ t2;;
+type _ t2 =
+    Int : int -&gt; int t2
+  | String : string -&gt; string t2
+  | Foo : int t2 * string t2 -&gt; 'a t2
+  | Bar : int t2 -&gt; 'b t2
+
+# Foo (Int 42, String "ml");;
+- : 'a t2 = Foo (Int 42, String "ml")
+
+# let better_box (e_ml : _ t2) : Z3.Expr.expr = failwith "not implemented";;
+val better_box : 'a t2 -&gt; Expr.expr = &lt;fun&gt;
+</code></pre>
 
                     </main>
 
