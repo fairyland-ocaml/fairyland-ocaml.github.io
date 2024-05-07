@@ -293,3 +293,30 @@ type t1 = Foo of int * string | Bar of int
 - [ ] Allow more customizing for primitives box and unbox function.
 - [ ] Make it more easier to use.
 - [ ] Add more testing.
+
+
+## (Extra) Reconciling datatypes
+
+There is tiny mismatch between the an OCaml type and a z3 datatype. OCaml's primitive types e.g. `int` lives outside of `t1` while in (current) Z3 all expressions are `Z3.Expr.expr`. To reconcile this, we can also rewrite `t1` to `t2` to make `t2` aligns with `Z3.Expr.expr`. Then we can define just one box function `better_box` to cover all cases.
+
+```ocaml
+# #show_type t1;;
+type nonrec t1 = Foo of int * string | Bar of int
+
+# type _ t2 =
+  | Int : int -> int t2
+  | String : string -> string t2
+  | Foo : int t2 * string t2 -> _ t2
+  | Bar : int t2 -> _ t2;;
+type _ t2 =
+    Int : int -> int t2
+  | String : string -> string t2
+  | Foo : int t2 * string t2 -> 'a t2
+  | Bar : int t2 -> 'b t2
+
+# Foo (Int 42, String "ml");;
+- : 'a t2 = Foo (Int 42, String "ml")
+
+# let better_box (e_ml : _ t2) : Z3.Expr.expr = failwith "not implemented";;
+val better_box : 'a t2 -> Expr.expr = <fun>
+```
