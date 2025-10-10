@@ -7,15 +7,14 @@ This repo is the source code for Fairyland OCaml [https://fairyland-ocaml.github
 - https://github.com/rust-lang/mdBook
 - https://github.com/marketplace/actions/mdbook-action
 - https://github.com/realworldocaml/mdx
-- https://github.com/dylanowen/mdbook-graphviz
 - https://github.com/badboy/mdbook-mermaid
 
 # Todo
 
--[ ] Porting and writing
--[ ] Customize favicon
+- [ ] Porting and writing
+- [ ] Customize favicon
 
 # Done
 
--[X] Update syntax highlighting for OCaml
--[X] Bring in mdx
+- [X] Update syntax highlighting for OCaml
+- [X] Bring in mdx
