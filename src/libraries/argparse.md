@@ -319,3 +319,7 @@ For command-line parsing, OCaml has build-in `Sys.argv` and standard library `Ar
   Command.basic ~summary:"fairy file" Command.Param.(map (anon ("filename" %: string)) ~f:(fun file () -> store := file; ()));;
 - : Command.t = <abstr>
 ```
+
+---
+
+_This post was improved thanks to feedback from [@Khady](https://github.com/Khady)._
