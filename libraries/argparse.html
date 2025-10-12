@@ -151,7 +151,7 @@
 <h2 id="four-concepts"><a class="header" href="#four-concepts">Four Concepts</a></h2>
 <p>Both libraires provide four levels of concepts:</p>
 <div class="table-wrapper"><table><thead><tr><th>Concept</th><th>Stage</th><th>Composable</th><th>Core.Command</th><th>Cmdliner</th></tr></thead><tbody>
-<tr><td>Argument Parser</td><td>Step 3</td><td>no</td><td><code>'a Arg_type.t</code></td><td><code>'a Arg.conv = 'a parser * 'a printer</code></td></tr>
+<tr><td>Argument Parser</td><td>Step 4</td><td>no</td><td><code>'a Arg_type.t</code></td><td><code>'a Arg.conv = 'a parser * 'a printer</code></td></tr>
 <tr><td>Argument Handler</td><td>Step 3</td><td>yes</td><td><code>'a Param.t</code></td><td><code>'a Term.t</code></td></tr>
 <tr><td>Command Item</td><td>Step 2</td><td>yes</td><td><code>unit Command.t</code></td><td><code>'a Cmd.t</code></td></tr>
 <tr><td>Driver</td><td>Step 1</td><td>no</td><td><code>Command.run</code></td><td><code>Cmd.eval</code>,  <code>Cmd.eval_value</code></td></tr>
@@ -168,8 +168,8 @@
 </ul>
 <h2 id="driver-functions"><a class="header" href="#driver-functions">Driver functions</a></h2>
 <p><code>Core.Command</code> can only build up to a <code>Command.t</code>. It doesn't provide any driver functions. The <strong>driver function</strong> <code>Core.Command.run</code> is defined in another library <code>core_unix.command_unix</code>. It takes the <code>Core.Command.t</code> and start the work.</p>
-<p><code>Cmdliner</code> has a variant of <strong>driver functions</strong> e.g. <code>Cmd.eval</code> and <code>Cmd.eval_value</code>. Since they're supposed to be the unique top functions, <code>Cmd.eval</code> returns a <code>unit</code> while <code>Cmd.eval</code> returns a <code>int</code> (standard error code) that is used by <code>exit</code>.</p>
-<p>It's a common myth that people seek to get the unboxed parsed result. Such a function is not even provided in <code>Core.Command</code>. It's do-able with <code>Cmdliner.Cmd.eval_value : ... -&gt; ?argv:string array -&gt; 'a Cmd.t -&gt; ('a Cmd.eval_ok, Cmd.eval_error) result</code>. However, you need to tokenize to get <code>argv</code> yourself (Imparient readers can jump to Section <a href="#elimination">Elimination</a>).</p>
+<p><code>Cmdliner</code> has a variant of <strong>driver functions</strong> e.g. <code>Cmd.eval</code> and <code>Cmd.eval_value</code>. Since it's supposed to be the unique top function, <code>Cmd.eval</code> returns a <code>int</code> (standard error code) that is used by <code>exit</code>.</p>
+<p>It's a common myth that people seek to get the unboxed parsed result. Such a function is not even provided in <code>Core.Command</code>. It's do-able with <code>Cmdliner.Cmd.eval_value : ... -&gt; ?argv:string array -&gt; 'a Cmd.t -&gt; ('a Cmd.eval_ok, Cmd.eval_error) result</code>. However, you need to tokenize to get <code>argv</code> yourself (Impatient readers can jump to Section <a href="#elimination">Elimination</a>).</p>
 <h2 id="diagrams-for-corecommand-and-cmdliner"><a class="header" href="#diagrams-for-corecommand-and-cmdliner">Diagrams for <code>Core.Command</code> and <code>Cmdliner</code></a></h2>
 <p>Both <code>Core.Command</code> and <code>Cmdliner</code> have two-layered compositional datatypes. An element in the inner layer is to parse one key-value pair (or key-only or value-only). For example, we're going to parse <code>-v -a=1 -b=t 42</code>.</p>
 <p>The inner layer for <code>Core.Command</code> is a compositional <code>Param.t</code>. We will have four <code>Param.t</code> that are</p>
@@ -186,7 +186,7 @@
 <li><code>string Term.t</code> for <code>-b=t</code> in which a <code>string Arg.conv</code> to parse <code>t</code></li>
 <li><code>int Term.t</code> for <code>42</code> in which a <code>int Arg.conv</code> to parse <code>42</code></li>
 </ul>
-<p>The inner layer data are wrapped into outer layer data <code>Core.Command.t</code> or <code>Cmdliner.Cmd.t</code> via packing function <code>Core.Command.basic</code> or <code>Cmdliner.Cmd.v</code>. A outer layer data is usually used for argparsing one command-line case. It is also composable and is used to group sub-commands. <a href="https://v3.ocaml.org/p/core/latest/doc/Core/Command/index.html#val-group"><code>Core.Command.group</code></a> takes <code>(string * Core.Command.t) list</code> and returns a <code>Core.Command.t</code>. <a href="https://erratique.ch/software/cmdliner/doc/Cmdliner/Cmd/index.html#val-group"><code>Cmdlinder.Cmd.group</code></a> takes <code>Cmdliner.Cmd.t list</code> and returns a <code>Cmdliner.Cmd.t</code>.</p>
+<p>The inner layer data are wrapped into outer layer data <code>Core.Command.t</code> or <code>Cmdliner.Cmd.t</code> via packing function <code>Core.Command.basic</code> or <code>Cmdliner.Cmd.v</code>. An outer layer data is usually used for argparsing one command-line case. It is also composable and is used to group sub-commands. <a href="https://v3.ocaml.org/p/core/latest/doc/Core/Command/index.html#val-group"><code>Core.Command.group</code></a> takes <code>(string * Core.Command.t) list</code> and returns a <code>Core.Command.t</code>. <a href="https://erratique.ch/software/cmdliner/doc/Cmdliner/Cmd/index.html#val-group"><code>Cmdlinder.Cmd.group</code></a> takes <code>Cmdliner.Cmd.t list</code> and returns a <code>Cmdliner.Cmd.t</code>.</p>
 <p>Their diagrams are very alike in the respective of our <strong>four concepts</strong>. A rectangle corresponds to a type. An edge is a function that transforms datatype. A rounded rectangle is also a function but at an endpoint (It's rare. Only two driver functions and one <code>Arg.flag</code>). Four compositional datatypes <code>Param.t</code> <code>Command.t</code> <code>Term.t</code> <code>Cmd.t</code> should be in stacked rectangles (but here I just use a rectangle with double edges). I omit the doc-related components to make it clear.</p>
 <pre class="mermaid">---
 title: Figure 1.1 - Diagram for Core.Command
@@ -267,7 +267,7 @@ graph LR
 </pre>
 <h2 id="how-paramt-and-termt-are-made"><a class="header" href="#how-paramt-and-termt-are-made">How <code>Param.t</code> and <code>Term.t</code> are made</a></h2>
 <p>A <code>Core.Command.t</code> consists of the <em>flagged</em> parameters and <em>anonymous</em> (flag-less) parameters. A <code>Cmdlinder.t</code> is consists of <em>optional arguments</em> and <em>positional arguments</em>. They are <strong>Argument Handlers</strong>. Note <strong>Argument Handlers</strong> use <strong>Argument Parsers</strong>.</p>
-<p>In <code>Core.Command</code>, A primitive <code>'a Param.t</code> can made up from ingridients</p>
+<p>In <code>Core.Command</code>, A primitive <code>'a Param.t</code> can made up from ingredients</p>
 <ol>
 <li><code>'a Arg_type.t</code> parses <code>string</code> to <code>'a</code></li>
 <li><code>'a Flag.t</code> can wrap <code>'a Arg_type.t</code> as <code>required</code>, <code>optional</code>, or <code>optional_with_default</code></li>
@@ -276,7 +276,7 @@ graph LR
 <li><code>Param.flag</code> makes <code>'a Flag.t</code> a <code>'a Param.t</code></li>
 <li><code>Param.anon</code> makes <code>'a Anons.t</code> a <code>'a Param.t</code></li>
 </ol>
-<p>In <code>Cmdlinder</code>, the ingridients to make up a primitive <code>'a Term.t</code> are:</p>
+<p>In <code>Cmdlinder</code>, the ingredients to make up a primitive <code>'a Term.t</code> are:</p>
 <ol>
 <li><code>'a Arg.conv</code> defines both a parser and a printer for <code>'a</code></li>
 <li><code>Arg.opt</code> wraps <code>'a Arg.conv</code> an optional flagged argument <code>'a Arg.t</code>.</li>
@@ -405,6 +405,8 @@ Try ' --help' for more information.
   Command.basic ~summary:"fairy file" Command.Param.(map (anon ("filename" %: string)) ~f:(fun file () -&gt; store := file; ()));;
 - : Command.t = &lt;abstr&gt;
 </code></pre>
+<hr />
+<p><em>This post was improved thanks to feedback from <a href="https://github.com/Khady">@Khady</a>.</em></p>
 
                     </main>
 
