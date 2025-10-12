@@ -7,7 +7,7 @@
 
 
         <!-- Custom HTML head -->
-        
+
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -84,7 +84,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="preface.html" class="active">Preface</a></li><li class="chapter-item expanded affix "><a href="libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="libraries/argparse.html">Understanding Core.Command and Cmdliner</a></li><li class="chapter-item expanded affix "><a href="libraries/z3-datatype.html">Using Z3.Datatype</a></li><li class="chapter-item expanded affix "><a href="core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="internals/polymorphic-compare.html">What is polymorphic compare?</a></li><li class="chapter-item expanded affix "><a href="core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Understanding Ocamlgraph</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Understanding destructive substitution</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="SUMMARY.html">Summary</a></li><li class="chapter-item expanded affix "><a href="preface.html">Preface</a></li><li class="chapter-item expanded affix "><a href="libraries/hashcons.html">Understanding Hashcons</a></li><li class="chapter-item expanded affix "><a href="libraries/argparse.html">Understanding Core.Command and Cmdliner</a></li><li class="chapter-item expanded affix "><a href="libraries/z3-datatype.html">Using Z3.Datatype</a></li><li class="chapter-item expanded affix "><a href="core/container-elements.html">What are [@@deriving compare, sexp_of, hash] for?</a></li><li class="chapter-item expanded affix "><a href="internals/ppxlib.html">A Glance of ppxlib</a></li><li class="chapter-item expanded affix "><a href="internals/gadt.html">Understanding gadt</a></li><li class="chapter-item expanded affix "><a href="internals/polymorphic-compare.html">What is polymorphic compare?</a></li><li class="chapter-item expanded affix "><a href="core/maps-and-hashtables.html">Understanding Data Collections in Core</a></li><li class="chapter-item expanded affix "><div>Using Hashcons</div></li><li class="chapter-item expanded affix "><div>Understanding Fix</div></li><li class="chapter-item expanded affix "><div>Using Fix</div></li><li class="chapter-item expanded affix "><div>Understanding Ocamlgraph</div></li><li class="chapter-item expanded affix "><div>Profiling</div></li><li class="chapter-item expanded affix "><div>Deriving print</div></li><li class="chapter-item expanded affix "><div>Understanding type format6</div></li><li class="chapter-item expanded affix "><div>Understanding module Format</div></li><li class="chapter-item expanded affix "><div>Understanding destructive substitution</div></li><li class="chapter-item expanded affix "><div>Fixed point</div></li><li class="chapter-item expanded affix "><div>Contravariant</div></li><li class="chapter-item expanded affix "><div>Typeclassopedia</div></li><li class="chapter-item expanded affix "><div>OCaml source reading</div></li><li class="chapter-item expanded affix "><li class="part-title">Earthbound</li><li class="chapter-item expanded affix "><div>Understanding t-string in Python 3.14</div></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -92,7 +92,7 @@
         <div id="page-wrapper" class="page-wrapper">
 
             <div class="page">
-                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar-hover-placeholder"></div>
                 <div id="menu-bar" class="menu-bar sticky bordered">
                     <div class="left-buttons">
                         <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
@@ -147,12 +147,13 @@
                     <main>
                         <p><img src="img/fairyland-camel.png" alt="Fairyland Camel" /></p>
 <h1 id="preface"><a class="header" href="#preface">Preface</a></h1>
-<p>Fairyland OCaml <sup class="footnote-reference"><a href="#image">1</a></sup> is a blog by <a href="https://www.prover.me/">Shiwei Weng</a> to write my OCaml experience. I used to share OCaml snippets and understanding in our research group <a href="https://pl.cs.jhu.edu/">JHU PL Lab</a>. I decided to port them here for a <a href="http://carl.flax.ie/dothingstellpeople.html">broader audience</a>. The intuition often comes from my learning and research experience and the fantastic students from two <a href="https://pl.cs.jhu.edu/fpse/">functional</a> <a href="https://pl.cs.jhu.edu/pl/">programming</a> courses at JHU.</p>
+<p>Fairyland OCaml <sup class="footnote-reference" id="fr-image-1"><a href="#footnote-image">1</a></sup> is a blog by <a href="https://www.prover.me/">Shiwei Weng</a> to write my OCaml experience. I used to share OCaml snippets and understanding in our research group <a href="https://pl.cs.jhu.edu/">JHU PL Lab</a>. I decided to port them here for a <a href="http://carl.flax.ie/dothingstellpeople.html">broader audience</a>. The intuition often comes from my learning and research experience and the fantastic students from two <a href="https://pl.cs.jhu.edu/fpse/">functional</a> <a href="https://pl.cs.jhu.edu/pl/">programming</a> courses at JHU.</p>
 <p>The blog name is obviously from <a href="https://dev.realworldocaml.org/">Real World OCaml</a>.</p>
-<div class="footnote-definition" id="image"><sup class="footnote-definition-label">1</sup>
-<p>The picture <em>Fairyland Camel</em> is generated at <a href="https://www.canva.com/">Canva</a> by my wife.</p>
-</div>
-
+<hr>
+<ol class="footnote-definition"><li id="footnote-image">
+<p>The picture <em>Fairyland Camel</em> is generated at <a href="https://www.canva.com/">Canva</a> by my wife. <a href="#fr-image-1">↩</a></p>
+</li>
+</ol>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
