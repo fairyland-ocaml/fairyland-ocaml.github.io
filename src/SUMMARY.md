@@ -28,10 +28,6 @@ More comprehensive discussion after RWO.
 
 ## Section: OCaml Internals
 
-[A Glance of `ppxlib`](internals/ppxlib.md)
-
-[Understanding `gadt`](internals/gadt.md)
-
 [What is polymorphic compare?](internals/polymorphic-compare.md)
 
 
@@ -39,7 +35,7 @@ More comprehensive discussion after RWO.
 
 [Understanding Data Collections in `Core`](core/maps-and-hashtables.md)
 
-## 📝 **In My Plan** 📝
+<!-- ## 📝 **In My Plan** 📝
 
 Section: Library Gems
 
@@ -64,6 +60,9 @@ Section: OCaml Internals
 
 [Understanding destructive substitution]() (internals/destructive-substitution.md)
 
+[A Glance of `ppxlib`](internals/ppxlib.md)
+
+[Understanding `gadt`](internals/gadt.md)
 
 Section: Concepts
 
@@ -75,11 +74,12 @@ Section: Concepts
 
 Section: Code Reading
 
-[OCaml source reading]() (reading/ocaml-source-reading.md)
+[OCaml source reading]() (reading/ocaml-source-reading.md) -->
+
 <!-- - https://discuss.ocaml.org/t/readable-ml-ocaml-sml-etc-compilers/13318 -->
 
-# Earthbound
+<!-- # Earthbound
 
 Section: Python
 
-[Understanding `t-string` in Python 3.14]() (python/template-string-literal.md)
+[Understanding `t-string` in Python 3.14]() (python/template-string-literal.md) -->
